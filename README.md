@@ -11,6 +11,8 @@ You can find what the first TacTic Project was on ("/Users/leroymerlin/Workspace
 
 ## Color / Design
 
+FONT FAMILY: font-family: "Bebas Neue", cursive;
+
 FONT COLOR :
 
 Icones/Boutons :
