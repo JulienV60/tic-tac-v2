@@ -1,16 +1,119 @@
-html,
-body {
+html {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+.navbar {
+  background-color: rgb(48 158 174);
+}
+.container-fluid .btn {
+  background-color: #609819;
+}
+
+.indexPage {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+  text-align: center;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: rgb(48 158 174);
+  padding-right: 1rem;
+  color: white;
+  line-height: 2rem;
+}
+
+.BodyHomePage {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+.AsideRight h1 {
+  font-family: "Bebas Neue", cursive;
+  font-size: 3rem;
+  line-height: 2rem;
+  text-align: center;
+}
+.AsideRight .btn {
+  background-color: #2f9dac;
+
+  width: 10rem;
+  height: 5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-left: 11rem;
+}
+.imgIndex {
+  grid-area: 1 / 1 / 6 / 4;
+  margin-top: 2rem;
+}
+.imgIndex img {
+  height: auto;
+  width: auto;
+  padding-left: 7rem;
+  border-right: 2px solid rgb(204 204 204);
+}
+
+.AsideRight {
+  padding-left: 6rem;
+  margin-right: 4rem;
+  margin-top: 20rem;
+  padding-right: 2rem;
+  grid-area: 1 / 4 / 6 / 6;
+}
+.AsideRight h1 {
+  text-align: center;
+  line-height: 5rem;
+}
+@media screen and (max-width: 480px) {
+  html {
+    background-color: #2f9dac;
+  }
+  .imgIndex {
+    padding: 0;
+    margin-right: 20rem;
+    width: 480px;
+    height: 480px;
+  }
+  .BodyHomePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2f9dac;
+  }
+  .AsideRight {
+    padding-top: 12rem;
+    color: white;
+    margin-left: 29rem;
+  }
+  .AsideRight .btn {
+    margin-right: 11rem;
+    color: #2f9dac;
+    background-color: white;
+  }
+}
+.external-event-calendar {
+  border-right: 1px solid #ccc;
+}
+
+.external-event-task {
+  color: #fff;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 8px;
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.demo-external-event-presets.demo-wrapper,
+.demo-external-event-presets .mbsc-grid,
+.demo-external-event-presets .mbsc-row,
+.demo-external-event-presets .external-event-calendar {
+  height: 100%;
 }
