@@ -28,7 +28,7 @@ const Layout: React.FC<any> = ({ children }) => {
             }}
           />
           <Navbar.Brand
-            href="/manager"
+            href="/collaborateur"
             style={{
               color: "white",
               width: "10rem",
@@ -108,7 +108,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontSize: "3rem",
                       marginLeft: "0.5rem",
                     }}
-                    href="/planning"
+                    href="/collaborateur/planning"
                   >
                     Plannings
                   </Dropdown.Item>
@@ -120,7 +120,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontSize: "3rem",
                       marginLeft: "0.5rem",
                     }}
-                    href="/Pointages"
+                    href="/collaborateur/pointages"
                   >
                     Pointages
                   </Dropdown.Item>
@@ -131,7 +131,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "3rem",
                     }}
-                    href="/conges"
+                    href="/collaborateur/conges"
                   >
                     Congés
                   </Dropdown.Item>
@@ -143,7 +143,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontSize: "3rem",
                       marginLeft: "0.5rem",
                     }}
-                    href="/kikela"
+                    href="/collaborateur/kikela"
                   >
                     Kikéla
                   </Dropdown.Item>
@@ -157,7 +157,7 @@ const Layout: React.FC<any> = ({ children }) => {
                     }}
                     href="/api/auth/logout"
                   >
-                    Logout
+                    Déconnexion
                   </Dropdown.Item>
                 </Dropdown>
               </Nav>

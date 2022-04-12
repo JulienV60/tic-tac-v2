@@ -8,10 +8,11 @@ import {
 } from "@mobiscroll/react";
 import { NextPage } from "next";
 import mobiscroll from "@mobiscroll/react";
+import LayoutCollab from "../../components/LayoutCollab";
 
 const conges: NextPage = () => {
   return (
-    <>
+    <LayoutCollab>
       <div className="container">
         <section className="leave-section">
           <div className="leave-title">
@@ -57,7 +58,7 @@ const conges: NextPage = () => {
           </div>
         </section>
       </div>
-    </>
+    </LayoutCollab>
   );
 };
 
