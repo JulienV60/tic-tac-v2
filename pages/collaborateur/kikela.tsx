@@ -6,7 +6,7 @@ import { GetServerSideProps } from "next";
 import { NextApiRequest } from "next";
 import { NextApiResponse } from "next";
 import React from "react";
-import LayoutCollab from "../../components/LayoutCollab";
+import { Layout } from "../../components/LayoutCollab";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const fetchCookie = await fetch(
@@ -33,7 +33,7 @@ export default function Kikela({ user }: any) {
   const data = JSON.parse(user);
   return (
     <div>
-      <LayoutCollab>
+      <Layout>
         <div className="kikelaInfo">
           <div className="div1">
             <form>
@@ -83,7 +83,7 @@ export default function Kikela({ user }: any) {
             </ul>
           </div>
         </div>
-      </LayoutCollab>
+      </Layout>
     </div>
   );
 }

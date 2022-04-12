@@ -15,6 +15,16 @@ import {
   Offcanvas,
 } from "react-bootstrap";
 const Layout: React.FC<any> = ({ children }) => {
+  const [user, setUser] = React.useState<any>([{}]);
+
+  React.useEffect(() => {
+    async function apiToken() {
+      const info = await fetch(`/api/infoUser`).then((data) => data.json());
+      setUser(info);
+    }
+    apiToken();
+  }, []);
+
   return (
     <div>
       <Navbar bg="#2f9dac" expand={false}>
@@ -26,25 +36,31 @@ const Layout: React.FC<any> = ({ children }) => {
               marginLeft: "0.2rem",
               color: "2f9dac",
             }}
-          />
+          />{" "}
           <Navbar.Brand
             href="/manager"
             style={{
               color: "white",
-              width: "10rem",
+              width: "20rem",
               display: "flex",
               margin: "1rem",
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
+              fontFamily: "Bebas Neue",
             }}
           >
+            {user.profile}
+            <span></span>
+            {user.nom}
+            <span></span>
+            {user.prenom}
+            <span></span>
             <HomeIcon />
             <Link href="/api/auth/logout" passHref={true}>
               <LogoutIcon />
             </Link>
           </Navbar.Brand>
-
           <Navbar.Offcanvas
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
