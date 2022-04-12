@@ -96,7 +96,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontSize: "3rem",
                       marginLeft: "0.5rem",
                     }}
-                    href="/manager"
+                    href="/collaborateur"
                   >
                     Accueil
                   </Dropdown.Item>
@@ -120,7 +120,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontSize: "3rem",
                       marginLeft: "0.5rem",
                     }}
-                    href="/creationPlanning"
+                    href="/Pointages"
                   >
                     Pointages
                   </Dropdown.Item>
