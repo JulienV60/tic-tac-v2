@@ -22,8 +22,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link
           href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
           rel="stylesheet"
-        />{" "}
-      </Head>{" "}
+        />
+      </Head>
       <Component {...pageProps} />
     </div>
   );
