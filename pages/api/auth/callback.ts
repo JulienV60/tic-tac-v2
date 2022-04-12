@@ -56,9 +56,9 @@ export default async function handler(
       }),
     ]);
     if (searchCategory === "manager") {
-      res.redirect(303, "/manager/home");
+      res.redirect(303, "/manager");
     } else if (searchCategory === "collaborateur") {
-      res.redirect(303, "/collaborateur/home");
+      res.redirect(303, "/collaborateur");
     } else {
       res.redirect("/404");
     }
