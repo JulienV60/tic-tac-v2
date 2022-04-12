@@ -198,7 +198,7 @@
   text-align: center;
   justify-content: center;
 }
-.leave-history > div {
+.leave-history.div {
   background-color: #2f9dac;
   border-radius: 3%;
   margin: 1em;
