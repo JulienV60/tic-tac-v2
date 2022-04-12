@@ -222,3 +222,30 @@
   width: 15rem;
   height: 3rem;
 }
+
+/* ######## Form Pointages ######## */
+
+.form-example-pointages {
+  display: table;
+}
+
+.form-example {
+  display: table-row;
+  margin-top: 32px;
+}
+
+.LabelPointages,
+.InputFormPointages {
+  display: table-cell;
+  /* margin-bottom: 10px; */
+}
+
+.InputFormPointages {
+  width: 100%;
+  margin-left: 32px;
+  /* margin-top: 16px; */
+}
+
+.LabelPointages {
+  margin-right: 32px;
+}
