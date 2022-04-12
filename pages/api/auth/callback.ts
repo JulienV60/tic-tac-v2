@@ -55,9 +55,9 @@ export default async function handler(
         path: "/",
       }),
     ]);
-    if (searchCategory === "manager") {
+    if (searchCategory === "Manager") {
       res.redirect(303, "/manager");
-    } else if (searchCategory === "collaborateur") {
+    } else if (searchCategory === "Collaborateur") {
       res.redirect(303, "/collaborateur");
     } else {
       res.redirect("/404");

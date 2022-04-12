@@ -1,10 +1,8 @@
 import { NextPage } from "next";
+import { Layout } from "../../components/LayoutCollab";
 
 const planning: NextPage = () => {
-
-  return (
-    <></>
-  );
+  return <Layout></Layout>;
 };
 
 export default planning;
