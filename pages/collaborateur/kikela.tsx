@@ -3,23 +3,26 @@ import jwt_decode from "jwt-decode";
 import { userProfil } from "../../src/userInfos";
 import { getDatabase } from "../../src/database";
 import { GetServerSideProps } from "next";
+import { NextApiRequest } from "next";
+import { NextApiResponse } from "next";
+import React from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const accessTokken = context;
-  console.log("======================ACCESSTOKKEN==================="+ accessTokken);
 
-  let profile;
 
-  if (context.req.cookies.idToken === undefined) {
-    profile = null;
-  }
 
-  // const decoded: any = jwt_decode(accessTokken);
-  // profile = await userProfil(decoded.email);
-  console.log("===================PROFILE===================="+profile);
+
+const fetchCookie = await fetch(`${process.env.AUTH0_LOCAL}/api/cookies`)
+  .then((data) => data.json())
+
+
+
+  console.log(fetchCookie);
+
+
 
   // const mongodb = await getDatabase();
-  // // const userInfo = await mongodb
+  // const userInfo = await mongodb
   //   .db()
   //   .collection("users")
   //   .findOne({ email: decoded.email })
@@ -27,14 +30,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      category: profile,
-      user: JSON.stringify("userInfo"),
+      user: JSON.stringify(fetchCookie),
     },
   };
 };
 
-export default function Kikela(props: any) {
-  const data = JSON.parse(props.user);
+export default function Kikela({user}: any) {
+  const data = JSON.parse(user);
   return (
     <div className="kikelaInfo">
       <div className="div1">
