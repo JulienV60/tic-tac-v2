@@ -4,7 +4,7 @@ import Link from "next/link";
 import LoginIcon from "@mui/icons-material/Login";
 import HomeIcon from "@mui/icons-material/Home";
 const Layout: React.FC = ({ children }: any) => {
-  console.log("hello");
+
   return (
     <>
       <Head>
