@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
-const home: NextPage = () => {
+const hello: NextPage = () => {
   return <>Cooucou</>;
 };
 
-export default home;
+export default hello;
