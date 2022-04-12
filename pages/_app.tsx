@@ -2,7 +2,11 @@ import type { AppProps } from "next/app";
 
 import "../styles/globals.css";
 import Head from "next/head";
+
 import Script from "next/script";
+
+import "@mobiscroll/react/dist/css/mobiscroll.min.css";
+
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (

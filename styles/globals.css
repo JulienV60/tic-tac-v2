@@ -159,6 +159,51 @@
 .demo-external-event-presets .external-event-calendar {
   height: 100%;
 }
+
+/*CONGES TITLE */
+.container-picker {
+  max-width: 50vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+.leave-picker {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin-left: 1em;
+}
+.container {
+  max-width: 90%;
+  margin-top: 4em;
+}
+.leave-section {
+  margin: 4em auto;
+}
+.leave-h3 {
+  text-align: center;
+}
+.leave-title {
+  background-color: rgb(15, 96, 102);
+  color: #f1f1f1;
+  margin-bottom: 2em;
+}
+
+.leave-balances {
+  display: flex;
+  text-align: center;
+}
+
+.leave-history {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, 186px);
+  color: #f1f1f1;
+  text-align: center;
+  justify-content: center;
+}
+.leave-history > * {
+  background-color: #2f9dac;
+  border-radius: 3%;
+  margin: 1em;
+}
 .error {
   display: flex;
   flex-direction: row;
