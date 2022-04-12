@@ -60,9 +60,9 @@ export default async function handler(
     } else if (searchCategory === "collaborateur") {
       res.redirect(303, "/collaborateur/home");
     } else {
-      res.redirect(404, "/404");
+      res.redirect("/404");
     }
   } else {
-    res.redirect(404, "/404");
+    res.redirect("/404");
   }
 }
