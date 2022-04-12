@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-import { Eventcalendar, getJson, formatDate, localeFr } from '@mobiscroll/react';
+import { Eventcalendar, formatDate, localeFr } from '@mobiscroll/react';
 import {getDatabase} from "../../src/database"
-import Layout from "../../components/Layout"
+import LayoutManager from "../../components/LayoutManager"
 const milestones = [];
 import moment from "moment";
 export const getServerSideProps = async (context) => {
@@ -184,7 +184,7 @@ function App(props) {
     }
 
     return (
-        <Layout>
+        <LayoutManager>
         <div className='container-fluid'>
             <button onClick={updateDb}>Valider</button>
         </div>
@@ -206,7 +206,7 @@ function App(props) {
             renderDay={renderDay}
             renderResource={renderCustomResource}
             />
-        </Layout>
+        </LayoutManager>
 
     );
 }

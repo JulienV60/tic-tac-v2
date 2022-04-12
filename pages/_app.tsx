@@ -1,9 +1,14 @@
-import "../styles/globals.css";
 import type { AppProps } from "next/app";
 
+import "../styles/globals.css";
 import Head from "next/head";
 
-function MyApp({ Component, pageProps }: AppProps) {
+import Script from "next/script";
+
+import "@mobiscroll/react/dist/css/mobiscroll.min.css";
+
+
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div>
       <Head>
@@ -23,9 +28,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           rel="stylesheet"
         />
       </Head>
+      <Script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossOrigin="anonymous"
+      />
       <Component {...pageProps} />
     </div>
   );
 }
-
-export default MyApp;

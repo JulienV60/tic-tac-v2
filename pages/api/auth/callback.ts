@@ -55,14 +55,14 @@ export default async function handler(
         path: "/",
       }),
     ]);
-    if (searchCategory === "manager") {
-      res.redirect(303, "/manager/home");
-    } else if (searchCategory === "collaborateur") {
-      res.redirect(303, "/collaborateur/home");
+    if (searchCategory === "Manager") {
+      res.redirect(303, "/manager");
+    } else if (searchCategory === "Collaborateur") {
+      res.redirect(303, "/collaborateur");
     } else {
-      res.redirect(404, "/404");
+      res.redirect("/404");
     }
   } else {
-    res.redirect(404, "/404");
+    res.redirect("/404");
   }
 }
