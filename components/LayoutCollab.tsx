@@ -46,7 +46,6 @@ export const Layout: React.FC<any> = ({ children }) => {
           <div
             className="infoUser"
             style={{
-              width: "95rem",
               fontFamily: "Bebas Neue",
               color: "white",
               fontSize: "1.6rem",

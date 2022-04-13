@@ -1,4 +1,4 @@
-import { Datepicker } from "@mobiscroll/react";
+import { Button, Datepicker, Input } from "@mobiscroll/react";
 import { setOptions, localeFr } from "@mobiscroll/react";
 import React from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
@@ -8,15 +8,15 @@ setOptions({
   themeVariant: "light",
 });
 import { GetServerSideProps, NextPage } from "next";
-import { Layout } from "../../components/LayoutCollab"
+import { Layout } from "../../components/LayoutCollab";
 import { userProfil } from "../../src/userInfos";
 import jwt_decode from "jwt-decode";
 import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-const accessTokken = context.req.cookies.IdToken;
+  const accessTokken = context.req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -24,7 +24,6 @@ const accessTokken = context.req.cookies.IdToken;
     profile = await userProfil(decoded.email);
   }
   if (profile === "Collaborateur") {
-
     return {
       props: {
         profileUser: profile,
@@ -220,10 +219,77 @@ const pointages: NextPage = (props: any) => {
             </div>
           </div>
         </form>
+        <div className="mbsc-row">
+          <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
+            <Datepicker
+              controls={["calendar"]}
+              select="preset-range"
+              firstSelectDay={1}
+              selectSize={7}
+              display="anchored"
+            />
+          </div>
+          <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
+            <Datepicker
+              calendarType="week"
+              calendarSize={1}
+              display="anchored"
+            />
+          </div>
+          <div className="mbsc-col-12 mbsc-col-lg-6">
+            <Input
+              label="Address"
+              inputStyle="box"
+              labelStyle="floating"
+              placeholder="What is your address?"
+            />
+          </div>
+        </div>
+        <div className="mbsc-row">
+          <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
+            <Input
+              label="Town"
+              inputStyle="box"
+              labelStyle="floating"
+              placeholder="Enter your town"
+            />
+          </div>
+          <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
+            <Input
+              label="State"
+              inputStyle="box"
+              labelStyle="floating"
+              placeholder="Select your state"
+            />
+          </div>
+          <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
+            <Input
+              label="Zip"
+              inputStyle="box"
+              labelStyle="floating"
+              placeholder="What is your zip code"
+            />
+          </div>
+          <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
+            <Input
+              label="Country"
+              inputStyle="box"
+              labelStyle="floating"
+              placeholder="Select your country"
+            />
+          </div>
+        </div>
+        <div className="mbsc-row">
+          <div className="mbsc-col-12 mbsc-col-md-12 mbsc-col-lg-3">
+            <div className="mbsc-button-group-block">
+              <Button color="success">Create account</Button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   } else {
-    return <PageNotFound/>
+    return <PageNotFound />;
   }
 };
 
