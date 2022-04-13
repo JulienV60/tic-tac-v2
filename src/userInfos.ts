@@ -4,7 +4,7 @@ export async function userProfil(userInfo: string) {
   const mongodb = await getDatabase();
   const userFound = await mongodb
     .db()
-    .collection("users")
+    .collection("Users")
     .findOne({
       email: userInfo,
     })
