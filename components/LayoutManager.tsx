@@ -25,7 +25,6 @@ const Layout: React.FC<any> = ({ children }) => {
       } else {
         setUser(info);
       }
-      setUser(info);
     }
     apiToken();
   }, []);
