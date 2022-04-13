@@ -52,7 +52,7 @@ const accessTokken = context.req.cookies.IdToken;
 
 
 export default function  Conges(props:any){
-  const [date, setDate] = useState("");
+
 
   return (
     <>
@@ -67,15 +67,19 @@ export default function  Conges(props:any){
               src="/calendar.png"
             />
             <div className="container-picker">
+              <form action="/api/conges/demandes" method="POST">
               <span className="leave-picker ">
                 <Datepicker
                   select="range"
                   rangeHighlight={true}
-                  showRangeLabels={true}
-
+                    showRangeLabels={true}
+                    inputComponent="input"
+                    name="inputdate"
+                    id="inputdate"
                 />
               </span>
-              <Button variant="secondary">Valider</Button>
+                <Button type="submit" variant="secondary">Valider</Button>
+                </form>
             </div>
 
             <div className="leave-history">
