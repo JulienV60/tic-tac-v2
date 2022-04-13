@@ -1,22 +1,33 @@
 import type { NextPage } from "next";
 import LoginIcon from "@mui/icons-material/Login";
+import { Card, Button, Row, Col } from "react-bootstrap";
 const Home: NextPage = () => {
   return (
-    <div>
-      <div className="BodyHomePage">
-        <div className="imgIndex">
-          <img src="/undraw_Time_management_re_tk5w (2).png"></img>
+    <>
+      {/* ======= HOMEPAGE NO CONNECTED START ======== */}
+
+      <section className="home-no-connected">
+        <div className="info-card">
+          <div className="container-home-image">
+            <Card.Img
+              src="/undraw_Time_management_re_tk5w (2).png"
+              alt="home image"
+            />
+          </div>
         </div>
-        <div className="AsideRight">
-          <h1>Welcome, to the new Tac-Tic.</h1>
+
+        <div className="rigth-side">
+          <h2>Welcome, to the new Tac-Tic.</h2>
           <form action="/api/auth/login" method="GET">
-            <button type="submit" className="btn btn-dark ">
+            <Button type="submit" className="home-btn">
               <LoginIcon />
-            </button>
+            </Button>
           </form>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* ======= HOMEPAGE NO CONNECTED END ======== */}
+    </>
   );
 };
 
