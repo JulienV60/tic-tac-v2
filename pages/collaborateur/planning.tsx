@@ -12,22 +12,9 @@ import {
   localeFr,
 } from "@mobiscroll/react";
 import React from "react";
-import { userProfil } from "../../src/userInfos";
-import jwt_decode from "jwt-decode";
-import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 
-  const accessTokken = req.cookies.IdToken;
-  let profile;
-  let decoded:any;
-  if (accessTokken === undefined) {
-    profile = null;
-  } else {
-    decoded = jwt_decode(accessTokken);
-    profile = await userProfil(decoded.email);
-  }
-  if (profile === "Collaborateur") {
     const mongodb = await getDatabase();
     //list of collaborateurs
     const listCollaborateurs = await mongodb
@@ -55,18 +42,11 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 
     return {
       props: {
-      profileUser:profile,
         prenoms: JSON.stringify(listPrenom),
         dataPlanningInit: JSON.stringify(data),
       },
     };
-  } else {
-    return {
-      props: {
-        profileUser:null,
-      },
-    };
-  }
+
 };
 
 export default function IndexManager(props: any) {
@@ -169,7 +149,6 @@ export default function IndexManager(props: any) {
     setEvents(eventsPlanning);
   }, []);
 
-  if (props.profileUser === "Collaborateur") {
     const renderDay = (args: any) => {
       const date = args.date;
 
@@ -217,7 +196,5 @@ export default function IndexManager(props: any) {
         />
       </Layout>
     );
-  } else {
-    return <PageNotFound/>
-  }
+
 }

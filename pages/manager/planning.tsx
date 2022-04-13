@@ -18,16 +18,7 @@ import PageNotFound from "../../components/PageNotFound";
 
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
-  const accessTokken = req.cookies.IdToken;
-  let profile;
-  let decoded: any;
-  if (accessTokken === undefined) {
-    profile = null;
-  } else {
-    decoded = jwt_decode(accessTokken);
-    profile = await userProfil(decoded.email);
-  }
-  if (profile === "Manager") {
+
     const mongodb = await getDatabase();
 
     //list of collaborateurs
@@ -56,18 +47,11 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 
     return {
       props: {
-        profileUser: profile,
         prenoms: JSON.stringify(listPrenom),
         dataPlanningInit: JSON.stringify(data),
       },
     };
-  } else {
-    return {
-      props: {
-        profileUser: null,
-      },
-    };
-  }
+
 };
 
 export default function IndexManager(props: any) {
@@ -167,7 +151,7 @@ export default function IndexManager(props: any) {
       setEvents(eventsPlanning);
     }, []);
 
-  if (props.profileUser === "Manager") {
+
 
     const renderDay = (args: any) => {
       const date = args.date;
@@ -216,7 +200,4 @@ export default function IndexManager(props: any) {
         />
       </LayoutManager>
     );
-  } else {
-    return <PageNotFound />
-  }
 }

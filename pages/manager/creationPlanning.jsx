@@ -11,16 +11,7 @@ import { useRouter } from "next/router";
 import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps = async (context) => {
-  const accessTokken = context.req.cookies.IdToken;
-  let profile;
-  let decoded;
-  if (accessTokken === undefined) {
-    profile = null;
-  } else {
-    decoded = jwt_decode(accessTokken);
-    profile = await userProfil(decoded.email);
-  }
-  if (profile === "Manager") {
+
     const mongodb = await getDatabase();
 
     const listCollaborateurs = await mongodb
@@ -46,18 +37,11 @@ export const getServerSideProps = async (context) => {
 
     return {
       props: {
-        profileUser:profile,
         prenoms: JSON.stringify(listPrenom),
         dataPlanningInit: JSON.stringify(data),
       },
     };
-  } else {
-    return {
-      props: {
-        profileUser: null,
-      },
-    };
-  }
+
 };
 
 function App(props) {
@@ -200,7 +184,7 @@ function App(props) {
     setEvents(eventsPlanning);
   }, [semaineShow]);
   const router = useRouter();
-  if (props.profileUser === "Manager") {
+
     const prenoms = JSON.parse(props.prenoms);
 
     const renderDay = (args) => {
@@ -276,9 +260,7 @@ function App(props) {
         />
       </LayoutManager>
     );
-  } else {
-    return <PageNotFound />
-  }
+
 }
 
 export default App;
