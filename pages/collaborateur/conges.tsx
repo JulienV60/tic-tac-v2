@@ -36,9 +36,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .then((result) => {
         return { droitCP: result?.droit_cp, soldesCP: result?.soldes_cp };
       });
+    const infoArrayConges = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => {
+        return result?.conges;
+      });
+    const congesNotApprouved = infoArrayConges.filter(
+      (element: any, index: any) => element.approuved === false
+    );
 
     return {
       props: {
+        nbrjours: congesNotApprouved.length,
         data: congesInfo,
       },
     };
@@ -104,7 +115,7 @@ export default function Conges(props: any) {
               <div className="end">
                 Soldes <p>{props.data.soldesCP}</p>
               </div>
-              <div className="quantity">Demandes en cours</div>
+              <div className="quantity">Demandes en cours {props.nbrjours}</div>{" "}
               <div className="rest">Demandes accept. ou validées</div>
               <div className="forecast-balances">Soldes prévitionnels</div>
             </div>
