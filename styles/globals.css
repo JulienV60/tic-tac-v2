@@ -223,9 +223,9 @@
   height: 3rem;
 }
 .resource-template-content {
-    position: relative;
-    padding-left: 80px;
-    text-align: left;
+  position: relative;
+  padding-left: 80px;
+  text-align: left;
 }
 
 /* ######## Form Pointages ######## */
@@ -255,32 +255,35 @@
   margin-right: 32px;
 }
 .resource-avatar {
-    position: absolute;
-    max-height: 50px;
-    max-width: 50px;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    left: 40px;
+  position: absolute;
+  max-height: 50px;
+  max-width: 50px;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  left: 40px;
 }
 
 .resource-name {
-    font-size: 20px;
+  font-size: 20px;
 }
 
-.pictures_creationPlanning{
+.pictures_creationPlanning {
   width: 50px;
   height: 50px;
   align-items: center;
 }
 
-.planning .mbsc-schedule-col-width{
-  width:5rem;
+.planning .mbsc-schedule-col-width {
+  width: 5rem;
 }
 
-.bouton_validation_planning{
+.bouton_validation_planning {
   position: absolute;
-top:150px;
-left:20px;
-z-index: 5;
+  top: 150px;
+  left: 20px;
+  z-index: 5;
+}
+.header-resource-avatar {
+  border-radius: 50%;
 }
