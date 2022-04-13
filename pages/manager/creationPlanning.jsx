@@ -8,9 +8,8 @@ import moment from "moment";
 import jwt_decode from "jwt-decode";
 import DoneIcon from "@mui/icons-material/Done";
 import PageNotFound from "../../components/PageNotFound";
-
+import { userProfil } from "../../src/userInfos";
 export const getServerSideProps = async (context) => {
-
   const accessTokken = context.req.cookies.IdToken;
   let profile;
   let decoded;
@@ -36,7 +35,8 @@ export const getServerSideProps = async (context) => {
     const data = await Promise.all(
       listPrenom.map(async (element) => {
         return await fetch(
-          `${process.env.AUTH0_LOCAL
+          `${
+            process.env.AUTH0_LOCAL
           }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
             moment().locale("fr").format("w")
           )}&id=${element._id}`
@@ -51,9 +51,9 @@ export const getServerSideProps = async (context) => {
       },
     };
   } else {
-      return {
+    return {
       notFound: true,
-    }
+    };
   }
 };
 
@@ -63,7 +63,7 @@ function App(props) {
     JSON.parse(props.dataPlanningInit)
   );
   const [semaineShow, setsemaineShow] = React.useState(0);
-   const router = useRouter();
+
   const prenoms = JSON.parse(props.prenoms);
 
   const view = React.useMemo(() => {
@@ -199,81 +199,79 @@ function App(props) {
     setEvents(eventsPlanning);
   }, [semaineShow]);
 
+  const renderDay = (args) => {
+    const date = args.date;
 
-    const renderDay = (args) => {
-      const date = args.date;
-
-      const dayNr = date.getDay();
-      const task =
-        milestones.find((obj) => {
-          return +new Date(obj.date) === +date;
-        }) || {};
-      const numeroSemaine = parseInt(
-        moment(args.date).locale("fr").format("w") - 1
-      );
-      setsemaineShow(numeroSemaine);
-
-      return (
-        <div className="header-template-container">
-          <div className="header-template-date">
-            <div className="header-template-day-name">
-              {formatDate("DDDD", date)}
-            </div>
-            <div className="header-template-day">
-              {formatDate("MMMM DD", date)}
-            </div>
-          </div>
-          <div
-            className="header-template-task"
-            style={{ background: task.color }}
-          >
-            {task.name}
-          </div>
-        </div>
-      );
-    };
-
-    const renderCustomResource = (resource) => {
-      return (
-        <div className="header-resource-template-content">
-          <img
-            className="header-resource-avatar pictures_creationPlanning"
-            src={resource.img}
-          />
-          <div className="header-resource-name">{resource.name}</div>
-        </div>
-      );
-    };
+    const dayNr = date.getDay();
+    const task =
+      milestones.find((obj) => {
+        return +new Date(obj.date) === +date;
+      }) || {};
+    const numeroSemaine = parseInt(
+      moment(args.date).locale("fr").format("w") - 1
+    );
+    setsemaineShow(numeroSemaine);
 
     return (
-      <LayoutManager>
-        <div>
-          <button className="bouton_validation_planning" onClick={updateDb}>
-            <DoneIcon />
-          </button>
+      <div className="header-template-container">
+        <div className="header-template-date">
+          <div className="header-template-day-name">
+            {formatDate("DDDD", date)}
+          </div>
+          <div className="header-template-day">
+            {formatDate("MMMM DD", date)}
+          </div>
         </div>
-        <Eventcalendar
-          className="planning"
-          theme="ios"
-          themeVariant="light"
-          clickToCreate={true}
-          dragToCreate={true}
-          dragToMove={true}
-          dragToResize={true}
-          locale={localeFr}
-          onEventCreated={onEventCreated}
-          onEventUpdate={eventUpdate}
-          onEventDelete={eventClose}
-          view={view}
-          data={myEvents}
-          resources={myResources}
-          groupBy="date"
-          renderDay={renderDay}
-          renderResource={renderCustomResource}
-        />
-      </LayoutManager>
+        <div
+          className="header-template-task"
+          style={{ background: task.color }}
+        >
+          {task.name}
+        </div>
+      </div>
     );
+  };
 
+  const renderCustomResource = (resource) => {
+    return (
+      <div className="header-resource-template-content">
+        <img
+          className="header-resource-avatar pictures_creationPlanning"
+          src={resource.img}
+        />
+        <div className="header-resource-name">{resource.name}</div>
+      </div>
+    );
+  };
+
+  return (
+    <LayoutManager>
+      <div>
+        <button className="bouton_validation_planning" onClick={updateDb}>
+          <DoneIcon />
+        </button>
+      </div>
+      <Eventcalendar
+        className="planning"
+        theme="ios"
+        themeVariant="light"
+        clickToCreate={true}
+        dragToCreate={true}
+        dragToMove={true}
+        dragToResize={true}
+        locale={localeFr}
+        onEventCreated={onEventCreated}
+        onEventUpdate={eventUpdate}
+        onEventDelete={eventClose}
+        view={view}
+        data={myEvents}
+        resources={myResources}
+        groupBy="date"
+        renderDay={renderDay}
+        renderResource={renderCustomResource}
+      />
+    </LayoutManager>
+  );
 }
 
 export default App;
