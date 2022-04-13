@@ -11,11 +11,12 @@ import { Card, Button } from "react-bootstrap";
 import { Layout } from "../../components/LayoutCollab";
 import jwt_decode from "jwt-decode";
 import { userProfil } from "../../src/userInfos";
+import React from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-const accessTokken = context.req.cookies.IdToken;
+  const accessTokken = context.req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -30,14 +31,25 @@ const accessTokken = context.req.cookies.IdToken;
       },
     };
   } else {
-     return {
+    return {
       notFound: true,
-    }
+    };
   }
 };
 
+const Conges: NextPage = () => {
+  const [date, setMyDate] = React.useState();
+  const [calendar, setCalendar] = React.useState();
+  const pickerChange = async (ev: any) => {
+    setMyDate(ev.value);
+  };
+  const sendDate = async (e: any) => {
+    const test = await fetch("/api/collaborateur", {
+      method: "POST",
+      body: JSON.stringify({ date: date }),
+    });
+  };
 
-const conges: NextPage = () => {
   return (
     <>
       <Layout>
@@ -51,14 +63,25 @@ const conges: NextPage = () => {
               src="/calendar.png"
             />
             <div className="container-picker">
-              <span className="leave-picker ">
-                <Datepicker
-                  select="range"
-                  rangeHighlight={true}
-                  showRangeLabels={true}
-                />
-              </span>
-              <Button variant="secondary">Valider</Button>
+              {" "}
+              <form
+                method="POST"
+                action={`${process.env.AUTH0_LOCAL}/api/collaborateur`}
+              >
+                <span className="leave-picker ">
+                  <Datepicker
+                    controls={["calendar"]}
+                    select="range"
+                    rangeHighlight={true}
+                    showRangeLabels={true}
+                    value={date}
+                    onChange={pickerChange}
+                  />
+                </span>
+                <button type="button" onClick={sendDate} id="date">
+                  Valider
+                </button>
+              </form>
             </div>
 
             <div className="leave-history">
@@ -91,4 +114,4 @@ const conges: NextPage = () => {
   );
 };
 
-export default conges;
+export default Conges;

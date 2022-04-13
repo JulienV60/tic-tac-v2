@@ -44,87 +44,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else {
     return {
       notFound: true,
-    }
+    };
   }
 };
 export default function Home(props: any) {
   const [view, setView] = React.useState("month");
   const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
 
-  React.useEffect(() => {}, []);
-
-  const [calView, setCalView] = React.useState<MbscEventcalendarView>({
-    calendar: { labels: true },
-  });
-
-  const changeView = (event: any) => {
-    let calView = {};
-
-    switch (event.target.value) {
-      case "year":
-        calView = {
-          calendar: { type: "year" },
-        };
-        break;
-      case "month":
-        calView = {
-          calendar: { labels: true },
-        };
-        break;
-      case "week":
-        calView = {
-          schedule: { type: "week" },
-        };
-        break;
-      case "day":
-        calView = {
-          schedule: { type: "day" },
-        };
-        break;
-      case "agenda":
-        calView = {
-          calendar: { type: "week" },
-          agenda: { type: "week" },
-        };
-        break;
-    }
-
-    setView(event.target.value);
-    setCalView(calView);
-  };
-
-  if (props.profileUser === "Collaborateur") {
-    const customWithNavButtons = () => {
-      return (
-        <React.Fragment>
-          <CalendarNav className="cal-header-nav" />
-          <div className="cal-header-picker">
-            <SegmentedGroup value={view} onChange={changeView}>
-              <SegmentedItem value="year">Year</SegmentedItem>
-              <SegmentedItem value="month">Month</SegmentedItem>
-              <SegmentedItem value="week">Week</SegmentedItem>
-              <SegmentedItem value="day">Day</SegmentedItem>
-              <SegmentedItem value="agenda">Agenda</SegmentedItem>
-            </SegmentedGroup>
-          </div>
-          <CalendarPrev className="cal-header-prev" />
-          <CalendarToday className="cal-header-today" />
-          <CalendarNext className="cal-header-next" />
-        </React.Fragment>
-      );
-    };
-    return (
-      <Layout>
-        <Eventcalendar
-          renderHeader={customWithNavButtons}
-          height={750}
-          view={calView}
-          data={myEvents}
-          cssClass="md-switching-view-cont"
-        />
-      </Layout>
-    );
-  } else {
-    return <PageNotFound />;
-  }
+  return (
+    <Layout>
+      <div className="parent">
+        <div className="div1">Anomalie</div>
+        <div className="div2"></div>
+        <div className="div3">Message </div>
+        <div className="div4"></div>
+        <div className="div5"> Horaires</div>
+        <div className="div6"></div>
+        <div className="div7">Compteurs </div>
+        <div className="div8">Ecarts </div>
+        <div className="div9"></div>
+        <div className="div10"></div>
+        <div className="div11">Demandes de congés </div>
+        <div className="div12"></div>
+      </div>
+    </Layout>
+  );
 }
