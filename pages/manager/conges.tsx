@@ -5,9 +5,9 @@ import { userProfil } from "../../src/userInfos";
 import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-const accessTokken = context.req.cookies.IdToken;
+  const accessTokken = context.req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -18,21 +18,17 @@ const accessTokken = context.req.cookies.IdToken;
     return {
       props: {
         category: profile,
-
       },
     };
   } else {
-        return {
+    return {
       notFound: true,
-    }
+    };
   }
 };
 
-const conges: NextPage = (props:any) => {
-
-    return <LayoutManager></LayoutManager>;
-
-
+const conges: NextPage = (props: any) => {
+  return <LayoutManager></LayoutManager>;
 };
 
 export default conges;
