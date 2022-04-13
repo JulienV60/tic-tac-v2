@@ -7,6 +7,7 @@ import {
   SegmentedItem,
 } from "@mobiscroll/react";
 import { NextPage } from "next";
+
 import { Card, Button } from "react-bootstrap";
 import LayoutCollab from "../../components/LayoutCollab";
 
@@ -34,6 +35,7 @@ const conges: NextPage = () => {
               <Button variant="secondary">Valider</Button>
             </div>
 
+
             <div className="leave-history">
               <div className="libelle">Droits</div>
               <div className="start"> Pris</div>
@@ -49,6 +51,7 @@ const conges: NextPage = () => {
               <h3 className="leave-h3">Historiques des demandes</h3>
             </div>
 
+
             <div className="leave-history">
               <div className="libelle">Libellé</div>
               <div className="start"> Date de Début</div>
@@ -61,6 +64,7 @@ const conges: NextPage = () => {
         </div>
       </LayoutCollab>
     </>
+
   );
 };
 
