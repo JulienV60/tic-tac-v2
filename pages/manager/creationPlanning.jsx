@@ -199,10 +199,10 @@ function App(props) {
 
     setEvents(eventsPlanning);
   }, [semaineShow]);
-
+  const router = useRouter();
   if (props.profileUser === "Manager") {
     const prenoms = JSON.parse(props.prenoms);
-    const router = useRouter();
+
     const renderDay = (args) => {
       const date = args.date;
 
