@@ -50,11 +50,11 @@ const Layout: React.FC<any> = ({ children }) => {
               fontFamily: "Bebas Neue",
             }}
           >
-            {user.profile}
+            Manager:
             <span></span>
-            {user.nom}
+            {user?.nom === null ? <>nom</> : user?.nom}
             <span></span>
-            {user.prenom}
+            {user?.prenom === null ? <>prenom</> : user?.prenom}
             <span></span>
             <HomeIcon />
             <Link href="/api/auth/logout" passHref={true}>
@@ -109,7 +109,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/manager"
@@ -121,7 +121,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/manager/planning"
@@ -133,7 +133,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       fontFamily: "Bebas Neue",
                       color: "#333",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/manager/creationPlanning"
@@ -145,7 +145,8 @@ const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
+                      marginLeft: "0.5rem",
                     }}
                     href="/manager/conges"
                   >
@@ -156,7 +157,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/manager/kikela"
@@ -168,7 +169,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/api/auth/logout"
