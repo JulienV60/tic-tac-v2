@@ -24,11 +24,9 @@ const accessTokken = context.req.cookies.IdToken;
       },
     };
   } else {
-    return {
-      props: {
-        profileUser: null,
-      },
-    };
+     return {
+      notFound: true,
+    }
   }
 };
 

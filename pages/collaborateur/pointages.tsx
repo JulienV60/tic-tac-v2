@@ -11,12 +11,37 @@ import { GetServerSideProps, NextPage } from "next";
 import { Layout } from "../../components/LayoutCollab";
 import { userProfil } from "../../src/userInfos";
 import jwt_decode from "jwt-decode";
-import PageNotFound from "../../components/PageNotFound";
 
+
+export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
+
+  const accessTokken = req.cookies.IdToken;
+  let profile;
+  let decoded:any;
+  if (accessTokken === undefined) {
+    profile = null;
+  } else {
+    decoded = jwt_decode(accessTokken);
+    profile = await userProfil(decoded.email);
+  }
+
+  if (profile === "Collaborateur") {
+
+    return {
+      props: {
+        prenoms: "",
+      },
+    };
+  } else {
+     return {
+      notFound: true,
+    }
+  }
+};
 
 
 const pointages: NextPage = (props: any) => {
-  if (props.profileUser === "Collaborateur") {
+
     return (
       <div>
         <Layout />
@@ -265,9 +290,7 @@ const pointages: NextPage = (props: any) => {
         </div>
       </div>
     );
-  } else {
-    return <PageNotFound />;
-  }
+
 };
 
 export default pointages;

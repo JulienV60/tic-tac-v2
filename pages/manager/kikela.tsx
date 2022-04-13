@@ -4,23 +4,34 @@ import { GetServerSideProps } from "next";
 import jwt_decode from "jwt-decode";
 import React from "react";
 import Layout from "../../components/LayoutManager";
-import moment from "moment";
-import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
+ const accessTokken = context.req.cookies.IdToken;
+  let profile;
+  let decoded:any;
+  if (accessTokken === undefined) {
+    profile = null;
+  } else {
+    decoded = jwt_decode(accessTokken);
+    profile = await userProfil(decoded.email);
+  }
 
+  if (profile === "Manager") {
+    const fetchCookie = await fetch(
+      `${process.env.AUTH0_LOCAL}/api/cookies`
+    ).then((data) => data.json());
 
-  const fetchCookie = await fetch(
-    `${process.env.AUTH0_LOCAL}/api/cookies`
-  ).then((data) => data.json());
-
-  return {
-    props: {
-      user: JSON.stringify(fetchCookie),
-    },
-  };
-
+    return {
+      props: {
+        user: JSON.stringify(fetchCookie),
+      },
+    };
+  } else {
+     return {
+      notFound: true,
+    }
+  }
 };
 
 export default function Kikela(props:any) {

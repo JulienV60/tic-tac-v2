@@ -43,10 +43,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   } else {
     return {
-      props: {
-        profileUser: null,
-      },
-    };
+      notFound: true,
+    }
   }
 };
 export default function Home(props: any) {

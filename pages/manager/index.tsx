@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     profile = await userProfil(decoded.email);
   }
 
-
+  if (profile === "Manager") {
     const mongodb = await getDatabase();
 
     //list of collaborateurs
@@ -46,8 +46,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     const data = await Promise.all(
       listPrenom.map(async (element) => {
         return await fetch(
-          `${
-            process.env.AUTH0_LOCAL
+          `${process.env.AUTH0_LOCAL
           }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
             moment().locale("fr").format("w")
           )}&id=${element._id}`
@@ -62,7 +61,11 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
         dataPlanningInit: JSON.stringify(data),
       },
     };
-
+  } else {
+     return {
+      notFound: true,
+    }
+  }
 };
 
 export default function IndexManager(props: any) {
