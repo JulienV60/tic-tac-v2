@@ -52,9 +52,11 @@ const Layout: React.FC<any> = ({ children }) => {
               justifyContent: "space-around",
               alignItems: "center",
               fontFamily: "Bebas Neue",
+              borderRadius: "50%",
             }}
           >
-            Manager:
+            Manager:{" "}
+            {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}
             <span></span>
             {user?.nom === null ? <>nom</> : user?.nom}
             <span></span>

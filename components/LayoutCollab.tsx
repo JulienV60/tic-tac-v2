@@ -56,7 +56,9 @@ export const Layout: React.FC<any> = ({ children }) => {
               fontFamily: "Bebas Neue",
             }}
           >
-            Collaborateur:<span> </span>
+            Collaborateur:{" "}
+            {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}
+            <span> </span>
             <span></span>
             {user.nom === null ? <>nom</> : user.nom}
             <span></span>

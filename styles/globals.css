@@ -287,3 +287,7 @@
 .header-resource-avatar {
   border-radius: 50%;
 }
+.container-fluid img {
+  width: 2rem;
+  border-radius: 50%;
+}
