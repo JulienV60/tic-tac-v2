@@ -1,15 +1,7 @@
-import { NextPage } from "next";
-
-import { userProfil } from "../../src/userInfos";
-import { getDatabase } from "../../src/database";
 import { GetServerSideProps } from "next";
-import { NextApiRequest } from "next";
-import { NextApiResponse } from "next";
 import React from "react";
 import { Layout } from "../../components/LayoutCollab";
 import moment from "moment";
-import { AnyError } from "mongodb";
-import { PrecisionManufacturing } from "@mui/icons-material";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const test = moment().locale("fr").format("YYYY-MM-DD");
