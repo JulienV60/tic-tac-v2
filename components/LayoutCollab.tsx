@@ -59,9 +59,9 @@ export const Layout: React.FC<any> = ({ children }) => {
           >
             Collaborateur:<span> </span>
             <span></span>
-            {user?.nom === null ? <>nom</> : user?.nom}
+            {user.nom === null ? <>nom</> : user.nom}
             <span></span>
-            {user?.prenom === null ? <>prenom</> : user?.prenom}
+            {user.prenom === null ? <>prenom</> : user.prenom}
             <span></span>
             <HomeIcon />
             <Link href="/api/auth/logout" passHref={true}>

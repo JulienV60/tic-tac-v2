@@ -8,7 +8,7 @@ setOptions({
   themeVariant: "light",
 });
 import { NextPage } from "next";
-import { Layout } from "../../components/LayoutCollab";
+import { Layout } from "../../components/LayoutCollab"
 
 const pointages: NextPage = () => {
   return (
