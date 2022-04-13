@@ -3,6 +3,7 @@ import React from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import {
   Button,
   Container,
@@ -14,17 +15,23 @@ import {
   NavDropdown,
   Offcanvas,
 } from "react-bootstrap";
+import { Router } from "@mui/icons-material";
 
 export const Layout: React.FC<any> = ({ children }) => {
   const [user, setUser] = React.useState<any>([{}]);
-
+  const router = useRouter();
   React.useEffect(() => {
     async function apiToken() {
       const info = await fetch(`/api/infoUser`).then((data) => data.json());
-      setUser(info);
+      if (info === null || info === undefined) {
+        router.reload();
+      } else {
+        setUser(info);
+      }
     }
     apiToken();
   }, []);
+
   return (
     <div>
       <Navbar bg="#2f9dac" expand={false}>
