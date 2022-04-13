@@ -294,6 +294,9 @@
   margin-left: 5em;
   margin-top: 10em;
 }
+.rigth-side > h2 {
+  font-family: "Bebas Neue", cursive;
+}
 .home-btn {
   background-color: #2f9dac;
   font-size: 18px;

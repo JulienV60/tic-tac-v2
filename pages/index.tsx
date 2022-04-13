@@ -17,7 +17,7 @@ const Home: NextPage = () => {
         </div>
 
         <div className="rigth-side">
-          <h2>Welcome, to the new Tac-Tic.</h2>
+          <h2>Bienvenue, sur le nouveau Tac-Tic.</h2>
           <form action="/api/auth/login" method="GET">
             <Button type="submit" className="home-btn">
               <LoginIcon />
