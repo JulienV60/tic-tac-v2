@@ -5,39 +5,59 @@ import { getDatabase } from "../../src/database";
 import LayoutManager from "../../components/LayoutManager";
 const milestones = [];
 import moment from "moment";
+import jwt_decode from "jwt-decode";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRouter } from "next/router";
+import PageNotFound from "../../components/PageNotFound";
+
 export const getServerSideProps = async (context) => {
-  const mongodb = await getDatabase();
+  const accessTokken = context.req.cookies.IdToken;
+  let profile;
+  let decoded;
+  if (accessTokken === undefined) {
+    profile = null;
+  } else {
+    decoded = jwt_decode(accessTokken);
+    profile = await userProfil(decoded.email);
+  }
+  if (profile === "Manager") {
+    const mongodb = await getDatabase();
 
-  const listCollaborateurs = await mongodb
-    .db()
-    .collection("Collaborateurs")
-    .find({ profile: "Collaborateur" })
-    .toArray();
+    const listCollaborateurs = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .find({ profile: "Collaborateur" })
+      .toArray();
 
-  const listPrenom = listCollaborateurs.map((element) => {
-    return { prenom: element.prenom, _id: element._id, img: element.img };
-  });
+    const listPrenom = listCollaborateurs.map((element) => {
+      return { prenom: element.prenom, _id: element._id, img: element.img };
+    });
 
-  const data = await Promise.all(
-    listPrenom.map(async (element) => {
-      return await fetch(
-        `${
-          process.env.AUTH0_LOCAL
-        }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
-          moment().locale("fr").format("w")
-        )}&id=${element._id}`
-      ).then((result) => result.json());
-    })
-  );
+    const data = await Promise.all(
+      listPrenom.map(async (element) => {
+        return await fetch(
+          `${process.env.AUTH0_LOCAL
+          }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
+            moment().locale("fr").format("w")
+          )}&id=${element._id}`
+        ).then((result) => result.json());
+      })
+    );
 
-  return {
-    props: {
-      prenoms: JSON.stringify(listPrenom),
-      dataPlanningInit: JSON.stringify(data),
-    },
-  };
+    return {
+      props: {
+        profileUser:profile,
+        prenoms: JSON.stringify(listPrenom),
+        dataPlanningInit: JSON.stringify(data),
+      },
+    };
+  } else {
+    return {
+      props: {
+        profileUser: null,
+      },
+    };
+  }
 };
 
 function App(props) {
@@ -46,8 +66,6 @@ function App(props) {
     JSON.parse(props.dataPlanningInit)
   );
   const [semaineShow, setsemaineShow] = React.useState(0);
-  const prenoms = JSON.parse(props.prenoms);
-  const router = useRouter();
 
   const view = React.useMemo(() => {
     return {
@@ -181,80 +199,86 @@ function App(props) {
 
     setEvents(eventsPlanning);
   }, [semaineShow]);
+  const router = useRouter();
+  if (props.profileUser === "Manager") {
+    const prenoms = JSON.parse(props.prenoms);
 
-  const renderDay = (args) => {
-    const date = args.date;
+    const renderDay = (args) => {
+      const date = args.date;
 
-    const dayNr = date.getDay();
-    const task =
-      milestones.find((obj) => {
-        return +new Date(obj.date) === +date;
-      }) || {};
-    const numeroSemaine = parseInt(
-      moment(args.date).locale("fr").format("w") - 1
-    );
-    setsemaineShow(numeroSemaine);
+      const dayNr = date.getDay();
+      const task =
+        milestones.find((obj) => {
+          return +new Date(obj.date) === +date;
+        }) || {};
+      const numeroSemaine = parseInt(
+        moment(args.date).locale("fr").format("w") - 1
+      );
+      setsemaineShow(numeroSemaine);
 
-    return (
-      <div className="header-template-container">
-        <div className="header-template-date">
-          <div className="header-template-day-name">
-            {formatDate("DDDD", date)}
+      return (
+        <div className="header-template-container">
+          <div className="header-template-date">
+            <div className="header-template-day-name">
+              {formatDate("DDDD", date)}
+            </div>
+            <div className="header-template-day">
+              {formatDate("MMMM DD", date)}
+            </div>
           </div>
-          <div className="header-template-day">
-            {formatDate("MMMM DD", date)}
+          <div
+            className="header-template-task"
+            style={{ background: task.color }}
+          >
+            {task.name}
           </div>
         </div>
-        <div
-          className="header-template-task"
-          style={{ background: task.color }}
-        >
-          {task.name}
-        </div>
-      </div>
-    );
-  };
+      );
+    };
 
-  const renderCustomResource = (resource) => {
+    const renderCustomResource = (resource) => {
+      return (
+        <div className="header-resource-template-content">
+          <img
+            className="header-resource-avatar pictures_creationPlanning"
+            src={resource.img}
+          />
+          <div className="header-resource-name">{resource.name}</div>
+        </div>
+      );
+    };
+
     return (
-      <div className="header-resource-template-content">
-        <img
-          className="header-resource-avatar pictures_creationPlanning"
-          src={resource.img}
+      <LayoutManager>
+        <div>
+          <button className="bouton_validation_planning" onClick={updateDb}>
+            <DoneIcon />
+          </button>
+        </div>
+        <Eventcalendar
+          className="planning"
+          theme="ios"
+          themeVariant="light"
+          clickToCreate={true}
+          dragToCreate={true}
+          dragToMove={true}
+          dragToResize={true}
+          locale={localeFr}
+          onEventCreated={onEventCreated}
+          onEventUpdate={eventUpdate}
+          onEventDelete={eventClose}
+          view={view}
+          data={myEvents}
+          resources={myResources}
+          groupBy="date"
+          renderDay={renderDay}
+          renderResource={renderCustomResource}
         />
-        <div className="header-resource-name">{resource.name}</div>
-      </div>
+      </LayoutManager>
     );
-  };
-
-  return (
-    <LayoutManager>
-      <div>
-        <button className="bouton_validation_planning" onClick={updateDb}>
-          <DoneIcon />
-        </button>
-      </div>
-      <Eventcalendar
-        className="planning"
-        theme="ios"
-        themeVariant="light"
-        clickToCreate={true}
-        dragToCreate={true}
-        dragToMove={true}
-        dragToResize={true}
-        locale={localeFr}
-        onEventCreated={onEventCreated}
-        onEventUpdate={eventUpdate}
-        onEventDelete={eventClose}
-        view={view}
-        data={myEvents}
-        resources={myResources}
-        groupBy="date"
-        renderDay={renderDay}
-        renderResource={renderCustomResource}
-      />
-    </LayoutManager>
-  );
+  } else {
+    return <PageNotFound />
+  }
 }
 
 export default App;
