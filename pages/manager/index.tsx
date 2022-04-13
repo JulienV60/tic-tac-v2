@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 };
 export default function IndexManager({ data }: any) {
   const result = JSON.parse(data);
-  console.log(result);
+
   const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
 
   const view = React.useMemo<MbscEventcalendarView>(() => {
