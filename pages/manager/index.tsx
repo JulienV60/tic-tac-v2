@@ -91,12 +91,18 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     }
   };
 };
+<<<<<<< HEAD
 export default function IndexManager(props:any) {
   const result = JSON.parse(props.data);
    const [dataPlanning, setDataPlanning] = React.useState(
     JSON.parse(props.dataPlanningInit)
   );
   const prenoms = JSON.parse(props.prenoms);
+=======
+export default function IndexManager({ data }: any) {
+  const result = JSON.parse(data);
+
+>>>>>>> 7601088ff138cd0dc5c24ce3d03e41636dfce2b6
   const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
   const [selectedDate, setSelectedDate] = React.useState(new Date(moment().format("L")));
 
