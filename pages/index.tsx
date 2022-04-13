@@ -10,7 +10,7 @@ const Home: NextPage = () => {
         <div className="AsideRight">
           <h1>Welcome, to the new Tac-Tic.</h1>
           <form action="/api/auth/login" method="GET">
-            <button type="submit" className="btn btn-success ">
+            <button type="submit" className="btn btn-dark ">
               <LoginIcon />
             </button>
           </form>

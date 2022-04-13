@@ -67,10 +67,10 @@ export default function IndexManager({ data }: any) {
   const view = React.useMemo<MbscEventcalendarView>(() => {
     return {
       schedule: {
-        type: "week",
+        type: "day",
         allDay: false,
         startDay: 1,
-        endDay: 5,
+        endDay: 1,
         startTime: "06:00",
         endTime: "20:00",
       },

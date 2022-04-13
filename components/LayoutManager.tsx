@@ -14,12 +14,17 @@ import {
   NavDropdown,
   Offcanvas,
 } from "react-bootstrap";
+import { useRouter } from "next/router";
 const Layout: React.FC<any> = ({ children }) => {
   const [user, setUser] = React.useState<any>([{}]);
-
+  const router = useRouter();
   React.useEffect(() => {
     async function apiToken() {
       const info = await fetch(`/api/infoUser`).then((data) => data.json());
+      if (info === null) {
+      } else {
+        setUser(info);
+      }
       setUser(info);
     }
     apiToken();
