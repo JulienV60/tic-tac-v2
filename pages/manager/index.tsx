@@ -57,57 +57,129 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     .findOne({ idUser: searchDbUser?.toString() })
     .then((data) => data);
   const result = JSON.stringify(byId);
-  return { props: { data: result } };
+
+  //list of collaborateurs
+  const listCollaborateurs = await mongodb
+    .db()
+    .collection("Collaborateurs")
+    .find({ profile: "Collaborateur" })
+    .toArray();
+
+  //return prenom id and img of collaborateurs
+  const listPrenom = listCollaborateurs.map((element) => {
+    return { prenom: element.prenom, _id: element._id, img: element.img };
+  });
+
+  //list of horaires of this semaine for all collaborateurs
+  const data = await Promise.all(
+    listPrenom.map(async (element) => {
+      return await fetch(
+        `${
+          process.env.AUTH0_LOCAL
+        }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
+          moment().locale("fr").format("w")
+        )}&id=${element._id}`
+      ).then((result) => result.json());
+    })
+  );
+
+  return {
+    props: {
+      data: result,
+      prenoms: JSON.stringify(listPrenom),
+      dataPlanningInit: JSON.stringify(data),
+    }
+  };
 };
-export default function IndexManager({ data }: any) {
-  const result = JSON.parse(data);
-  console.log(result);
+export default function IndexManager(props:any) {
+  const result = JSON.parse(props.data);
+   const [dataPlanning, setDataPlanning] = React.useState(
+    JSON.parse(props.dataPlanningInit)
+  );
+  const prenoms = JSON.parse(props.prenoms);
   const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
+  const [selectedDate, setSelectedDate] = React.useState(new Date(moment().format("L")));
+
+
+  function onSelectedDateChange() {
+  setSelectedDate(new Date(moment().format("L")));
+  }
+
+  function setDate() {
+  setSelectedDate(new Date(moment().format("L")));
+  }
 
   const view = React.useMemo<MbscEventcalendarView>(() => {
     return {
       schedule: {
         type: "day",
         allDay: false,
-        startDay: 1,
-        endDay: 1,
+        startDay: 0,
+        endDay: -1,
         startTime: "06:00",
         endTime: "20:00",
+        editable:false,
       },
     };
   }, []);
 
-  const myResources = React.useMemo<MbscResource[]>(() => {
-    return [
-      {
-        id: 1,
-        name: "Ryan",
+  const myResources = React.useMemo(() => {
+    return prenoms.map((element:any, index:number) => {
+      return {
+        id: element._id,
+        name: element.prenom,
         color: "#f7c4b4",
-        img: "https://img.mobiscroll.com/demos/m1.png",
-      },
-      {
-        id: 2,
-        name: "Kate",
-        color: "#c6f1c9",
-        img: "https://img.mobiscroll.com/demos/f1.png",
-      },
-      {
-        id: 3,
-        name: "John",
-        color: "#e8d0ef",
-        img: "https://img.mobiscroll.com/demos/m2.png",
-      },
-    ];
+        img: element.img,
+      };
+    });
   }, []);
 
   React.useEffect(() => {
-    getJson(
-      "https://trial.mobiscroll.com/resource-events/",
-      (events: MbscCalendarEvent[]) => {
-        setEvents(events);
-      },
-      "jsonp"
-    );
+    const dataPlanningDbFilter:any = [];
+    fetch("/api/manager/planning/deleteJson");
+    const dataPlanningDb = dataPlanning.forEach((element:any, index:number) => {
+      element.planningData.forEach((ele: any) => {
+
+        if (ele.horaires !== "" && (moment().format("DD/MM/YYYY").toString() === ele.date)) {
+
+          dataPlanningDbFilter.push({ id: element.id, event: ele });
+        } else {
+          null;
+        }
+      });
+    });
+
+    const eventsPlanning = dataPlanningDbFilter.map((element:any, index:number) => {
+      const colorRandom = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      const splitHoraires = element.event.horaires.split("/");
+
+
+        fetch("/api/manager/planning/addSlot", {
+          method: "POST",
+          body: JSON.stringify({
+            id: index,
+            collaborateur: element.id,
+            start: splitHoraires[0],
+            end: splitHoraires[1],
+          }),
+        });
+
+      return {
+        id: index,
+        color: colorRandom,
+        start: formatDate(
+          "YYYY-MM-DDTHH:mm:ss.000Z",
+          new Date(splitHoraires[0])
+        ),
+        end: formatDate("YYYY-MM-DDTHH:mm:ss.000Z", new Date(splitHoraires[1])),
+        busy: true,
+        description: "Weekly meeting with team",
+        location: "Office",
+        resource: `${element.id}`,
+      };
+    });
+
+    setEvents(eventsPlanning);
   }, []);
 
   const renderDay = (args: any) => {
@@ -141,9 +213,8 @@ export default function IndexManager({ data }: any) {
     return (
       <div className="header-resource-template-content">
         <img
-          className="header-resource-avatar"
+          className="header-resource-avatar pictures_creationPlanning"
           src={resource.img}
-          alt="Avatar"
         />
         <div className="header-resource-name">{resource.name}</div>
       </div>
@@ -155,16 +226,14 @@ export default function IndexManager({ data }: any) {
       <Eventcalendar
         theme="ios"
         themeVariant="light"
-        clickToCreate={true}
-        dragToCreate={true}
-        dragToMove={true}
-        dragToResize={true}
         locale={localeFr}
         view={view}
         data={myEvents}
         resources={myResources}
         groupBy="date"
         renderDay={renderDay}
+        selectedDate={selectedDate}
+        onSelectedDateChange={onSelectedDateChange}
         renderResource={renderCustomResource}
       />
     </LayoutManager>
