@@ -9,6 +9,7 @@ import jwt_decode from "jwt-decode";
 import DoneIcon from "@mui/icons-material/Done";
 import PageNotFound from "../../components/PageNotFound";
 import { userProfil } from "../../src/userInfos";
+import { WindowSharp } from "@mui/icons-material";
 export const getServerSideProps = async (context) => {
   const accessTokken = context.req.cookies.IdToken;
   let profile;
@@ -62,7 +63,8 @@ function App(props) {
   const [dataPlanning, setDataPlanning] = React.useState(
     JSON.parse(props.dataPlanningInit)
   );
-  const [semaineShow, setsemaineShow] = React.useState(0);
+  const [semaineShow, setsemaineShow] = React.useState(parseInt(moment().locale("fr").format("w")) -
+          1);
 
   const prenoms = JSON.parse(props.prenoms);
 
@@ -92,6 +94,7 @@ function App(props) {
 
   //à la creation d'un evenement
   const onEventCreated = React.useCallback((args) => {
+
     fetch("/api/manager/planning/addSlot", {
       method: "POST",
       body: JSON.stringify({
@@ -137,25 +140,33 @@ function App(props) {
   //update db whith JSON data
   function updateDb() {
     fetch("/api/manager/planning/db/updateDb");
-    router.reload();
+    window.location.reload();
   }
 
   //function recuperation de la data mongo par semaine
-  async function getDataPlanningDb(semaine) {
+  async function getDataPlanningDb(semaineShow) {
+
     const data = await Promise.all(
       prenoms.map(async (element) => {
         return await fetch(
-          `/api/manager/planning/db/loadPlanningDb?semaine=${semaine}&id=${element._id}`
+          `/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow}&id=${element._id}`
         ).then((result) => result.json());
       })
     );
-    setDataPlanning(data);
+     setDataPlanning(data);
   }
 
+  useEffect(() => {
+    getDataPlanningDb(semaineShow);
+  },[semaineShow])
   //lorsque la semaine change
   useEffect(() => {
-    getDataPlanningDb(parseInt(moment().locale("fr").format("w")) - 1);
+
+
+    if(dataPlanning[0].planningData !== null){
     const dataPlanningDbFilter = [];
+
+
     const dataPlanningDb = dataPlanning.forEach((element, index) => {
       element.planningData.forEach((ele) => {
         if (ele.horaires !== "") {
@@ -165,6 +176,7 @@ function App(props) {
         }
       });
     });
+
 
     const eventsPlanning = dataPlanningDbFilter.map((element, index) => {
       const colorRandom = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
@@ -183,7 +195,7 @@ function App(props) {
       }
       return {
         id: index,
-        color: colorRandom,
+        color: "#2f9dac",
         start: formatDate(
           "YYYY-MM-DDTHH:mm:ss.000Z",
           new Date(splitHoraires[0])
@@ -194,10 +206,12 @@ function App(props) {
         location: "Office",
         resource: `${element.id}`,
       };
+
     });
 
-    setEvents(eventsPlanning);
-  }, [semaineShow]);
+ setEvents(eventsPlanning);
+  }
+  }, [dataPlanning]);
 
   const renderDay = (args) => {
     const date = args.date;

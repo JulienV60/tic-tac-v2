@@ -15,7 +15,7 @@ export default async function handler(
     const mongodb = await getDatabase();
     const semaineSelected = parseInt(req.query.semaine.toString()) - 1;
     const idUser = req.query.id;
-    let planning;
+    let planning = null;
 
     if (semaineSelected !== -1) {
       planning = await mongodb
