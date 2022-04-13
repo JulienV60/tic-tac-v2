@@ -51,11 +51,11 @@ export const Layout: React.FC<any> = ({ children }) => {
             }}
           >
             {" "}
-            {user.profile}
+            {user?.profile}
             <span></span>
-            {user.nom}
+            {user?.nom}
             <span></span>
-            {user.prenom}
+            {user?.prenom}
             <span></span>
             <HomeIcon />
             <Link href="/api/auth/logout" passHref={true}>
