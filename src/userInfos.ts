@@ -11,3 +11,15 @@ export async function userProfil(userInfo: string) {
     .then((result) => result?.profile);
   return userFound;
 }
+
+export async function userId(userInfo: string) {
+  const mongodb = await getDatabase();
+  const userIdFound = await mongodb
+    .db()
+    .collection("Users")
+    .findOne({
+      email: userInfo,
+    })
+    .then((result) => result?._id);
+  return userIdFound;
+}
