@@ -8,7 +8,7 @@ setOptions({
   themeVariant: "light",
 });
 import { NextPage } from "next";
-import Layout from "../../components/LayoutCollab"
+import { Layout } from "../../components/LayoutCollab";
 
 const pointages: NextPage = () => {
   return (
@@ -62,46 +62,76 @@ const pointages: NextPage = () => {
             value="A modifier avec les horaires de planning"
           />
         </div>
-        <div className="verifHoraires" >
-          <div className="verifHorairesPlanning" >
+        <div className="verifHoraires">
+          <div className="verifHorairesPlanning">
             <p>Planning de la journée</p>
-            <div className="form-example-horaires" >
-              <label className="LabelVerifHoraires" >Matin</label>
-              <input className="InputVerifHoraires" type="time" name="verifHorairesMatin" id="verifHorairesMatin" />
+            <div className="form-example-horaires">
+              <label className="LabelVerifHoraires">Matin</label>
+              <input
+                className="InputVerifHoraires"
+                type="time"
+                name="verifHorairesMatin"
+                id="verifHorairesMatin"
+              />
             </div>
 
-            <div className="form-example-horaires" >
-              <label className="LabelVerifHoraires" >Après-midi</label>
-              <input className="InputVerifHoraires" type="time" name="verifHorairesApresMidi" id="verifHorairesApresMidi" />
+            <div className="form-example-horaires">
+              <label className="LabelVerifHoraires">Après-midi</label>
+              <input
+                className="InputVerifHoraires"
+                type="time"
+                name="verifHorairesApresMidi"
+                id="verifHorairesApresMidi"
+              />
             </div>
           </div>
-          <div className="PointagesHoraires" >
+          <div className="PointagesHoraires">
             <p>Pointages</p>
-            <div className="form-example-horaires" >
+            <div className="form-example-horaires">
               <label className="LabelPointagesHoraires">Matin</label>
-              <input className="InputPointagesHoraires" type="time" name="pointagesHorairesMatin" id="pointagesHorairesMatin" />
+              <input
+                className="InputPointagesHoraires"
+                type="time"
+                name="pointagesHorairesMatin"
+                id="pointagesHorairesMatin"
+              />
             </div>
 
-            <div className="form-example-horaires" >
+            <div className="form-example-horaires">
               <label className="LabelPointagesHoraires">Après-midi</label>
-              <input className="InputPointagesHoraires" type="time" name="pointagesHorairesApresMidi" id="pointagesHorairesApresMidi" />
+              <input
+                className="InputPointagesHoraires"
+                type="time"
+                name="pointagesHorairesApresMidi"
+                id="pointagesHorairesApresMidi"
+              />
             </div>
           </div>
-          <div className="PointagesHoraires" >
+          <div className="PointagesHoraires">
             <p>Correction</p>
-            <div className="form-example-horaires" >
+            <div className="form-example-horaires">
               <label className="LabelCorrectionHoraires">Matin</label>
-              <input className="InputCorrectionHoraires" type="time" name="correctionHorairesMatin" id="correctionHorairesMatin" />
+              <input
+                className="InputCorrectionHoraires"
+                type="time"
+                name="correctionHorairesMatin"
+                id="correctionHorairesMatin"
+              />
             </div>
 
-            <div className="form-example-horaires" >
+            <div className="form-example-horaires">
               <label className="LabelCorrectionHoraires">Après-midi</label>
-              <input className="InputCorrectionHoraires" type="time" name="correctionHorairesApresMidi" id="correctionHorairesApresMidi" />
+              <input
+                className="InputCorrectionHoraires"
+                type="time"
+                name="correctionHorairesApresMidi"
+                id="correctionHorairesApresMidi"
+              />
             </div>
           </div>
-          <div className="MotifPointages" >
+          <div className="MotifPointages">
             <p>Motif: </p>
-            <select id="motifs" name="motifs" >
+            <select id="motifs" name="motifs">
               <option value="medicale">Médicale</option>
               <option value="familiale">Familiale</option>
               <option value="administratif">Administratif</option>
