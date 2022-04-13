@@ -50,12 +50,11 @@ export const Layout: React.FC<any> = ({ children }) => {
               fontFamily: "Bebas Neue",
             }}
           >
-            {" "}
-            {user.profile}
+            Collaborateur:<span> </span>
             <span></span>
-            {user.nom}
+            {user?.nom === null ? <>nom</> : user?.nom}
             <span></span>
-            {user.prenom}
+            {user?.prenom === null ? <>prenom</> : user?.prenom}
             <span></span>
             <HomeIcon />
             <Link href="/api/auth/logout" passHref={true}>
@@ -111,7 +110,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/collaborateur"
@@ -123,7 +122,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/collaborateur/planning"
@@ -135,7 +134,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       fontFamily: "Bebas Neue",
                       color: "#333",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/collaborateur/pointages"
@@ -147,7 +146,8 @@ export const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
+                      marginLeft: "0.5rem",
                     }}
                     href="/collaborateur/conges"
                   >
@@ -158,7 +158,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/collaborateur/kikela"
@@ -170,7 +170,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       borderRadius: "10px",
                       color: "#333",
                       fontFamily: "Bebas Neue",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                       marginLeft: "0.5rem",
                     }}
                     href="/api/auth/logout"
