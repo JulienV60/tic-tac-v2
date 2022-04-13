@@ -25,11 +25,10 @@ setOptions({
   themeVariant: "light",
 });
 
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
-const accessTokken = context.req.cookies.IdToken;
+  const accessTokken = context.req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -128,8 +127,6 @@ export default function Home(props: any) {
       </Layout>
     );
   } else {
-    return <PageNotFound/>
+    return <PageNotFound />;
   }
 }
-
-

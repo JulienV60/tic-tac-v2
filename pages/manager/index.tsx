@@ -19,7 +19,7 @@ import PageNotFound from "../../components/PageNotFound";
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const accessTokken = req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -46,7 +46,8 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     const data = await Promise.all(
       listPrenom.map(async (element) => {
         return await fetch(
-          `${process.env.AUTH0_LOCAL
+          `${
+            process.env.AUTH0_LOCAL
           }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
             moment().locale("fr").format("w")
           )}&id=${element._id}`
@@ -59,33 +60,33 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
         profileUser: profile,
         prenoms: JSON.stringify(listPrenom),
         dataPlanningInit: JSON.stringify(data),
-      }
+      },
     };
   } else {
     return {
       props: {
         profileUser: null,
-      }
+      },
     };
   }
 };
 
-export default function IndexManager(props:any) {
-  const result = JSON.parse(props.data);
-   const [dataPlanning, setDataPlanning] = React.useState(
+export default function IndexManager(props: any) {
+  const [dataPlanning, setDataPlanning] = React.useState(
     JSON.parse(props.dataPlanningInit)
-   );
+  );
   const prenoms = JSON.parse(props.prenoms);
   const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
-  const [selectedDate, setSelectedDate] = React.useState(new Date(moment().format("L")));
-
+  const [selectedDate, setSelectedDate] = React.useState(
+    new Date(moment().format("L"))
+  );
 
   function onSelectedDateChange() {
-  setSelectedDate(new Date(moment().format("L")));
+    setSelectedDate(new Date(moment().format("L")));
   }
 
   function setDate() {
-  setSelectedDate(new Date(moment().format("L")));
+    setSelectedDate(new Date(moment().format("L")));
   }
 
   const view = React.useMemo<MbscEventcalendarView>(() => {
@@ -97,13 +98,13 @@ export default function IndexManager(props:any) {
         endDay: -1,
         startTime: "06:00",
         endTime: "20:00",
-        editable:false,
+        editable: false,
       },
     };
   }, []);
 
   const myResources = React.useMemo(() => {
-    return prenoms.map((element:any, index:number) => {
+    return prenoms.map((element: any, index: number) => {
       return {
         id: element._id,
         name: element.prenom,
@@ -114,25 +115,28 @@ export default function IndexManager(props:any) {
   }, []);
 
   React.useEffect(() => {
-    const dataPlanningDbFilter:any = [];
+    const dataPlanningDbFilter: any = [];
     fetch("/api/manager/planning/deleteJson");
-    const dataPlanningDb = dataPlanning.forEach((element:any, index:number) => {
-      element.planningData.forEach((ele: any) => {
+    const dataPlanningDb = dataPlanning.forEach(
+      (element: any, index: number) => {
+        element.planningData.forEach((ele: any) => {
+          if (
+            ele.horaires !== "" &&
+            moment().format("DD/MM/YYYY").toString() === ele.date
+          ) {
+            dataPlanningDbFilter.push({ id: element.id, event: ele });
+          } else {
+            null;
+          }
+        });
+      }
+    );
 
-        if (ele.horaires !== "" && (moment().format("DD/MM/YYYY").toString() === ele.date)) {
-
-          dataPlanningDbFilter.push({ id: element.id, event: ele });
-        } else {
-          null;
-        }
-      });
-    });
-
-
-    const eventsPlanning = dataPlanningDbFilter.map((element:any, index:number) => {
-      const colorRandom = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-      const splitHoraires = element.event.horaires.split("/");
-
+    const eventsPlanning = dataPlanningDbFilter.map(
+      (element: any, index: number) => {
+        const colorRandom =
+          "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+        const splitHoraires = element.event.horaires.split("/");
 
         fetch("/api/manager/planning/addSlot", {
           method: "POST",
@@ -144,20 +148,24 @@ export default function IndexManager(props:any) {
           }),
         });
 
-      return {
-        id: index,
-        color: colorRandom,
-        start: formatDate(
-          "YYYY-MM-DDTHH:mm:ss.000Z",
-          new Date(splitHoraires[0])
-        ),
-        end: formatDate("YYYY-MM-DDTHH:mm:ss.000Z", new Date(splitHoraires[1])),
-        busy: true,
-        description: "Weekly meeting with team",
-        location: "Office",
-        resource: `${element.id}`,
-      };
-    });
+        return {
+          id: index,
+          color: colorRandom,
+          start: formatDate(
+            "YYYY-MM-DDTHH:mm:ss.000Z",
+            new Date(splitHoraires[0])
+          ),
+          end: formatDate(
+            "YYYY-MM-DDTHH:mm:ss.000Z",
+            new Date(splitHoraires[1])
+          ),
+          busy: true,
+          description: "Weekly meeting with team",
+          location: "Office",
+          resource: `${element.id}`,
+        };
+      }
+    );
 
     setEvents(eventsPlanning);
   }, []);
@@ -165,7 +173,6 @@ export default function IndexManager(props:any) {
   if (props.profileUser === "Manager") {
     const renderDay = (args: any) => {
       const date = args.date;
-
 
       return (
         <div className="header-template-container">
@@ -177,7 +184,6 @@ export default function IndexManager(props:any) {
               {formatDate("MMMM DD", date)}
             </div>
           </div>
-
         </div>
       );
     };
@@ -212,6 +218,6 @@ export default function IndexManager(props:any) {
       </LayoutManager>
     );
   } else {
-    return <PageNotFound/>
+    return <PageNotFound />;
   }
 }
