@@ -181,7 +181,7 @@
   text-align: center;
 }
 .leave-title {
-  background-color: rgb(15, 96, 102);
+  background-color: #278591;
   color: #f1f1f1;
   margin-bottom: 2em;
 }
@@ -195,12 +195,12 @@
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fit, 186px);
-  color: #f1f1f1;
+  color: #111;
   text-align: center;
   justify-content: center;
 }
 .leave-history > * {
-  background-color: #2f9dac;
+  background-color: #99b4bf;
   border-radius: 3%;
   margin: 1em;
 }
