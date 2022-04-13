@@ -41,6 +41,20 @@ const Layout: React.FC<any> = ({ children }) => {
               color: "2f9dac",
             }}
           />{" "}
+          <div
+            className="infoUser"
+            style={{
+              paddingRight: "82rem",
+              fontFamily: "Bebas Neue",
+              color: "white",
+              fontSize: "1.6rem",
+            }}
+          >
+            {" "}
+            Manager:{" "}
+            {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}
+            <span> </span>
+          </div>
           <Navbar.Brand
             href="/manager"
             style={{
@@ -55,9 +69,6 @@ const Layout: React.FC<any> = ({ children }) => {
               borderRadius: "50%",
             }}
           >
-            Manager:{" "}
-            {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}
-            <span></span>
             {user?.nom === null ? <>nom</> : user?.nom}
             <span></span>
             {user?.prenom === null ? <>prenom</> : user?.prenom}

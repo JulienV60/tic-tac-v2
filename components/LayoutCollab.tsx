@@ -42,12 +42,26 @@ export const Layout: React.FC<any> = ({ children }) => {
               marginLeft: "0.2rem",
               color: "2f9dac",
             }}
-          />
+          />{" "}
+          <div
+            className="infoUser"
+            style={{
+              paddingRight: "84rem",
+              fontFamily: "Bebas Neue",
+              color: "white",
+              fontSize: "1.6rem",
+            }}
+          >
+            {" "}
+            Collaborateur:{" "}
+            {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}
+            <span> </span>
+          </div>
           <Navbar.Brand
             href="/collaborateur"
             style={{
               color: "white",
-              width: "20rem",
+              width: "15rem",
               display: "flex",
               margin: "1rem",
               flexDirection: "row",
@@ -56,9 +70,6 @@ export const Layout: React.FC<any> = ({ children }) => {
               fontFamily: "Bebas Neue",
             }}
           >
-            Collaborateur:{" "}
-            {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}
-            <span> </span>
             <span></span>
             {user.nom === null ? <>nom</> : user.nom}
             <span></span>
@@ -69,7 +80,6 @@ export const Layout: React.FC<any> = ({ children }) => {
               <LogoutIcon />
             </Link>
           </Navbar.Brand>
-
           <Navbar.Offcanvas
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
