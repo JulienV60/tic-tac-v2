@@ -10,24 +10,36 @@ import { GetServerSideProps, NextPage } from "next";
 import { Card, Button } from "react-bootstrap";
 import { Layout } from "../../components/LayoutCollab";
 import jwt_decode from "jwt-decode";
-import { userProfil } from "../../src/userInfos";
-import React from "react";
+import { userId, userProfil } from "../../src/userInfos";
+import { getDatabase } from "../../src/database";
+import React, { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const accessTokken = context.req.cookies.IdToken;
   let profile;
+  let idUser;
   let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
     decoded = jwt_decode(accessTokken);
     profile = await userProfil(decoded.email);
+    idUser = await userId(decoded.email);
   }
 
   if (profile === "Collaborateur") {
+    const mongodb = await getDatabase();
+    const congesInfo = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => {
+        return { droitCP: result?.droit_cp, soldesCP: result?.soldes_cp };
+      });
+
     return {
       props: {
-        profileUser: profile,
+        data: congesInfo,
       },
     };
   } else {
@@ -37,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const Conges: NextPage = () => {
+export default function Conges(props: any) {
   const [date, setMyDate] = React.useState();
   const [calendar, setCalendar] = React.useState();
   const pickerChange = async (ev: any) => {
@@ -85,9 +97,13 @@ const Conges: NextPage = () => {
             </div>
 
             <div className="leave-history">
-              <div className="libelle">Droits</div>
+              <div className="libelle">
+                Droits <p>{props.data.droitCP}</p>
+              </div>
               <div className="start"> Pris</div>
-              <div className="end">Soldes</div>
+              <div className="end">
+                Soldes <p>{props.data.soldesCP}</p>
+              </div>
               <div className="quantity">Demandes en cours</div>
               <div className="rest">Demandes accept. ou validées</div>
               <div className="forecast-balances">Soldes prévitionnels</div>
@@ -112,6 +128,4 @@ const Conges: NextPage = () => {
       </Layout>
     </>
   );
-};
-
-export default Conges;
+}
