@@ -24,7 +24,6 @@ export const Layout: React.FC<any> = ({ children }) => {
     async function apiToken() {
       const info = await fetch(`/api/infoUser`).then((data) => data.json());
       if (info === null || info === undefined) {
-        router.reload();
       } else {
         setUser(info);
       }
