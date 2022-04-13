@@ -18,7 +18,6 @@ import {
 import { Router } from "@mui/icons-material";
 
 export const Layout: React.FC<any> = ({ children }) => {
-  console.log("hellocss");
   const [user, setUser] = React.useState<any>([{}]);
   const router = useRouter();
   React.useEffect(() => {
@@ -47,7 +46,7 @@ export const Layout: React.FC<any> = ({ children }) => {
           <div
             className="infoUser"
             style={{
-              paddingRight: "84rem",
+              width: "95rem",
               fontFamily: "Bebas Neue",
               color: "white",
               fontSize: "1.6rem",
@@ -64,7 +63,7 @@ export const Layout: React.FC<any> = ({ children }) => {
               color: "white",
               width: "15rem",
               display: "flex",
-              margin: "1rem",
+              margin: "0.8rem",
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",

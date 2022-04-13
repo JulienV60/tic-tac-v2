@@ -328,13 +328,6 @@
   position: relative;
 }
 
-.container-home-image img {
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-  border-right: 2px solid rgb(204 204 204);
-}
-
 /* ------ HOMEPAGE NO CONNECTED : Medias queries ------- */
 
 @media screen and (max-width: 1001px) {

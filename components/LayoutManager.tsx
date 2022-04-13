@@ -44,7 +44,7 @@ const Layout: React.FC<any> = ({ children }) => {
           <div
             className="infoUser"
             style={{
-              paddingRight: "82rem",
+              width: "90rem",
               fontFamily: "Bebas Neue",
               color: "white",
               fontSize: "1.6rem",
@@ -61,7 +61,7 @@ const Layout: React.FC<any> = ({ children }) => {
               color: "white",
               width: "20rem",
               display: "flex",
-              margin: "1rem",
+              margin: "0.8rem",
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
