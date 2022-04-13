@@ -14,11 +14,20 @@ import {
 import React from "react";
 import jwt_decode from "jwt-decode";
 import { userProfil } from "../../src/userInfos";
-import PageNotFound from "../../components/PageNotFound";
-
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 
+    const accessTokken = req.cookies.IdToken;
+  let profile;
+  let decoded:any;
+  if (accessTokken === undefined) {
+    profile = null;
+  } else {
+    decoded = jwt_decode(accessTokken);
+    profile = await userProfil(decoded.email);
+  }
+
+  if (profile === "Manager") {
     const mongodb = await getDatabase();
 
     //list of collaborateurs
@@ -51,10 +60,15 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
         dataPlanningInit: JSON.stringify(data),
       },
     };
-
+  } else {
+    return {
+      notFound: true,
+    }
+  }
 };
 
 export default function IndexManager(props: any) {
+
 
     const [dataPlanning, setDataPlanning] = React.useState(
       JSON.parse(props.dataPlanningInit)
@@ -95,6 +109,7 @@ export default function IndexManager(props: any) {
         };
       });
   }, []);
+
   React.useEffect(() => {
       const dataPlanningDbFilter: any = [];
       fetch("/api/manager/planning/deleteJson");

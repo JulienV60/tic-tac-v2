@@ -7,13 +7,22 @@ const milestones = [];
 import moment from "moment";
 import jwt_decode from "jwt-decode";
 import DoneIcon from "@mui/icons-material/Done";
-import { useRouter } from "next/router";
 import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps = async (context) => {
 
-    const mongodb = await getDatabase();
+  const accessTokken = context.req.cookies.IdToken;
+  let profile;
+  let decoded;
+  if (accessTokken === undefined) {
+    profile = null;
+  } else {
+    decoded = jwt_decode(accessTokken);
+    profile = await userProfil(decoded.email);
+  }
 
+  if (profile === "Manager") {
+    const mongodb = await getDatabase();
     const listCollaborateurs = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -41,7 +50,11 @@ export const getServerSideProps = async (context) => {
         dataPlanningInit: JSON.stringify(data),
       },
     };
-
+  } else {
+      return {
+      notFound: true,
+    }
+  }
 };
 
 function App(props) {
@@ -50,6 +63,8 @@ function App(props) {
     JSON.parse(props.dataPlanningInit)
   );
   const [semaineShow, setsemaineShow] = React.useState(0);
+   const router = useRouter();
+  const prenoms = JSON.parse(props.prenoms);
 
   const view = React.useMemo(() => {
     return {
@@ -183,9 +198,7 @@ function App(props) {
 
     setEvents(eventsPlanning);
   }, [semaineShow]);
-  const router = useRouter();
 
-    const prenoms = JSON.parse(props.prenoms);
 
     const renderDay = (args) => {
       const date = args.date;

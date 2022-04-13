@@ -12,9 +12,22 @@ import {
   localeFr,
 } from "@mobiscroll/react";
 import React from "react";
+import jwt_decode from "jwt-decode";
+import { userProfil } from "../../src/userInfos";
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 
+  const accessTokken = req.cookies.IdToken;
+  let profile;
+  let decoded:any;
+  if (accessTokken === undefined) {
+    profile = null;
+  } else {
+    decoded = jwt_decode(accessTokken);
+    profile = await userProfil(decoded.email);
+  }
+
+  if (profile === "Collaborateur") {
     const mongodb = await getDatabase();
     //list of collaborateurs
     const listCollaborateurs = await mongodb
@@ -46,7 +59,11 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
         dataPlanningInit: JSON.stringify(data),
       },
     };
-
+  } else {
+     return {
+      notFound: true,
+    }
+  }
 };
 
 export default function IndexManager(props: any) {
