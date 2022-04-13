@@ -1,47 +1,26 @@
 import { NextPage } from "next";
 import { userProfil } from "../../src/userInfos";
-import { getDatabase } from "../../src/database";
 import { GetServerSideProps } from "next";
-import { NextApiRequest } from "next";
-import { NextApiResponse } from "next";
 import jwt_decode from "jwt-decode";
 import React from "react";
 import Layout from "../../components/LayoutManager";
 import moment from "moment";
-import { AnyError } from "mongodb";
-import { PrecisionManufacturing } from "@mui/icons-material";
 import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const test = moment().locale("fr").format("YYYY-MM-DD");
-  const accessTokken = context.req.cookies.IdToken;
-  let profile;
-  let decoded: any;
-  if (accessTokken === undefined) {
-    profile = null;
-  } else {
-    decoded = jwt_decode(accessTokken);
-    profile = await userProfil(decoded.email);
-  }
 
-  if (profile === "Manager") {
+
+
   const fetchCookie = await fetch(
     `${process.env.AUTH0_LOCAL}/api/cookies`
   ).then((data) => data.json());
 
   return {
     props: {
-      profileUser:  profile,
       user: JSON.stringify(fetchCookie),
     },
   };
-  } else {
-    return {
-    props: {
-      profileUser:  null,
-    },
-  };
-}
+
 };
 
 export default function Kikela(props:any) {
@@ -49,7 +28,6 @@ export default function Kikela(props:any) {
     const [prenom, setPrenom] = React.useState("");
     const [nom, setNom] = React.useState("");
     const [dispo, setDispo] = React.useState("");
-  if (props.profileUser === "Manager") {
      const data = JSON.parse(props.user);
     const handleSubmit = async (event: any) => {
       if (prenom !== "" || nom !== "") {
@@ -122,9 +100,7 @@ export default function Kikela(props:any) {
         </Layout>
       </div>
     );
-  } else {
-    return <PageNotFound />
-  }
+
 }
 
 

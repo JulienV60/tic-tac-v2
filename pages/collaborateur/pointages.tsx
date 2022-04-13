@@ -13,30 +13,7 @@ import { userProfil } from "../../src/userInfos";
 import jwt_decode from "jwt-decode";
 import PageNotFound from "../../components/PageNotFound";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const accessTokken = context.req.cookies.IdToken;
-  let profile;
-  let decoded: any;
-  if (accessTokken === undefined) {
-    profile = null;
-  } else {
-    decoded = jwt_decode(accessTokken);
-    profile = await userProfil(decoded.email);
-  }
-  if (profile === "Collaborateur") {
-    return {
-      props: {
-        profileUser: profile,
-      },
-    };
-  } else {
-    return {
-      props: {
-        profileUser: null,
-      },
-    };
-  }
-};
+
 
 const pointages: NextPage = (props: any) => {
   if (props.profileUser === "Collaborateur") {
