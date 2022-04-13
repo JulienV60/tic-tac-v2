@@ -18,6 +18,7 @@ import {
 import { Router } from "@mui/icons-material";
 
 export const Layout: React.FC<any> = ({ children }) => {
+  console.log("hellocss");
   const [user, setUser] = React.useState<any>([{}]);
   const router = useRouter();
   React.useEffect(() => {
