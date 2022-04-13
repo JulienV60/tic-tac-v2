@@ -50,6 +50,12 @@ export default async function handler(
             {
               $set: {
                 [`horaires.${numeroSemaine}.${numeroJourSemaine}.horaires`]: `${elementFormatJson.start}/${elementFormatJson.end}`,
+                [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_necessaire`]: `${
+                  moment(elementFormatJson.end).diff(
+                    elementFormatJson.start,
+                    "minutes"
+                  ) / 60
+                }`,
               },
             }
           );
@@ -97,6 +103,8 @@ export default async function handler(
               {
                 $set: {
                   [`horaires.${numeroSemaine}.${numeroJourSemaine}.horaires`]:
+                    "",
+                  [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_necessaire`]:
                     "",
                 },
               }

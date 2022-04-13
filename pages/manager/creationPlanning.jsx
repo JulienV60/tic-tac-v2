@@ -5,6 +5,7 @@ import {getDatabase} from "../../src/database"
 import LayoutManager from "../../components/LayoutManager"
 const milestones = [];
 import moment from "moment";
+import DoneIcon from '@mui/icons-material/Done';
 export const getServerSideProps = async (context) => {
 
     const mongodb = await getDatabase();
@@ -16,7 +17,7 @@ export const getServerSideProps = async (context) => {
       .toArray();
 
     const listPrenom = listCollaborateurs.map((element) => {
-      return {prenom:element.prenom,_id:element._id}
+      return {prenom:element.prenom,_id:element._id,img:element.img}
     });
 
     const data = await Promise.all(
@@ -60,11 +61,11 @@ function App(props) {
             return {
             id: element._id,
             name: element.prenom,
-            color: '#f7c4b4',
+                color: '#f7c4b4',
+            img:element.img
         }
         })
     }, []);
-
 
     //à la creation d'un evenement
     const onEventCreated = React.useCallback((args) => {
@@ -133,7 +134,8 @@ function App(props) {
         });
 
 
-        const eventsPlanning = dataPlanningDbFilter.map((element,index) => {
+        const eventsPlanning = dataPlanningDbFilter.map((element, index) => {
+            const colorRandom = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
             const splitHoraires = element.event.horaires.split("/");
 
             if (semaineShow !== 0) {
@@ -144,7 +146,7 @@ function App(props) {
             }
             return {
             id:index,
-            color: '#56ca70',
+            color: colorRandom,
             start: formatDate('YYYY-MM-DDTHH:mm:ss.000Z', new Date(splitHoraires[0])),
             end: formatDate('YYYY-MM-DDTHH:mm:ss.000Z', new Date(splitHoraires[1])),
             busy: true,
@@ -178,17 +180,19 @@ function App(props) {
 
     const renderCustomResource = (resource) => {
         return <div className="header-resource-template-content">
-                <img className="header-resource-avatar" src={resource.img} />
+                <img className="header-resource-avatar pictures_creationPlanning" src={resource.img} />
                 <div className="header-resource-name">{resource.name}</div>
         </div>;
     }
 
     return (
         <LayoutManager>
-        <div className='container-fluid'>
-            <button onClick={updateDb}>Valider</button>
+
+        <div >
+            <button className='bouton_validation_planning' onClick={updateDb} ><DoneIcon /></button>
         </div>
-        <Eventcalendar
+            <Eventcalendar
+            className='planning'
             theme="ios"
             themeVariant="light"
             clickToCreate={true}

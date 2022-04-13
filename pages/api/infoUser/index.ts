@@ -7,6 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const accesstoken = req.cookies.AccessToken;
+
   const mongodb = await getDatabase();
   const auth0searchUser = await fetch(
     `https://${process.env.AUTH0_DOMAIN}/userinfo`,
