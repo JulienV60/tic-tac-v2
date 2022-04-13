@@ -46,7 +46,8 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     const data = await Promise.all(
       listPrenom.map(async (element) => {
         return await fetch(
-          `${process.env.AUTH0_LOCAL
+          `${
+            process.env.AUTH0_LOCAL
           }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
             moment().locale("fr").format("w")
           )}&id=${element._id}`
@@ -62,157 +63,29 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
       },
     };
   } else {
-     return {
+    return {
       notFound: true,
-    }
+    };
   }
 };
 
 export default function IndexManager(props: any) {
-  const [dataPlanning, setDataPlanning] = React.useState(
-    JSON.parse(props.dataPlanningInit)
+  return (
+    <LayoutManager>
+      <div className="parent">
+        <div className="div1">Anomalie</div>
+        <div className="div2"></div>
+        <div className="div3">Message </div>
+        <div className="div4"></div>
+        <div className="div5"> Horaires</div>
+        <div className="div6"></div>
+        <div className="div7">Compteurs </div>
+        <div className="div8">Ecarts </div>
+        <div className="div9"></div>
+        <div className="div10"></div>
+        <div className="div11">Demandes de congés </div>
+        <div className="div12"></div>
+      </div>
+    </LayoutManager>
   );
-  const prenoms = JSON.parse(props.prenoms);
-  const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date(moment().format("L"))
-  );
-
-  function onSelectedDateChange() {
-    setSelectedDate(new Date(moment().format("L")));
-  }
-
-  function setDate() {
-    setSelectedDate(new Date(moment().format("L")));
-  }
-
-  const view = React.useMemo<MbscEventcalendarView>(() => {
-    return {
-      schedule: {
-        type: "day",
-        allDay: false,
-        startDay: 0,
-        endDay: -1,
-        startTime: "06:00",
-        endTime: "20:00",
-        editable: false,
-      },
-    };
-  }, []);
-
-  const myResources = React.useMemo(() => {
-    return prenoms.map((element: any, index: number) => {
-      return {
-        id: element._id,
-        name: element.prenom,
-        color: "#f7c4b4",
-        img: element.img,
-      };
-    });
-  }, []);
-
-  React.useEffect(() => {
-    const dataPlanningDbFilter: any = [];
-    fetch("/api/manager/planning/deleteJson");
-    const dataPlanningDb = dataPlanning.forEach(
-      (element: any, index: number) => {
-        element.planningData.forEach((ele: any) => {
-          if (
-            ele.horaires !== "" &&
-            moment().format("DD/MM/YYYY").toString() === ele.date
-          ) {
-            dataPlanningDbFilter.push({ id: element.id, event: ele });
-          } else {
-            null;
-          }
-        });
-      }
-    );
-
-    const eventsPlanning = dataPlanningDbFilter.map(
-      (element: any, index: number) => {
-        const colorRandom =
-          "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-        const splitHoraires = element.event.horaires.split("/");
-
-        fetch("/api/manager/planning/addSlot", {
-          method: "POST",
-          body: JSON.stringify({
-            id: index,
-            collaborateur: element.id,
-            start: splitHoraires[0],
-            end: splitHoraires[1],
-          }),
-        });
-
-        return {
-          id: index,
-          color: colorRandom,
-          start: formatDate(
-            "YYYY-MM-DDTHH:mm:ss.000Z",
-            new Date(splitHoraires[0])
-          ),
-          end: formatDate(
-            "YYYY-MM-DDTHH:mm:ss.000Z",
-            new Date(splitHoraires[1])
-          ),
-          busy: true,
-          description: "Weekly meeting with team",
-          location: "Office",
-          resource: `${element.id}`,
-        };
-      }
-    );
-
-    setEvents(eventsPlanning);
-  }, []);
-
-
-    const renderDay = (args: any) => {
-      const date = args.date;
-
-      return (
-        <div className="header-template-container">
-          <div className="header-template-date">
-            <div className="header-template-day-name">
-              {formatDate("DDDD", date)}
-            </div>
-            <div className="header-template-day">
-              {formatDate("MMMM DD", date)}
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    const renderCustomResource = (resource: MbscResource) => {
-      return (
-        <div className="header-resource-template-content">
-          <img
-            className="header-resource-avatar pictures_creationPlanning"
-            src={resource.img}
-          />
-          <div className="header-resource-name">{resource.name}</div>
-        </div>
-      );
-    };
-
-    return (
-      <LayoutManager>
-        <Eventcalendar
-          theme="ios"
-          themeVariant="light"
-          locale={localeFr}
-          view={view}
-          data={myEvents}
-          resources={myResources}
-          groupBy="date"
-          renderDay={renderDay}
-          selectedDate={selectedDate}
-          onSelectedDateChange={onSelectedDateChange}
-          renderResource={renderCustomResource}
-        />
-      </LayoutManager>
-    );
-
 }

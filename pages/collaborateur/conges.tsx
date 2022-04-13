@@ -15,10 +15,10 @@ import { getDatabase } from "../../src/database";
 import React, { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-const accessTokken = context.req.cookies.IdToken;
+  const accessTokken = context.req.cookies.IdToken;
   let profile;
   let idUser;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -28,31 +28,50 @@ const accessTokken = context.req.cookies.IdToken;
   }
 
   if (profile === "Collaborateur") {
-
-  const mongodb = await getDatabase();
-  const congesInfo = await mongodb
-    .db()
-    .collection("Collaborateurs")
-    .findOne({ idUser: idUser?.toString() })
-    .then((result) => {
-      return {droitCP:result?.droit_cp, soldesCP:result?.soldes_cp}
-    });
+    const mongodb = await getDatabase();
+    const congesInfo = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => {
+        return { droitCP: result?.droit_cp, soldesCP: result?.soldes_cp };
+      });
+    const infoArrayConges = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => {
+        return result?.conges;
+      });
+    const congesNotApprouved = infoArrayConges.filter(
+      (element: any, index: any) => element.approuved === false
+    );
 
     return {
       props: {
+        nbrjours: congesNotApprouved.length,
         data: congesInfo,
       },
     };
   } else {
-     return {
+    return {
       notFound: true,
-    }
+    };
   }
 };
 
-
-export default function  Conges(props:any){
-  const [date, setDate] = useState("");
+export default function Conges(props: any) {
+  const [date, setMyDate] = React.useState();
+  const [calendar, setCalendar] = React.useState();
+  const pickerChange = async (ev: any) => {
+    setMyDate(ev.value);
+  };
+  const sendDate = async (e: any) => {
+    const test = await fetch("/api/collaborateur", {
+      method: "POST",
+      body: JSON.stringify({ date: date }),
+    });
+  };
 
   return (
     <>
@@ -67,23 +86,36 @@ export default function  Conges(props:any){
               src="/calendar.png"
             />
             <div className="container-picker">
-              <span className="leave-picker ">
-                <Datepicker
-                  select="range"
-                  rangeHighlight={true}
-                  showRangeLabels={true}
-
-                />
-              </span>
-              <Button variant="secondary">Valider</Button>
+              {" "}
+              <form
+                method="POST"
+                action={`${process.env.AUTH0_LOCAL}/api/collaborateur`}
+              >
+                <span className="leave-picker ">
+                  <Datepicker
+                    controls={["calendar"]}
+                    select="range"
+                    rangeHighlight={true}
+                    showRangeLabels={true}
+                    value={date}
+                    onChange={pickerChange}
+                  />
+                </span>
+                <button type="button" onClick={sendDate} id="date">
+                  Valider
+                </button>
+              </form>
             </div>
 
             <div className="leave-history">
-
-              <div className="libelle">Droits <p>{props.data.droitCP}</p></div>
+              <div className="libelle">
+                Droits <p>{props.data.droitCP}</p>
+              </div>
               <div className="start"> Pris</div>
-              <div className="end">Soldes <p>{props.data.soldesCP}</p></div>
-              <div className="quantity">Demandes en cours</div>
+              <div className="end">
+                Soldes <p>{props.data.soldesCP}</p>
+              </div>
+              <div className="quantity">Demandes en cours {props.nbrjours}</div>{" "}
               <div className="rest">Demandes accept. ou validées</div>
               <div className="forecast-balances">Soldes prévitionnels</div>
             </div>
@@ -107,5 +139,4 @@ export default function  Conges(props:any){
       </Layout>
     </>
   );
-};
-
+}

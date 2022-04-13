@@ -178,10 +178,11 @@
   margin: 4em auto;
 }
 .leave-h3 {
+  font-family: "Bebas Neue", cursive;
   text-align: center;
 }
 .leave-title {
-  background-color: #278591;
+  background-color: #2f9dac;
   color: #f1f1f1;
   margin-bottom: 2em;
 }
@@ -195,12 +196,12 @@
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fit, 186px);
-  color: #111;
+  color: white;
   text-align: center;
   justify-content: center;
 }
 .leave-history > * {
-  background-color: #99b4bf;
+  background-color: #2f9dac;
   border-radius: 3%;
   margin: 1em;
 }
@@ -364,3 +365,126 @@
   }
 }
 /* ------ END HOMEPAGE NO CONNECTED : Medias queries ------- */
+/* ------ CSS INDEXPAGE COLLAB ET MANAGER ------- */
+.parent {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  margin-top: 5rem;
+}
+
+.div1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 1 / 1 / 2 / 4;
+}
+.div2 {
+  color: #2f9dac;
+  grid-area: 2 / 1 / 4 / 4;
+}
+.div3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 1 / 4 / 2 / 7;
+}
+.div4 {
+  grid-area: 2 / 4 / 4 / 7;
+}
+.div5 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 4 / 1 / 5 / 7;
+}
+.div6 {
+  grid-area: 5 / 1 / 8 / 7;
+}
+.div7 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 8 / 1 / 9 / 4;
+}
+.div8 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 8 / 4 / 9 / 7;
+}
+.div9 {
+  grid-area: 9 / 1 / 11 / 4;
+}
+.div10 {
+  grid-area: 9 / 4 / 11 / 7;
+}
+.div11 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 11 / 1 / 12 / 7;
+}
+.div12 {
+  grid-area: 12 / 1 / 13 / 7;
+}
+/* ------ END CSS INDEXPAGE COLLAB ET MANAGER ------- */
