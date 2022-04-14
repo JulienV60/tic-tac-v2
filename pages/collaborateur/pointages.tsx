@@ -84,6 +84,7 @@ const pointages: NextPage = (props: any) => {
               id="horairesPointages"
               value="A modifier avec les horaires de planning"
             />
+
           </div>
           <div className="form-example-absence">
             <label className="LabelPointages">Absences ou Congés en H:</label>{" "}
@@ -96,6 +97,40 @@ const pointages: NextPage = (props: any) => {
             />
           </div>
           <div className="horairesPlanning">
+
+          </label>
+          {/* <input
+            className="InputFormPointages"
+            type="date"
+            name="jourPointage"
+            id="jourPointages"
+          /> */}
+        </div>
+        <div className="form-example">
+          <label className="LabelPointagesHoraires">
+            Horaires planifié a la semaine
+          </label>
+          <input
+            className="InputFormPointages"
+            type="horairesPointages"
+            name="horairesPointages"
+            id="horairesPointages"
+            value="A modifier avec les horaires de planning"
+          />
+        </div>
+        <div className="form-example">
+          <label className="LabelPointages">Total heures travailler</label>
+          <input
+            className="InputFormPointages"
+            type="totalHorairesPointages"
+            name="totalHorairesPointages"
+            id="totalHorairesPointages"
+            value="A modifier avec les horaires de planning"
+          />
+        </div>
+        <div className="verifHoraires">
+          <div className="verifHorairesPlanning ">
+
             <p>Planning de la journée</p>
             <div className="form-example-horaires">
               <label className="LabelVerifHoraires">

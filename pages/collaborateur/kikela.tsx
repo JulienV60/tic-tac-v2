@@ -1,15 +1,18 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import { Layout } from "../../components/LayoutCollab";
+import moment from "moment";
+
+import { AnyError } from "mongodb";
+import { PrecisionManufacturing } from "@mui/icons-material";
 import jwt_decode from "jwt-decode";
 import PageNotFound from "../../components/PageNotFound";
 import { userProfil } from "../../src/userInfos";
 
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
-const accessTokken = context.req.cookies.IdToken;
+  const accessTokken = context.req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -24,14 +27,15 @@ const accessTokken = context.req.cookies.IdToken;
       },
     };
   } else {
-     return {
-      notFound: true,
-    }
+    return {
+      props: {
+        profileUser: null,
+      },
+    };
   }
 };
 
-export default function Kikela(props:any) {
-
+export default function Kikela(props: any) {
   const [prenom, setPrenom] = React.useState("");
   const [nom, setNom] = React.useState("");
   const [dispo, setDispo] = React.useState("");
@@ -41,6 +45,7 @@ export default function Kikela(props:any) {
         method: "POST",
         body: JSON.stringify({ nom: nom, prenom: prenom }),
       }).then((result) => result.json());
+      console.log(test);
 
       if (test === true) {
         setDispo("Present sur la base du planning");
@@ -56,7 +61,17 @@ export default function Kikela(props:any) {
     return (
       <div>
         <Layout>
-          <div className="kikelaInfo">
+          <div className="parent">
+
+              <div className="div1">Entrez votre Nom</div>
+              <div className="div2"></div>
+              <div className="div3">Entrez votre Prénom</div>
+              <div className="div4"></div>
+
+          </div>
+
+
+          {/* <div className="kikelaInfo">
             <div className="div1">
               <form>
                 <div className="row">
@@ -102,11 +117,11 @@ export default function Kikela(props:any) {
                 <li className="list-group-item">Dispo: {dispo}</li>
               </ul>
             </div>
-          </div>
+          </div> */}
         </Layout>
       </div>
     );
   } else {
-    return <PageNotFound/>
+    return <PageNotFound />;
   }
 }
