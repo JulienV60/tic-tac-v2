@@ -37,6 +37,16 @@ export default async function handler(
       .then((result) => result?.horaires)
       .then((horaires) => horaires[numeroSemaine]);
 
+    const heurePlannifJour = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => result?.horaires)
+      .then((horaires) => horaires[numeroSemaine][numeroJourSemaine].horaires);
+
+    const heureMatin = moment(heurePlannifJour.split("/")[0]).format("HH:ss");
+    const heureAprem = moment(heurePlannifJour.split("/")[1]).format("HH:ss");
+
     const totalHeurePlanif = heurePlannif.map((element: any) => {
       return parseInt(element.heure_necessaire);
     });
@@ -47,7 +57,11 @@ export default async function handler(
     }
 
     const totalHeureRea = heurePlannif.map((element: any) => {
-      return parseInt(element.heure_realisees);
+      if (element.heure_realisees !== undefined) {
+        return parseInt(element.heure_realisees);
+      } else {
+        return 0;
+      }
     });
 
     let sumTotalHeuresRea = 0;
@@ -59,6 +73,8 @@ export default async function handler(
       JSON.stringify({
         heuresPlanif: sumTotalHeures,
         heuresrea: sumTotalHeuresRea,
+        heureMatin: heureMatin,
+        heureAprem: heureAprem,
       })
     );
   } else {
