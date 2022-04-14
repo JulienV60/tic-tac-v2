@@ -23,3 +23,15 @@ export async function userId(userInfo: string) {
     .then((result) => result?._id);
   return userIdFound;
 }
+export async function userRayon(userInfo: string) {
+  const mongodb = await getDatabase();
+  const userIdFound = await mongodb
+    .db()
+    .collection("Collaborateurs")
+    .findOne({
+      email: userInfo,
+    })
+    .then((result) => result?.rayon);
+
+  return userIdFound;
+}
