@@ -140,6 +140,7 @@ export default function Conges(props: any) {
                     showRangeLabels={true}
                     value={date}
                     onChange={pickerChange}
+                    endIcon="calendar"
                   />
                 </span>
                 {showbutton === true ? <button type="button" onClick={sendDate} id="date">
