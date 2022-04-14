@@ -100,7 +100,7 @@ const pointages: NextPage = (props: any) => {
           />
         </div>
         <div className="verifHoraires">
-          <div className="verifHorairesPlanning">
+          <div className="verifHorairesPlanning ">
             <p>Planning de la journée</p>
             <div className="form-example-horaires">
               <label className="LabelVerifHoraires">
