@@ -63,68 +63,72 @@ const conges: NextPage = (props: any) => {
     <LayoutManager>
       <div className="ManagerConges">
         <div className="titreDemande">Demande de congés</div>
-
         <div className="Demande">
-          {" "}
-          {result.map((element: any) => {
-            return (
-              <>
-                {" "}
-                <div className="leave-history">
-                  <div className="start">
-                    nom : {element.firstName}
-                    <br></br>prenom : {element.lastName}
-                  </div>
+          <div className="row overflow-auto">
+            {result.map((element: any) => {
+              return (
+                <div className="col-8" key="toto">
+                  {" "}
+                  <div style={{ width: "18rem" }}>
+                    <div>
+                      <h5 className="card-title">nom : {element.firstName}</h5>
+                      <h5 className="card-title">
+                        prenom : {element.lastName}
+                      </h5>
+                      {element.conges.map((e: any) => {
+                        if (e !== null) {
+                          return (
+                            <>
+                              <div>
+                                <div>
+                                  Commence le <br></br>
+                                  {moment(e.split("/")[0]).format("L")}
+                                </div>
+                                <div className="end">
+                                  Fini le <br></br>{" "}
+                                  {moment(e.split("/")[1]).format("L")}
+                                </div>
+                                <div>
+                                  Nombre de jours <br></br>
+                                  {e.split("/")[2]}
+                                </div>
+                                <button
+                                  className="btn"
+                                  style={{
+                                    backgroundColor: "green",
+                                    width: "3rem",
 
-                  {element.conges.map((e: any) => {
-                    if (e !== null) {
-                      return (
-                        <>
-                          <div className="start">
-                            Commence le <br></br>
-                            {moment(e.split("/")[0]).format("L")}
-                          </div>
-                          <div className="end">
-                            Fini le <br></br>{" "}
-                            {moment(e.split("/")[1]).format("L")}
-                          </div>
-                          <div>
-                            Nombre de jours <br></br>
-                            {e.split("/")[2]}
-                          </div>
-                          <button
-                            className="btn"
-                            style={{
-                              backgroundColor: "green",
-                              width: "3rem",
-                              marginLeft: "4.4rem",
-                              color: "white",
-                              borderRadius: "10px",
-                            }}
-                          >
-                            <DoneIcon />
-                          </button>
-                          <button
-                            className="btn"
-                            style={{
-                              backgroundColor: "red",
-                              width: "3rem",
-                              marginLeft: "4.4rem",
-                              color: "white",
-                              borderRadius: "10px",
-                            }}
-                          >
-                            <CloseIcon />
-                          </button>
-                        </>
-                      );
-                    }
-                  })}
+                                    color: "white",
+                                    borderRadius: "10px",
+                                  }}
+                                >
+                                  <DoneIcon />
+                                </button>
+                                <button
+                                  className="btn"
+                                  style={{
+                                    backgroundColor: "red",
+                                    width: "3rem",
+                                    marginLeft: "4.4rem",
+                                    color: "white",
+                                    borderRadius: "10px",
+                                  }}
+                                >
+                                  <CloseIcon />
+                                </button>
+                              </div>
+                            </>
+                          );
+                        }
+                      })}
+                    </div>{" "}
+                  </div>{" "}
                 </div>
-              </>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
+
         <div className="titreHistorique">Historique Demande de congés</div>
         <div className="Historique">data</div>
       </div>
