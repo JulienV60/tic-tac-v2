@@ -56,8 +56,8 @@ export default function Kikela(props:any) {
     return (
       <div>
         <Layout>
-          <div className="container p-5 my-5 border">
-            <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
+          <div className="parent">
+            <div className="div1">
               <form>
                 <div className="row">
                   <div className="col">
