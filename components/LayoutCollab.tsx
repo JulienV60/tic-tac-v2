@@ -144,7 +144,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                     }}
                     href="/collaborateur/planning"
                   >
-                    Plannings
+                    Plannings Collectif
                   </Dropdown.Item>
                   <Dropdown.Item
                     style={{
