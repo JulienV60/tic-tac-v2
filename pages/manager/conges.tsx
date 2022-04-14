@@ -7,6 +7,7 @@ import { getDatabase } from "../../src/database";
 import moment from "moment";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
+import React from "react";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const mongodb = await getDatabase();
 
@@ -68,8 +69,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const conges: NextPage = (props: any) => {
+function Conges(props: any) {
   const result = JSON.parse(props.conges);
+
   return (
     <LayoutManager>
       <div className="">
@@ -115,12 +117,13 @@ const conges: NextPage = (props: any) => {
                                 Nombre de jours <br></br>
                                 {e.split("/")[2]}
                               </div>{" "}
-                              <form
+                              {element.soldes_cp - e.split("/")[2] < 0 ? <></> :    <form
                                 action={`/api/manager/conges/validConges?${
                                   e.split("/")[3]
                                 }&i=${index}&day=${e.split("/")[4]}`}
                                 method="POST"
                               >
+
                                 <button
                                   className="btn"
                                   style={{
@@ -133,7 +136,8 @@ const conges: NextPage = (props: any) => {
                                 >
                                   <DoneIcon />
                                 </button>
-                              </form>
+                              </form>}
+
                               <form
                                 action={`/api/manager/conges/deleteConges?${
                                   e.split("/")[3]
@@ -169,4 +173,4 @@ const conges: NextPage = (props: any) => {
   );
 };
 
-export default conges;
+export default Conges;
