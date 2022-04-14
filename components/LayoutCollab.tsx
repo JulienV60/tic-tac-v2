@@ -50,7 +50,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                 aria-controls="offcanvasNavbar"
                 style={{
                   backgroundColor: "white",
-                  margin: " 0.5rem 1rem ",
+                  margin: " 0.8rem 1rem ",
                   color: "2f9dac",
                 }}
               />
@@ -82,6 +82,7 @@ export const Layout: React.FC<any> = ({ children }) => {
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
             placement="start"
+            variant="white"
             style={{
               backgroundColor: "#2f9dac",
               textAlign: "center",
@@ -127,6 +128,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/collaborateur"
                   >
@@ -139,6 +141,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/collaborateur/planning"
                   >
@@ -151,6 +154,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       color: "#333",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/collaborateur/pointages"
                   >
@@ -163,6 +167,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/collaborateur/conges"
                   >
@@ -175,6 +180,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/collaborateur/kikela"
                   >
@@ -187,6 +193,7 @@ export const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/api/auth/logout"
                   >

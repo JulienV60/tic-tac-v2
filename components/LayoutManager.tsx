@@ -127,6 +127,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/manager"
                   >
@@ -139,6 +140,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/manager/planning"
                   >
@@ -151,6 +153,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       color: "#333",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/manager/creationPlanning"
                   >
@@ -163,6 +166,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/manager/conges"
                   >
@@ -175,6 +179,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/manager/kikela"
                   >
@@ -187,6 +192,7 @@ const Layout: React.FC<any> = ({ children }) => {
                       fontFamily: "Bebas Neue",
                       fontSize: "2rem",
                       marginLeft: "0.5rem",
+                      marginBottom: "1rem",
                     }}
                     href="/api/auth/logout"
                   >
