@@ -16,10 +16,9 @@ import jwt_decode from "jwt-decode";
 import { userProfil } from "../../src/userInfos";
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
-
   const accessTokken = req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -45,7 +44,8 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     const data = await Promise.all(
       listPrenom.map(async (element) => {
         return await fetch(
-          `${process.env.AUTH0_LOCAL
+          `${
+            process.env.AUTH0_LOCAL
           }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
             moment().locale("fr").format("w")
           )}&id=${element._id}`
@@ -60,14 +60,13 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
       },
     };
   } else {
-     return {
+    return {
       notFound: true,
-    }
+    };
   }
 };
 
 export default function IndexManager(props: any) {
-
   const [dataPlanning, setDataPlanning] = React.useState(
     JSON.parse(props.dataPlanningInit)
   );
@@ -166,52 +165,50 @@ export default function IndexManager(props: any) {
     setEvents(eventsPlanning);
   }, []);
 
-    const renderDay = (args: any) => {
-      const date = args.date;
-
-
-      return (
-        <div className="header-template-container">
-          <div className="header-template-date">
-            <div className="header-template-day-name">
-              {formatDate("DDDD", date)}
-            </div>
-            <div className="header-template-day">
-              {formatDate("MMMM DD", date)}
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    const renderCustomResource = (resource: MbscResource) => {
-      return (
-        <div className="header-resource-template-content">
-          <img
-            className="header-resource-avatar pictures_creationPlanning"
-            src={resource.img}
-          />
-          <div className="header-resource-name">{resource.name}</div>
-        </div>
-      );
-    };
+  const renderDay = (args: any) => {
+    const date = args.date;
 
     return (
-      <Layout>
-        <Eventcalendar
-          theme="ios"
-          themeVariant="light"
-          locale={localeFr}
-          view={view}
-          data={myEvents}
-          resources={myResources}
-          groupBy="date"
-          renderDay={renderDay}
-          selectedDate={selectedDate}
-          onSelectedDateChange={onSelectedDateChange}
-          renderResource={renderCustomResource}
-        />
-      </Layout>
+      <div className="header-template-container">
+        <div className="header-template-date">
+          <div className="header-template-day-name">
+            {formatDate("DDDD", date)}
+          </div>
+          <div className="header-template-day">
+            {formatDate("MMMM DD", date)}
+          </div>
+        </div>
+      </div>
     );
+  };
 
+  const renderCustomResource = (resource: MbscResource) => {
+    return (
+      <div className="header-resource-template-content">
+        <img
+          className="header-resource-avatar pictures_creationPlanning"
+          src={resource.img}
+        />
+        <div className="header-resource-name">{resource.name}</div>
+      </div>
+    );
+  };
+
+  return (
+    <Layout>
+      <Eventcalendar
+        theme="ios"
+        themeVariant="light"
+        locale={localeFr}
+        view={view}
+        data={myEvents}
+        resources={myResources}
+        groupBy="date"
+        renderDay={renderDay}
+        selectedDate={selectedDate}
+        onSelectedDateChange={onSelectedDateChange}
+        renderResource={renderCustomResource}
+      />
+    </Layout>
+  );
 }
