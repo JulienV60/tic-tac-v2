@@ -51,6 +51,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const congesNotApprouved = infoArrayConges.filter(
         (element: any, index: any) => element.traited === false
       );
+      const nbrDayAwait = congesNotApprouved.map(
+        (element: any, index: any) => {
+          if (element.traited === false) {
+            return element.nbrdays;
+          }
+        }
+      );
       const congesApprouved = infoArrayConges.filter(
         (element: any, index: any) => element.approuved === true
       );
@@ -61,9 +68,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const congesTake = congesApprouved.map((element: any, index: any) => {
         return element.nbrdays;
       });
+
       let sum = 0;
       for (let i = 0; i < congesTake.length; i++) {
         sum += congesTake[i];
+      }
+
+      let sumNbrAwait = 0;
+      for (let i = 0; i < nbrDayAwait.length; i++) {
+        sumNbrAwait += nbrDayAwait[i];
       }
 
       return {
@@ -73,6 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           demandeApprouved: congesApprouved.length,
           nbrTake: sum,
           data: congesInfo,
+          nbrNbrAwait:sumNbrAwait,
           dataListConges: JSON.stringify(infoArrayConges),
         },
       };
@@ -93,6 +107,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function Conges(props: any) {
   const [date, setMyDate] = React.useState();
+  const [soldePrevision, setSoldePrevision] = React.useState(parseInt(props.data.soldesCP) - parseInt(props.nbrNbrAwait));
   const [calendar, setCalendar] = React.useState();
   const [showbutton, setShowButton] = React.useState(false);
   let dataConges = [];
@@ -105,7 +120,7 @@ export default function Conges(props: any) {
     const dateEnd = moment(date[1]);
     const diffInDays = dateEnd.diff(dateStart, "day");
 
-    if (diffInDays <= props.data.soldesCP) {
+    if (diffInDays <= soldePrevision) {
       setShowButton(true);
     }
     setMyDate(ev.value);
@@ -187,13 +202,13 @@ export default function Conges(props: any) {
               <div className="forecast-balances">
                 Demandes refusées<p>{props.demandeRefused}</p>
               </div>
-              <div className="forecast-balances">Soldes prévitionnels</div>
+              <div className="forecast-balances">Soldes prévitionnels<p>{soldePrevision}</p></div>
             </div>
           </section>
 
           <section className="leave-section">
             <div className="leave-title" style={{ borderRadius: "5px" }}>
-              <h3 className="leave-h3">Historiques des demandes</h3>
+              <h3 className="leave-h3">Historiques des demandes en cours</h3>
             </div>
 
             <div className="leave-history">
@@ -218,33 +233,154 @@ export default function Conges(props: any) {
               </div>
             </div>
             {dataConges.map((element: any, index: number) => {
-              return (
-                <div
-                  key={index}
-                  className="leave-history"
-                  style={{ borderRadius: "5px" }}
-                >
-                  <div className="start" style={{ borderRadius: "5px" }}>
-                    {moment(element.start).format("L")}
-                  </div>
-                  <div className="end" style={{ borderRadius: "5px" }}>
-                    {" "}
-                    {moment(element.end).format("L")}
-                  </div>
-                  <div className="quantity" style={{ borderRadius: "5px" }}>
-                    {element.nbrdays}
-                  </div>
-                  <div className="rest" style={{ borderRadius: "5px" }}>
-                    {element.approuved.toString()}
-                  </div>
+
+              if (element.traited === false) {
+                return (
                   <div
-                    className="forecast-balances"
+                    key={index}
+                    className="leave-history"
                     style={{ borderRadius: "5px" }}
                   >
-                    Soldes prévisionnels
+                    <div className="start" style={{ borderRadius: "5px" }}>
+                      {moment(element.start).format("L")}
+                    </div>
+                    <div className="end" style={{ borderRadius: "5px" }}>
+                      {" "}
+                      {moment(element.end).format("L")}
+                    </div>
+                    <div className="quantity" style={{ borderRadius: "5px" }}>
+                      {element.nbrdays}
+                    </div>
+                    <div className="rest" style={{ borderRadius: "5px" }}>
+                      En cours
+                    </div>
+                    <div
+                      className="forecast-balances"
+                      style={{ borderRadius: "5px" }}
+                    >
+                      Soldes prévisionnels
+                    </div>
                   </div>
-                </div>
-              );
+                );
+              }
+            })}
+          </section>
+
+          <section className="leave-section">
+            <div className="leave-title" style={{ borderRadius: "5px" }}>
+              <h3 className="leave-h3">Historiques des demandes refusées</h3>
+            </div>
+
+            <div className="leave-history">
+              <div className="start" style={{ borderRadius: "5px" }}>
+                {" "}
+                Date de Début
+              </div>
+              <div className="end" style={{ borderRadius: "5px" }}>
+                Date de fin
+              </div>
+              <div className="quantity" style={{ borderRadius: "5px" }}>
+                Quantité
+              </div>
+              <div className="rest" style={{ borderRadius: "5px" }}>
+                Statut
+              </div>
+              <div
+                className="forecast-balances"
+                style={{ borderRadius: "5px" }}
+              >
+                Soldes prévisionnels
+              </div>
+            </div>
+            {dataConges.map((element: any, index: number) => {
+
+              if (element.approuved === false && element.traited === true) {
+                return (
+                  <div
+                    key={index}
+                    className="leave-history"
+                    style={{ borderRadius: "5px" }}
+                  >
+                    <div className="start" style={{ borderRadius: "5px" }}>
+                      {moment(element.start).format("L")}
+                    </div>
+                    <div className="end" style={{ borderRadius: "5px" }}>
+                      {" "}
+                      {moment(element.end).format("L")}
+                    </div>
+                    <div className="quantity" style={{ borderRadius: "5px" }}>
+                      {element.nbrdays}
+                    </div>
+                    <div className="rest" style={{ borderRadius: "5px",backgroundColor:"red" }}>
+                      Refusée
+                    </div>
+                    <div
+                      className="forecast-balances"
+                      style={{ borderRadius: "5px" }}
+                    >
+                      Soldes prévisionnels
+                    </div>
+                  </div>
+                );
+              }
+            })}
+          </section>
+          <section className="leave-section">
+            <div className="leave-title" style={{ borderRadius: "5px" }}>
+              <h3 className="leave-h3">Historiques des demandes acceptées</h3>
+            </div>
+
+            <div className="leave-history">
+              <div className="start" style={{ borderRadius: "5px" }}>
+                {" "}
+                Date de Début
+              </div>
+              <div className="end" style={{ borderRadius: "5px" }}>
+                Date de fin
+              </div>
+              <div className="quantity" style={{ borderRadius: "5px" }}>
+                Quantité
+              </div>
+              <div className="rest" style={{ borderRadius: "5px" }}>
+                Statut
+              </div>
+              <div
+                className="forecast-balances"
+                style={{ borderRadius: "5px" }}
+              >
+                Soldes prévisionnels
+              </div>
+            </div>
+            {dataConges.map((element: any, index: number) => {
+              if (element.approuved === true) {
+                return (
+                  <div
+                    key={index}
+                    className="leave-history"
+                    style={{ borderRadius: "5px" }}
+                  >
+                    <div className="start" style={{ borderRadius: "5px" }}>
+                      {moment(element.start).format("L")}
+                    </div>
+                    <div className="end" style={{ borderRadius: "5px" }}>
+                      {" "}
+                      {moment(element.end).format("L")}
+                    </div>
+                    <div className="quantity" style={{ borderRadius: "5px" }}>
+                      {element.nbrdays}
+                    </div>
+                    <div className="rest" style={{ borderRadius: "5px",backgroundColor:"green" }}>
+                      Acceptée
+                    </div>
+                    <div
+                      className="forecast-balances"
+                      style={{ borderRadius: "5px" }}
+                    >
+                      Soldes prévisionnels
+                    </div>
+                  </div>
+                );
+              }
             })}
           </section>
         </div>

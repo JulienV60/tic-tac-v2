@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     rayon = await userRayon(decoded.email);
   }
   if (profile === "Manager") {
+
     const searchconges = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -32,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         data.map((element: any) => {
           let arrayAllCongeTraited: any = [];
           if (element.conges.length !== 0) {
+
             return {
               firstName: element.prenom,
               lastName: element.nom,
