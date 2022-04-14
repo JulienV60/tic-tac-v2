@@ -100,17 +100,17 @@ export default function Home(props: any) {
           >
             Semaine Actuel:{" "}
           </span>
+          <br></br>
 
           {allDateActual.map((element: any) => {
             if (element !== null) {
               return (
                 <>
                   <p>
-                    {element.nameday}
-                    <span></span>
+                    {element.nameday} <span></span>
                     {element.date} <span></span>
                     {element.horairesStart} <span></span>
-                    {element.horairesEnd} <span></span>
+                    {element.horairesEnd}
                   </p>
                 </>
               );
@@ -126,7 +126,7 @@ export default function Home(props: any) {
               margin: "0",
             }}
           >
-            Semaine Suivante:{" "}
+            Semaine Suivante:
           </span>
           {allDateNext.map((element: any) => {
             if (element !== null) {
@@ -136,6 +136,7 @@ export default function Home(props: any) {
                     {element.nameday} <span></span>
                     {element.date} <span></span>
                     {element.horairesStart} <span></span>
+                    {element.horairesEnd}
                   </p>
                 </>
               );
