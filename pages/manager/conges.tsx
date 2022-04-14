@@ -30,19 +30,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .then((result: any) => result)
       .then((data: any) =>
         data.map((element: any) => {
-          return {
-            firstName: element.prenom,
-            lastName: element.nom,
-            mail: element.email,
-            conges: element.conges.map((element: any) => {
-              if (element.approuved === false) {
-                return `${element.start}/${element.end}/${element.nbrdays}`;
-              }
-            }),
-          };
+          if (element.conges.length !== 0) {
+            return {
+              firstName: element.prenom,
+              lastName: element.nom,
+              mail: element.email,
+              conges: element.conges.map((element: any) => {
+                if (element.approuved === false) {
+                  return `${element.start}/${element.end}/${element.nbrdays}`;
+                }
+              }),
+            };
+          }
         })
       );
-    console.log(searchconges.conges);
+   // console.log(searchconges);
 
     return {
       props: {
@@ -61,24 +63,29 @@ const conges: NextPage = (props: any) => {
   const result = JSON.parse(props.conges);
   return (
     <LayoutManager>
-      <div className="ManagerConges">
+      <div className="">
         <div className="titreDemande">Demande de congés</div>
-        <div className="Demande">
-          <div className="row overflow-auto">
-            {result.map((element: any) => {
+
+          {result.map((element: any) => {
+            if (element !== null)
               return (
-                <div className="col-8" key="toto">
-                  {" "}
-                  <div style={{ width: "18rem" }}>
-                    <div>
-                      <h5 className="card-title">nom : {element.firstName}</h5>
+                <div className="row overflow-auto" key={element.id}>
+                <div className="col-2" >
+                    <div style={{ width: "18rem" }}>
+                      <div>
+                        <h5 className="card-title">nom : {element.firstName}</h5>
                       <h5 className="card-title">
                         prenom : {element.lastName}
-                      </h5>
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+
                       {element.conges.map((e: any) => {
                         if (e !== null) {
                           return (
-                            <>
+                            <div className="col-2" >
+                    <div style={{ width: "18rem" }}>
                               <div>
                                 <div>
                                   Commence le <br></br>
@@ -117,17 +124,17 @@ const conges: NextPage = (props: any) => {
                                   <CloseIcon />
                                 </button>
                               </div>
-                            </>
+                                </div>
+                </div>
                           );
-                        }
-                      })}
-                    </div>{" "}
-                  </div>{" "}
+                         }
+
+                       })}
+
                 </div>
               );
+
             })}
-          </div>
-        </div>
 
         <div className="titreHistorique">Historique Demande de congés</div>
         <div className="Historique">data</div>
