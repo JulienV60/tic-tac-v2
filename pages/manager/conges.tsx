@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               mail: element.email,
               soldes_cp: element.soldes_cp,
               conges: element.conges.map((element: any) => {
-                if (element.approuved === false) {
+                if (element.approuved === false && element.traited === false) {
                   return `${element.start}/${element.end}/${
                     element.nbrdays
                   }/${element.id.toString()}/${element.nbrdays}`;
