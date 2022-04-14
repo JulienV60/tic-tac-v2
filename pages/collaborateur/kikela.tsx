@@ -56,11 +56,12 @@ export default function Kikela(props:any) {
     return (
       <div>
         <Layout>
-          <div className="parent">
-            <div className="div1">
+          <div>
+            <div>
               <form>
-                <div className="row">
+                <div className="row parent1">
                   <div className="col">
+                    <div className="div1">Entrez votre nom</div>
                     <input
                       type="text"
                       className="form-control"
@@ -72,6 +73,7 @@ export default function Kikela(props:any) {
                     />
                   </div>
                   <div className="col">
+                    <div className="div2">Entrez votre prenom</div>
                     <input
                       type="text"
                       className="form-control"
