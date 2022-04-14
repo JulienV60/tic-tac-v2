@@ -31,18 +31,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .then((data: any) =>
         data.map((element: any) => {
           if (element.conges.length !== 0) {
+            console.log(element)
             return {
-              firstName: element.prenom,
-              lastName: element.nom,
-              mail: element.email,
-              soldes_cp: element.soldes_cp,
+
               conges: element.conges.map((element: any) => {
                 if (element.approuved === false) {
                   return `${element.start}/${element.end}/${
                     element.nbrdays
                   }/${element.id.toString()}/${element.nbrdays}`;
                 }
-              }),
+              }),firstName: element.prenom,
+              lastName: element.nom,
+              mail: element.email,
+              soldes_cp: element.soldes_cp,
             };
           }
         })
