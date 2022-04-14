@@ -47,24 +47,38 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return result?.conges;
       });
 
-    const congesNotApprouved = infoArrayConges.filter(
-      (element: any, index: any) => element.approuved === false
-    );
-    const congesApprouved = infoArrayConges.filter(
-      (element: any, index: any) => element.approuved === true
-    );
-    const congesTake = congesApprouved.map(
-      (element: any, index: any) => {
-        console.log(element)
+    if (infoArrayConges !== undefined) {
+      const congesNotApprouved = infoArrayConges.filter(
+        (element: any, index: any) => element.approuved === false
+      );
+      const congesApprouved = infoArrayConges.filter(
+        (element: any, index: any) => element.approuved === true
+      );
+      const congesTake = congesApprouved.map(
+        (element: any, index: any) => {
+          return element.nbrdays;
+        }
+      );
+      let sum = 0;
+      for (let i = 0; i < congesTake.length; i++) {
+        sum += congesTake[i];
       }
-    );
-    return {
-      props: {
-        demandeawait: congesNotApprouved.length,
-        demandeApprouved:congesApprouved.length,
-        data: congesInfo,
-      },
-    };
+
+      return {
+        props: {
+          demandeawait: congesNotApprouved.length,
+          demandeApprouved: congesApprouved.length,
+          data: congesInfo,
+        },
+      };
+    } else {
+      return {
+        props: {
+          demandeawait: null,
+          data: congesInfo,
+        },
+      };
+    }
   } else {
     return {
       notFound: true,
