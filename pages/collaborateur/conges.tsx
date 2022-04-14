@@ -68,7 +68,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
           demandeawait: congesNotApprouved.length,
           demandeApprouved: congesApprouved.length,
+          nbrTake:sum,
           data: congesInfo,
+          dataListConges: JSON.stringify(infoArrayConges),
         },
       };
     } else {
@@ -90,7 +92,10 @@ export default function Conges(props: any) {
   const [date, setMyDate] = React.useState();
   const [calendar, setCalendar] = React.useState();
   const [showbutton, setShowButton] = React.useState(false);
-
+  let dataConges = [];
+  if (props.demandeawait !== null) {
+    dataConges = JSON.parse(props.dataListConges);
+  }
   const pickerChange = async (ev: any) => {
     const date: any = ev.value;
     const dateStart = moment(date[0]);
@@ -149,7 +154,7 @@ export default function Conges(props: any) {
               <div className="libelle">
                 Droits <p>{props.data.droitCP}</p>
               </div>
-              <div className="start"> Pris</div>
+              <div className="start"> Pris <p>{props.nbrTake}</p></div>
               <div className="end">
                 Soldes <p>{props.data.soldesCP}</p>
               </div>
@@ -165,13 +170,22 @@ export default function Conges(props: any) {
             </div>
 
             <div className="leave-history">
-              <div className="libelle">Libellé</div>
               <div className="start"> Date de Début</div>
               <div className="end">Date de fin</div>
               <div className="quantity">Quantité</div>
-              <div className="rest">Repos</div>
+              <div className="rest">Statut</div>
               <div className="forecast-balances">Soldes prévisionnels</div>
             </div>
+            {dataConges.map((element:any,index:number) => {
+              return (
+                <div key={index} className="leave-history">
+                  <div className="start">{moment(element.start).format("L")}</div>
+                <div className="end">{moment(element.end).format("L")}</div>
+                  <div className="quantity">{element.nbrdays}</div>
+                  <div className="rest">{element.approuved.toString()}</div>
+                <div className="forecast-balances">Soldes prévisionnels</div>
+            </div>)
+            })}
           </section>
         </div>
       </Layout>
