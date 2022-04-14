@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .then((result: any) => result)
       .then((data: any) =>
         data.map((element: any) => {
-          let arrayAllCongeTraited:any=[];
+          let arrayAllCongeTraited: any = [];
           if (element.conges.length !== 0) {
 
             return {
@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                   arrayAllCongeTraited.push(true);
                 }
               }),
-              allCongeTraited:arrayAllCongeTraited,
+              allCongeTraited: arrayAllCongeTraited,
             };
           }
         })
@@ -83,7 +83,9 @@ const conges: NextPage = (props: any) => {
                   <div className="col-2">
                     <div style={{ width: "18rem", marginLeft: "1rem" }}>
                       <div>
-                        <h5 className="card-title">nom : {element.firstName}</h5>
+                        <h5 className="card-title">
+                          nom : {element.firstName}
+                        </h5>
                         <h5 className="card-title">
                           prenom : {element.lastName}
                         </h5>
@@ -114,8 +116,9 @@ const conges: NextPage = (props: any) => {
                                 {e.split("/")[2]}
                               </div>{" "}
                               <form
-                                action={`/api/manager/conges/validConges?${e.split("/")[3]
-                                  }&i=${index}&day=${e.split("/")[4]}`}
+                                action={`/api/manager/conges/validConges?${
+                                  e.split("/")[3]
+                                }&i=${index}&day=${e.split("/")[4]}`}
                                 method="POST"
                               >
                                 <button
@@ -132,8 +135,9 @@ const conges: NextPage = (props: any) => {
                                 </button>
                               </form>
                               <form
-                                action={`/api/manager/conges/deleteConges?${e.split("/")[3]
-                                  }&i=${index}&day=${e.split("/")[4]}`}
+                                action={`/api/manager/conges/deleteConges?${
+                                  e.split("/")[3]
+                                }&i=${index}&day=${e.split("/")[4]}`}
                                 method="POST"
                               >
                                 <button
@@ -158,12 +162,8 @@ const conges: NextPage = (props: any) => {
                 </div>
               );
             }
-
           }
         })}
-
-        <div className="titreHistorique">Historique Demande de congés</div>
-        <div className="Historique">data</div>
       </div>
     </LayoutManager>
   );

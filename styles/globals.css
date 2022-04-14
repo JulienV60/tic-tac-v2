@@ -85,30 +85,64 @@
 
 /* ######## Form Pointages ######## */
 
-.form-example-pointages {
-  display: table;
+.form-example-pointages .container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
 }
 
-.form-example {
-  display: table-row;
-  margin-top: 32px;
+.form-example-pointages label {
+  font-family: "Bebas Neue", cursive;
+  font-size: 1.2em;
 }
 
-.LabelPointages,
-.InputFormPointages {
-  display: table-cell;
-  /* margin-bottom: 10px; */
+.form-example-pointages p {
+  font-family: "Bebas Neue", cursive;
+  font-size: 1.2em;
 }
 
-.InputFormPointages {
-  width: 100%;
-  margin-left: 32px;
-  /* margin-top: 16px; */
+.form-example-semaines {
+  grid-area: 1 / 1 / 2 / 2;
 }
 
-.LabelPointages {
-  margin-right: 32px;
+.form-example-semaines .LabelPointages {
+  width: 85%;
 }
+
+.form-example-jour {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.form-example-planifie {
+  grid-area: 2 / 1 / 3 / 3;
+}
+
+.form-example-total {
+  grid-area: 3 / 1 / 4 / 3;
+}
+
+.form-example-absence {
+  grid-area: 4 / 1 / 5 / 3;
+}
+
+.horairesPlanning {
+  grid-area: 5 / 1 / 7 / 2;
+}
+
+.PointagesHoraires {
+  grid-area: 5 / 2 / 7 / 3;
+}
+
+.correctionHoraires {
+  grid-area: 5 / 3 / 7 / 4;
+}
+
+.MotifPointages {
+  grid-area: 5 / 4 / 7 / 5;
+}
+
 .resource-avatar {
   position: absolute;
   max-height: 50px;
@@ -370,29 +404,6 @@
   grid-area: 1 / 1 / 2 / 6;
 }
 
-.titreHistorique {
-  margin-right: 1rem;
-  margin-left: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: #2f9dac;
-  color: white;
-  height: 2.9rem;
-  font-family: "Bebas Neue", cursive;
-  font-size: 2rem;
-  align-items: center;
-  padding-left: 1rem;
-  border-radius: 5px;
-  grid-area: 4 / 1 / 5 / 6;
-}
-.Historique {
-  margin-right: 1rem;
-  margin-left: 1rem;
-  grid-area: 5 / 1 / 7 / 6;
-}
-
 /* ============ PAGE ERROR 404 ============ */
 .error-page {
   display: flex;
@@ -438,3 +449,5 @@
   }
 }
 /* ============= FIN ERROR PAGE 404 ============= */
+.mbsc-schedule-time-col {
+}

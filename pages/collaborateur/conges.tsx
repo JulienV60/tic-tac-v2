@@ -49,16 +49,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (infoArrayConges !== undefined) {
       const congesNotApprouved = infoArrayConges.filter(
-        (element: any, index: any) => element.approuved === false
+        (element: any, index: any) => element.traited === false
       );
       const congesApprouved = infoArrayConges.filter(
         (element: any, index: any) => element.approuved === true
       );
-      const congesTake = congesApprouved.map(
-        (element: any, index: any) => {
-          return element.nbrdays;
-        }
+      const congesRefused = infoArrayConges.filter(
+        (element: any, index: any) =>
+          element.approuved === false && element.traited === true
       );
+      const congesTake = congesApprouved.map((element: any, index: any) => {
+        return element.nbrdays;
+      });
       let sum = 0;
       for (let i = 0; i < congesTake.length; i++) {
         sum += congesTake[i];
@@ -66,9 +68,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
       return {
         props: {
+          demandeRefused: congesRefused.length,
           demandeawait: congesNotApprouved.length,
           demandeApprouved: congesApprouved.length,
-          nbrTake:sum,
+          nbrTake: sum,
           data: congesInfo,
           dataListConges: JSON.stringify(infoArrayConges),
         },
@@ -102,7 +105,7 @@ export default function Conges(props: any) {
     const dateEnd = moment(date[1]);
     const diffInDays = dateEnd.diff(dateStart, "day");
 
-    if (diffInDays < props.data.soldesCP) {
+    if (diffInDays <= props.data.soldesCP) {
       setShowButton(true);
     }
     setMyDate(ev.value);
@@ -112,6 +115,7 @@ export default function Conges(props: any) {
       method: "POST",
       body: JSON.stringify({ date: date }),
     });
+    window.location.reload();
   };
 
   return (
@@ -119,8 +123,8 @@ export default function Conges(props: any) {
       <Layout>
         <div className="container">
           <section className="leave-section">
-            <div className="leave-title">
-              <h3 className="leave-h3">Soldes des congés payés</h3>
+            <div className="leave-title" style={{ borderRadius: "5px" }}>
+              <h3 className="leave-h3 ">Soldes des congés payés</h3>
             </div>
             <Card.Img
               style={{ width: "5rem", height: "5rem" }}
@@ -133,21 +137,33 @@ export default function Conges(props: any) {
                 action={`${process.env.AUTH0_LOCAL}/api/collaborateur`}
               >
                 <span className="leave-picker ">
-                  <Datepicker
-                    controls={["calendar"]}
-                    select="range"
-                    rangeHighlight={true}
-                    showRangeLabels={true}
-                    value={date}
-                    onChange={pickerChange}
-                    endIcon="calendar"
-                  />
+                  <div>
+                    {" "}
+                    <Datepicker
+                      themeVariant="light"
+                      controls={["calendar"]}
+                      select="range"
+                      rangeHighlight={true}
+                      showRangeLabels={true}
+                      value={date}
+                      onChange={pickerChange}
+                      endIcon="calendar"
+                    />{" "}
+                  </div>
                 </span>
-                {showbutton === true ? <button type="button" onClick={sendDate} id="date">
-                  Valider
-                </button> : <></>
-                }
-
+                {showbutton === true ? (
+                  <button
+                    type="button"
+                    className="btn"
+                    style={{ backgroundColor: "#2f9dac", color: "white" }}
+                    onClick={sendDate}
+                    id="date"
+                  >
+                    Valider
+                  </button>
+                ) : (
+                  <></>
+                )}
               </form>
             </div>
 
@@ -155,37 +171,80 @@ export default function Conges(props: any) {
               <div className="libelle">
                 Droits <p>{props.data.droitCP}</p>
               </div>
-              <div className="start"> Pris <p>{props.nbrTake}</p></div>
+              <div className="start">
+                {" "}
+                Pris <p>{props.nbrTake}</p>
+              </div>
               <div className="end">
                 Soldes <p>{props.data.soldesCP}</p>
               </div>
-              <div className="quantity">Demandes en cours <p>{props.demandeawait}</p></div>{" "}
-              <div className="rest">Demandes accept. <p>{props.demandeApprouved}</p></div>
+              <div className="quantity">
+                Demandes en cours <p>{props.demandeawait}</p>
+              </div>{" "}
+              <div className="rest">
+                Demandes acceptées <p>{props.demandeApprouved}</p>
+              </div>{" "}
+              <div className="forecast-balances">
+                Demandes refusées<p>{props.demandeRefused}</p>
+              </div>
               <div className="forecast-balances">Soldes prévitionnels</div>
             </div>
           </section>
 
           <section className="leave-section">
-            <div className="leave-title">
+            <div className="leave-title" style={{ borderRadius: "5px" }}>
               <h3 className="leave-h3">Historiques des demandes</h3>
             </div>
 
             <div className="leave-history">
-              <div className="start"> Date de Début</div>
-              <div className="end">Date de fin</div>
-              <div className="quantity">Quantité</div>
-              <div className="rest">Statut</div>
-              <div className="forecast-balances">Soldes prévisionnels</div>
+              <div className="start" style={{ borderRadius: "5px" }}>
+                {" "}
+                Date de Début
+              </div>
+              <div className="end" style={{ borderRadius: "5px" }}>
+                Date de fin
+              </div>
+              <div className="quantity" style={{ borderRadius: "5px" }}>
+                Quantité
+              </div>
+              <div className="rest" style={{ borderRadius: "5px" }}>
+                Statut
+              </div>
+              <div
+                className="forecast-balances"
+                style={{ borderRadius: "5px" }}
+              >
+                Soldes prévisionnels
+              </div>
             </div>
-            {dataConges.map((element:any,index:number) => {
+            {dataConges.map((element: any, index: number) => {
               return (
-                <div key={index} className="leave-history">
-                  <div className="start">{moment(element.start).format("L")}</div>
-                <div className="end">{moment(element.end).format("L")}</div>
-                  <div className="quantity">{element.nbrdays}</div>
-                  <div className="rest">{element.approuved.toString()}</div>
-                <div className="forecast-balances">Soldes prévisionnels</div>
-            </div>)
+                <div
+                  key={index}
+                  className="leave-history"
+                  style={{ borderRadius: "5px" }}
+                >
+                  <div className="start" style={{ borderRadius: "5px" }}>
+                    {moment(element.start).format("L")}
+                  </div>
+                  <div className="end" style={{ borderRadius: "5px" }}>
+                    {" "}
+                    {moment(element.end).format("L")}
+                  </div>
+                  <div className="quantity" style={{ borderRadius: "5px" }}>
+                    {element.nbrdays}
+                  </div>
+                  <div className="rest" style={{ borderRadius: "5px" }}>
+                    {element.approuved.toString()}
+                  </div>
+                  <div
+                    className="forecast-balances"
+                    style={{ borderRadius: "5px" }}
+                  >
+                    Soldes prévisionnels
+                  </div>
+                </div>
+              );
             })}
           </section>
         </div>
