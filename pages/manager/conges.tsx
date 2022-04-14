@@ -10,10 +10,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const searchCongés = await mongodb
     .db()
     .collection("Collaborateurs")
-    .findOne({ profile: "Collaborateur" })
-    .then((data) => data);
+    .find({ profile: "Collaborateur" })
+    .toArray();
 
-  console.log(searchCongés);
   const accessTokken = context.req.cookies.IdToken;
   let profile;
   let decoded: any;
