@@ -142,7 +142,7 @@ const Layout: React.FC<any> = ({ children }) => {
                     }}
                     href="/manager/planning"
                   >
-                    Plannings
+                    Plannings Collectif
                   </Dropdown.Item>
                   <Dropdown.Item
                     style={{
@@ -166,7 +166,7 @@ const Layout: React.FC<any> = ({ children }) => {
                     }}
                     href="/manager/conges"
                   >
-                    Congés
+                    Demande Congés
                   </Dropdown.Item>
                   <Dropdown.Item
                     style={{
