@@ -63,8 +63,9 @@ function App(props) {
   const [dataPlanning, setDataPlanning] = React.useState(
     JSON.parse(props.dataPlanningInit)
   );
-  const [semaineShow, setsemaineShow] = React.useState(parseInt(moment().locale("fr").format("w")) -
-          1);
+  const [semaineShow, setsemaineShow] = React.useState(
+    parseInt(moment().locale("fr").format("w")) - 1
+  );
 
   const prenoms = JSON.parse(props.prenoms);
 
@@ -94,7 +95,6 @@ function App(props) {
 
   //à la creation d'un evenement
   const onEventCreated = React.useCallback((args) => {
-
     fetch("/api/manager/planning/addSlot", {
       method: "POST",
       body: JSON.stringify({
@@ -145,7 +145,6 @@ function App(props) {
 
   //function recuperation de la data mongo par semaine
   async function getDataPlanningDb(semaineShow) {
-
     const data = await Promise.all(
       prenoms.map(async (element) => {
         return await fetch(
@@ -153,64 +152,63 @@ function App(props) {
         ).then((result) => result.json());
       })
     );
-     setDataPlanning(data);
+    setDataPlanning(data);
   }
 
   useEffect(() => {
     getDataPlanningDb(semaineShow);
-  },[semaineShow])
+  }, [semaineShow]);
   //lorsque la semaine change
   useEffect(() => {
+    if (dataPlanning[0].planningData !== null) {
+      const dataPlanningDbFilter = [];
 
-
-    if(dataPlanning[0].planningData !== null){
-    const dataPlanningDbFilter = [];
-
-
-    const dataPlanningDb = dataPlanning.forEach((element, index) => {
-      element.planningData.forEach((ele) => {
-        if (ele.horaires !== "") {
-          dataPlanningDbFilter.push({ id: element.id, event: ele });
-        } else {
-          null;
-        }
-      });
-    });
-
-
-    const eventsPlanning = dataPlanningDbFilter.map((element, index) => {
-      const colorRandom = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-      const splitHoraires = element.event.horaires.split("/");
-
-      if (semaineShow !== 0) {
-        fetch("/api/manager/planning/addSlot", {
-          method: "POST",
-          body: JSON.stringify({
-            id: index,
-            collaborateur: element.id,
-            start: splitHoraires[0],
-            end: splitHoraires[1],
-          }),
+      const dataPlanningDb = dataPlanning.forEach((element, index) => {
+        element.planningData.forEach((ele) => {
+          if (ele.horaires !== "") {
+            dataPlanningDbFilter.push({ id: element.id, event: ele });
+          } else {
+            null;
+          }
         });
-      }
-      return {
-        id: index,
-        color: "#2f9dac",
-        start: formatDate(
-          "YYYY-MM-DDTHH:mm:ss.000Z",
-          new Date(splitHoraires[0])
-        ),
-        end: formatDate("YYYY-MM-DDTHH:mm:ss.000Z", new Date(splitHoraires[1])),
-        busy: true,
-        description: "Weekly meeting with team",
-        location: "Office",
-        resource: `${element.id}`,
-      };
+      });
 
-    });
+      const eventsPlanning = dataPlanningDbFilter.map((element, index) => {
+        const colorRandom =
+          "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+        const splitHoraires = element.event.horaires.split("/");
 
- setEvents(eventsPlanning);
-  }
+        if (semaineShow !== 0) {
+          fetch("/api/manager/planning/addSlot", {
+            method: "POST",
+            body: JSON.stringify({
+              id: index,
+              collaborateur: element.id,
+              start: splitHoraires[0],
+              end: splitHoraires[1],
+            }),
+          });
+        }
+        return {
+          id: index,
+          color: "#2f9dac",
+          start: formatDate(
+            "YYYY-MM-DDTHH:mm:ss.000Z",
+            new Date(splitHoraires[0])
+          ),
+          end: formatDate(
+            "YYYY-MM-DDTHH:mm:ss.000Z",
+            new Date(splitHoraires[1])
+          ),
+          busy: true,
+          description: "Weekly meeting with team",
+          location: "Office",
+          resource: `${element.id}`,
+        };
+      });
+
+      setEvents(eventsPlanning);
+    }
   }, [dataPlanning]);
 
   const renderDay = (args) => {
@@ -260,8 +258,16 @@ function App(props) {
 
   return (
     <LayoutManager>
-      <div>
-        <button className="bouton_validation_planning" onClick={updateDb}>
+      <div style={{ width: "1rem", height: "1rem" }}>
+        <button
+          className="bouton_validation_planning"
+          style={{
+            backgroundColor: "#2f9dac",
+            borderRadius: "50%",
+            color: "white",
+          }}
+          onClick={updateDb}
+        >
           <DoneIcon />
         </button>
       </div>
