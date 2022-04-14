@@ -38,9 +38,10 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 };
 
 export default function Pointages(props: any) {
-
   const [semaine, setMySemaine] = React.useState();
-  const [numSemaine, setNumSemaine] = React.useState(parseInt(moment().format("w"))-1);
+  const [numSemaine, setNumSemaine] = React.useState(
+    parseInt(moment().format("w")) - 1
+  );
   const [jour, setMyJour] = React.useState();
   const [afficheFormJour, setAfficheFormJour] = React.useState(false);
   const [afficheFormPointage, setAfficheFormPointage] = React.useState(false);
@@ -49,41 +50,39 @@ export default function Pointages(props: any) {
   const [horaireMatin, setHoraireMatin] = React.useState("");
   const [horaireAprem, setHoraireAprem] = React.useState("");
 
-
   const pickerChangeSemaine = async (ev: any) => {
     setMySemaine(ev.value);
-    setNumSemaine(parseInt(moment((ev.value)[0]).format("w")) - 1);
+    setNumSemaine(parseInt(moment(ev.value[0]).format("w")) - 1);
 
     if (ev.value !== null) {
       setAfficheFormJour(true);
     } else {
       setAfficheFormJour(false);
     }
-
   };
 
-   const pickerChangeJour = async (ev: any) => {
-     setMyJour(ev.value);
-     if (semaine !== null && jour !== null) {
-       const dataHoraires = await fetch("/api/collaborateur/pointages",
-         {
-           method: "POST",
-           body: JSON.stringify({semaine:semaine,jour:jour})
-         }).then((result) => result.json())
-         .then((response)=>response);
+  const pickerChangeJour = async (ev: any) => {
+    setMyJour(ev.value);
+    if (semaine !== null && jour !== null) {
+      const dataHoraires = await fetch("/api/collaborateur/pointages", {
+        method: "POST",
+        body: JSON.stringify({ semaine: semaine, jour: jour }),
+      })
+        .then((result) => result.json())
+        .then((response) => response);
 
-       setAfficheFormPointage(true)
-       setHeurePlanif(parseInt(dataHoraires.heuresPlanif.toString()));
-       setHeuresRea(parseInt(dataHoraires.heuresrea.toString()));
-       setHoraireMatin(dataHoraires.heureMatin);
-       setHoraireAprem(dataHoraires.heureAprem);
-     }
+      setAfficheFormPointage(true);
+      setHeurePlanif(parseInt(dataHoraires.heuresPlanif.toString()));
+      setHeuresRea(parseInt(dataHoraires.heuresrea.toString()));
+      setHoraireMatin(dataHoraires.heureMatin);
+      setHoraireAprem(dataHoraires.heureAprem);
+    }
   };
 
   return (
     <div>
       <Layout />
-      <form  className="form-example-pointages">
+      <form className="form-example-pointages">
         <div className="container p-5 my-5 border">
           <div className="form-example-semaines">
             <label className="LabelPointages">
@@ -99,153 +98,160 @@ export default function Pointages(props: any) {
               />
             </label>
           </div>
-          {afficheFormJour === true ? <div className="form-example-jour">
-            <label className="LabelPointagesHoraires">
-              Jour
-              <Datepicker
-                calendarType="week"
-                calendarSize={1}
-                display="anchored"
-                endIcon="calendar"
-                onChange={pickerChangeJour}
-              />
-            </label>
-          </div> : <></>}
-          {afficheFormPointage === true ? <><div className="form-example-planifie">
-            <label className="LabelPointagesHoraires">Horaires planifié:</label>{" "}
-            <input
-              className="InputFormPointages"
-              type="horairesPointages"
-              name="horairesPointages"
-              id="horairesPointages"
-              value={`${heurePlanif}`}
-            />
-          </div>
-          <div className="form-example-total">
-            <label className="LabelPointages">Total travaillé:</label>{" "}
-            <input
-              className="InputFormPointages"
-              type="horairesPointages"
-              name="horairesPointages"
-              id="horairesPointages"
-              value={`${heuresRea}`}
-            />
-          </div>
-          <div className="form-example-absence">
-            <label className="LabelPointages">Absences ou Congés en H:</label>{" "}
-            <input
-              className="InputFormPointages"
-              type="horairesPointages"
-              name="horairesPointages"
-              id="horairesPointages"
-              value="A modifier avec les horaires de planning"
-            />
-          </div>
-          <div className="horairesPlanning">
-            <p>Planning de la journée</p>
-            <div className="form-example-horaires">
-              <label className="LabelVerifHoraires">
-                Matin
-                <Datepicker
-                  controls={["time"]}
-                  display="bottom"
-                  themeVariant="light"
-                  showRangeLabels={true}
-                  touchUi={false}
-                  endIcon="clock"
-                  value={`${horaireMatin}`}
-                />
-              </label>
-            </div>
-
-            <div className="form-example-horaires">
-              <label className="LabelVerifHoraires">
-                Après-midi
-                <Datepicker
-                  controls={["time"]}
-                  themeVariant="dark"
-                  display="bottom"
-                  select="range"
-                  showRangeLabels={true}
-                  touchUi={true}
-                  endIcon="clock"
-                  value={`${horaireAprem}`}
-                />
-              </label>
-            </div>
-          </div>
-          <div className="PointagesHoraires">
-            <p>Pointages</p>
-            <div className="form-example-horaires">
+          {afficheFormJour === true ? (
+            <div className="form-example-jour">
               <label className="LabelPointagesHoraires">
-                Matin
+                Jour
                 <Datepicker
-                  controls={["time"]}
-                  display="bottom"
-                  select="date"
-                  showRangeLabels={true}
-                  touchUi={true}
-                  endIcon="clock"
+                  calendarType="week"
+                  calendarSize={1}
+                  display="anchored"
+                  endIcon="calendar"
+                  onChange={pickerChangeJour}
                 />
               </label>
             </div>
-
-            <div className="form-example-horaires">
-              <label className="LabelPointagesHoraires">
-                Après-midi
-                <Datepicker
-                  controls={["time"]}
-                  display="bottom"
-                    select="date"
-
-                  showRangeLabels={true}
-                  touchUi={true}
-                  endIcon="clock"
+          ) : (
+            <></>
+          )}
+          {afficheFormPointage === true ? (
+            <>
+              <div className="form-example-planifie">
+                <label className="LabelPointagesHoraires">
+                  Horaires planifié:
+                </label>{" "}
+                <input
+                  className="InputFormPointages"
+                  type="horairesPointages"
+                  name="horairesPointages"
+                  id="horairesPointages"
+                  value={`${heurePlanif}`}
                 />
-              </label>
-            </div>
-          </div>
-          <div className="correctionHoraires">
-            <p>Correction</p>
-            <div className="form-example-horaires">
-              <label className="LabelCorrectionHoraires">
-                Matin
-                <Datepicker
-                  controls={["time"]}
-                  display="bottom"
-                  select="date"
-                  showRangeLabels={true}
-                  touchUi={true}
-                  endIcon="clock"
+              </div>
+              <div className="form-example-total">
+                <label className="LabelPointages">Total travaillé:</label>{" "}
+                <input
+                  className="InputFormPointages"
+                  type="horairesPointages"
+                  name="horairesPointages"
+                  id="horairesPointages"
+                  value={`${heuresRea}`}
                 />
-              </label>
-            </div>
+              </div>
 
-            <div className="form-example-horaires">
-              <label className="LabelCorrectionHoraires">
-                Après-midi
-                <Datepicker
-                  controls={["time"]}
-                  display="bottom"
-                  select="date"
-                  showRangeLabels={true}
-                  touchUi={true}
-                  endIcon="clock"
-                />
-              </label>
-            </div>
-          </div>
-          <div className="MotifPointages">
-            <p>Motif: </p>
-            <select id="motifs" name="motifs">
-              <option value="medicale">Médicale</option>
-              <option value="familiale">Familiale</option>
-              <option value="administratif">Administratif</option>
-            </select>
-          </div></>: <></>}
+              <div className="horairesPlanning">
+                <p>Planning de la journée</p>
+                <div className="form-example-horaires">
+                  <label className="LabelVerifHoraires">
+                    Matin
+                    <Datepicker
+                      controls={["time"]}
+                      display="bottom"
+                      themeVariant="light"
+                      showRangeLabels={true}
+                      touchUi={false}
+                      endIcon="clock"
+                      value={`${horaireMatin}`}
+                    />
+                  </label>
+                </div>
 
+                <div className="form-example-horaires">
+                  <label className="LabelVerifHoraires">
+                    Après-midi
+                    <Datepicker
+                      controls={["time"]}
+                      themeVariant="light"
+                      display="bottom"
+                      select="range"
+                      showRangeLabels={true}
+                      touchUi={true}
+                      endIcon="clock"
+                      value={`${horaireAprem}`}
+                    />
+                  </label>
+                </div>
+              </div>
+              <div className="PointagesHoraires">
+                <p>Pointages</p>
+                <div className="form-example-horaires">
+                  <label className="LabelPointagesHoraires">
+                    Matin
+                    <Datepicker
+                      controls={["time"]}
+                      display="bottom"
+                      themeVariant="light"
+                      select="date"
+                      showRangeLabels={true}
+                      touchUi={true}
+                      endIcon="clock"
+                    />
+                  </label>
+                </div>
+
+                <div className="form-example-horaires">
+                  <label className="LabelPointagesHoraires">
+                    Après-midi
+                    <Datepicker
+                      controls={["time"]}
+                      themeVariant="light"
+                      display="bottom"
+                      select="date"
+                      showRangeLabels={true}
+                      touchUi={true}
+                      endIcon="clock"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div className="correctionHoraires">
+                <p>Correction</p>
+                <div className="form-example-horaires">
+                  <label className="LabelCorrectionHoraires">
+                    Matin
+                    <Datepicker
+                      controls={["time"]}
+                      themeVariant="light"
+                      display="bottom"
+                      select="date"
+                      showRangeLabels={true}
+                      touchUi={true}
+                      endIcon="clock"
+                    />
+                  </label>
+                </div>
+
+                <div className="form-example-horaires">
+                  <label className="LabelCorrectionHoraires">
+                    Après-midi
+                    <Datepicker
+                      controls={["time"]}
+                      display="bottom"
+                      themeVariant="light"
+                      select="date"
+                      showRangeLabels={true}
+                      touchUi={true}
+                      endIcon="clock"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div className="MotifPointages">
+                <p>Motif: </p>
+                <select id="motifs" name="motifs">
+                  <option value="medicale">Médicale</option>
+                  <option value="familiale">Familiale</option>
+                  <option value="administratif">Administratif</option>{" "}
+                  <option value="familiale">Formation</option>
+                  <option value="administratif">Autres</option>
+                </select>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </form>
     </div>
   );
-};
+}
