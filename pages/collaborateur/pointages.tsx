@@ -36,12 +36,43 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   }
 };
 
-const pointages: NextPage = (props: any) => {
+export default function Pointages(props: any) {
+
+  const [semaine, setMySemaine] = React.useState();
+  const [jour, setMyJour] = React.useState();
+  const [afficheFormJour, setAfficheFormJour] = React.useState(false);
+  const [heurePlanif, setHeurePlanif] = React.useState(0);
+   const [heuresRea, setHeuresRea] = React.useState(0);
+
+  const pickerChangeSemaine = async (ev: any) => {
+    setMySemaine(ev.value);
+
+    if (ev.value !== null) {
+      setAfficheFormJour(true);
+    } else {
+      setAfficheFormJour(false);
+    }
+  };
+   const pickerChangeJour = async (ev: any) => {
+     setMyJour(ev.value);
+     if (semaine !== null && jour !== null) {
+       const dataHoraires = await fetch("/api/collaborateur/pointages",
+         {
+           method: "POST",
+           body: JSON.stringify({semaine:semaine,jour:jour})
+         }).then((result) => result.json())
+         .then((response)=>response);
+
+       setHeurePlanif(parseInt(dataHoraires.heuresPlanif.toString()));
+       setHeuresRea(parseInt(dataHoraires.heuresrea.toString()));
+     }
+  };
+
   return (
     <div>
       <Layout />
 
-      <form action="" method="POST" className="form-example-pointages">
+      <form  className="form-example-pointages">
         <div className="container p-5 my-5 border">
           <div className="form-example-semaines">
             <label className="LabelPointages">
@@ -53,10 +84,11 @@ const pointages: NextPage = (props: any) => {
                 selectSize={7}
                 display="anchored"
                 endIcon="calendar"
+                onChange={pickerChangeSemaine}
               />
             </label>
           </div>
-          <div className="form-example-jour">
+          {afficheFormJour === true ? <div className="form-example-jour">
             <label className="LabelPointagesHoraires">
               Jour
               <Datepicker
@@ -64,9 +96,10 @@ const pointages: NextPage = (props: any) => {
                 calendarSize={1}
                 display="anchored"
                 endIcon="calendar"
+                onChange={pickerChangeJour}
               />
             </label>
-          </div>
+          </div> : <></>}
           <div className="form-example-planifie">
             <label className="LabelPointagesHoraires">Horaires planifié:</label>{" "}
             <input
@@ -74,7 +107,7 @@ const pointages: NextPage = (props: any) => {
               type="horairesPointages"
               name="horairesPointages"
               id="horairesPointages"
-              value="A modifier avec les horaires de planning"
+              value={`${heurePlanif}`}
             />
           </div>
           <div className="form-example-total">
@@ -84,7 +117,7 @@ const pointages: NextPage = (props: any) => {
               type="horairesPointages"
               name="horairesPointages"
               id="horairesPointages"
-              value="A modifier avec les horaires de planning"
+              value={`${heuresRea}`}
             />
           </div>
           <div className="form-example-absence">
@@ -202,5 +235,3 @@ const pointages: NextPage = (props: any) => {
     </div>
   );
 };
-
-export default pointages;
