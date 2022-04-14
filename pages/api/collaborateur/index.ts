@@ -3,6 +3,7 @@ import { getDatabase } from "../../../src/database";
 import jwt_decode from "jwt-decode";
 import { userId, userProfil } from "../../../src/userInfos";
 import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -37,9 +38,11 @@ export default async function handler(
         {
           $push: {
             conges: {
+              id: uuidv4(),
               start: alldate[0],
               end: alldate[1],
               approuved: false,
+              traited: false,
               nbrdays: diffInDays,
             },
           },
