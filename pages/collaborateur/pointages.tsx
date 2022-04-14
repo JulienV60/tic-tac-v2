@@ -43,17 +43,25 @@ const pointages: NextPage = (props: any) => {
 
       <form action="" method="POST" className="form-example-pointages">
         <div className="container p-5 my-5 border">
+
           <div className="form-example">
             <label className="LabelPointages">
               Semaine
               <Datepicker
                 theme="ios"
                 themeVariant="light"
+
+          <div className="form-example-semaines">
+            <label className="LabelPointages">
+              Semaine
+              <Datepicker
+
                 controls={["calendar"]}
                 select="preset-range"
                 firstSelectDay={1}
                 selectSize={7}
                 display="anchored"
+
                 endIcon="calendar"
               />
             </label>
@@ -65,16 +73,63 @@ const pointages: NextPage = (props: any) => {
           /> */}
           </div>
           <div className="form-example">
+
+              />
+            </label>
+          </div>
+          <div className="form-example-jour">
+
             <label className="LabelPointagesHoraires">
               Jour
               <Datepicker
                 calendarType="week"
                 calendarSize={1}
                 display="anchored"
+
                 endIcon="calendar"
               />
             </label>
             {/* <input
+
+              />
+            </label>
+          </div>
+          <div className="form-example-planifie">
+            <label className="LabelPointagesHoraires">Horaires planifié:</label>{" "}
+            <input
+              className="InputFormPointages"
+              type="horairesPointages"
+              name="horairesPointages"
+              id="horairesPointages"
+              value="A modifier avec les horaires de planning"
+            />
+          </div>
+          <div className="form-example-total">
+            <label className="LabelPointages">Total travaillé:</label>{" "}
+            <input
+              className="InputFormPointages"
+              type="horairesPointages"
+              name="horairesPointages"
+              id="horairesPointages"
+              value="A modifier avec les horaires de planning"
+            />
+
+          </div>
+          <div className="form-example-absence">
+            <label className="LabelPointages">Absences ou Congés en H:</label>{" "}
+            <input
+              className="InputFormPointages"
+              type="horairesPointages"
+              name="horairesPointages"
+              id="horairesPointages"
+              value="A modifier avec les horaires de planning"
+            />
+          </div>
+          <div className="horairesPlanning">
+
+          </label>
+          {/* <input
+
             className="InputFormPointages"
             type="date"
             name="jourPointage"
@@ -144,6 +199,7 @@ const pointages: NextPage = (props: any) => {
         </div>
         <div className="verifHoraires">
           <div className="verifHorairesPlanning ">
+
             <p>Planning de la journée</p>
             <div className="form-example-horaires">
               <label className="LabelVerifHoraires">
@@ -151,9 +207,12 @@ const pointages: NextPage = (props: any) => {
                 <Datepicker
                   controls={["time"]}
                   display="bottom"
+                  select="range"
+                  showRangeLabels={true}
                   touchUi={true}
                 />
               </label>
+
               {/* <input
 
                 className="InputVerifHoraires"
@@ -266,10 +325,82 @@ const pointages: NextPage = (props: any) => {
                 <option value="Formation">Formation</option>
                 <option value="Deces">Absence Décés</option>
               </select>
+
+            </div>
+
+            <div className="form-example-horaires">
+              <label className="LabelVerifHoraires">
+                Après-midi
+                <Datepicker
+                  controls={["time"]}
+                  display="bottom"
+                  select="range"
+                  showRangeLabels={true}
+                  touchUi={true}
+                />
+              </label>
+            </div>
+          </div>
+          <div className="PointagesHoraires">
+            <p>Pointages</p>
+            <div className="form-example-horaires">
+              <label className="LabelPointagesHoraires">
+                Matin
+                <Datepicker
+                  controls={["time"]}
+                  display="bottom"
+                  select="range"
+                  showRangeLabels={true}
+                  touchUi={true}
+                />
+              </label>
+            </div>
+
+            <div className="form-example-horaires">
+              <label className="LabelPointagesHoraires">
+                Après-midi
+                <Datepicker
+                  controls={["time"]}
+                  display="bottom"
+                  select="range"
+                  showRangeLabels={true}
+                  touchUi={true}
+                />
+              </label>
+            </div>
+          </div>
+          <div className="correctionHoraires">
+            <p>Correction</p>
+            <div className="form-example-horaires">
+              <label className="LabelCorrectionHoraires">
+                Matin
+                <Datepicker
+                  controls={["time"]}
+                  display="bottom"
+                  select="range"
+                  showRangeLabels={true}
+                  touchUi={true}
+                />
+              </label>
+            </div>
+
+            <div className="form-example-horaires">
+              <label className="LabelCorrectionHoraires">
+                Après-midi
+                <Datepicker
+                  controls={["time"]}
+                  display="bottom"
+                  select="range"
+                  showRangeLabels={true}
+                  touchUi={true}
+                />
+              </label>
+
             </div>
           </div>
         </div>
       </form>
+
       <div className="container p-5 my-5 border">
         <div className="mbsc-row">
           <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
@@ -343,6 +474,7 @@ const pointages: NextPage = (props: any) => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };
