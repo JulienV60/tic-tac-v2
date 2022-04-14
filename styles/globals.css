@@ -320,6 +320,7 @@
   grid-area: 4 / 1 / 5 / 7;
 }
 .div6 {
+  margin-bottom: 0rem;
   grid-area: 5 / 1 / 8 / 7;
 }
 .div7 {
@@ -450,4 +451,134 @@
 }
 /* ============= FIN ERROR PAGE 404 ============= */
 .mbsc-schedule-time-col {
+}
+
+.dashboard {
+  height: 50rem;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  margin-top: 5rem;
+}
+
+.anomalie {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  margin-bottom: 0rem;
+  grid-area: 1 / 1 / 2 / 6;
+}
+.dataAnomalie {
+  height: 0;
+  color: #2f9dac;
+  height: 1rem;
+  grid-area: 2 / 1 / 3 / 6;
+}
+.message {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 1 / 6 / 2 / 11;
+}
+.datamessage {
+  grid-area: 2 / 6 / 3 / 11;
+}
+.horaires {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 3 / 1 / 4 / 11;
+}
+.dataHoraires {
+  display: flex;
+  flex-direction: row;
+
+  margin-bottom: 0rem;
+  grid-area: 4 / 1 / 7 / 11;
+}
+.compteurs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 7 / 1 / 8 / 6;
+}
+.ecarts {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 7 / 6 / 8 / 11;
+}
+.datacompteurs {
+  grid-area: 8 / 1 / 9 / 6;
+}
+.dataecarts {
+  grid-area: 8 / 6 / 9 / 11;
+}
+.conges {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #2f9dac;
+  color: white;
+  height: 2.9rem;
+  font-family: "Bebas Neue", cursive;
+  font-size: 2rem;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 5px;
+  grid-area: 9 / 1 / 10 / 11;
+}
+.dataconges {
+  grid-area: 10 / 1 / 11 / 11;
 }
