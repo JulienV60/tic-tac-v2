@@ -369,19 +369,7 @@
   border-radius: 5px;
   grid-area: 1 / 1 / 2 / 6;
 }
-.Demande {
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  height: 10rem;
-  margin-bottom: 0rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
-  display: flex;
-  flex-direction: column nowrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
+
 .titreHistorique {
   margin-right: 1rem;
   margin-left: 1rem;
