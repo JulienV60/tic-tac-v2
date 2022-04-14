@@ -56,6 +56,9 @@ export default async function handler(
                     "minutes"
                   ) / 60
                 }`,
+                [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_realisees`]: `${
+                  Math.floor(Math.random() * (11 - 2)) + 2
+                }`,
               },
             }
           );
