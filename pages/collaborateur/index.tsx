@@ -59,8 +59,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
       }
     });
+    const infoArrayConges = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => {
+        return result?.conges;
+      });
+    const congesNotApprouved = infoArrayConges.filter(
+      (element: any, index: any) => element.traited === false
+    );
     return {
       props: {
+        congesPending: JSON.stringify(congesNotApprouved),
         allDate: JSON.stringify(allDateActuel),
         allDateNext: JSON.stringify(allDateNext),
         profileUser: profile,
@@ -75,6 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Home(props: any) {
   const allDateActual = JSON.parse(props.allDate);
   const allDateNext = JSON.parse(props.allDateNext);
+  // const congesPending = JSON.parse(props.congesPending);
   return (
     <Layout>
       <div className="dashboard">
@@ -186,7 +198,38 @@ export default function Home(props: any) {
         <div className="datacompteurs"></div>
         <div className="dataecarts"></div>
         <div className="conges">Demandes de congés </div>
-        <div className="dataconges"></div>
+
+        {/* {congesPending.map((element: any, index: number) => {
+            if (element.traited === false) {
+              return (
+                <div
+                  key={index}
+                  className="leave-history"
+                  style={{ borderRadius: "5px" }}
+                >
+                  <div className="start" style={{ borderRadius: "5px" }}>
+                    {moment(element.start).format("L")}
+                  </div>
+                  <div className="end" style={{ borderRadius: "5px" }}>
+                    {" "}
+                    {moment(element.end).format("L")}
+                  </div>
+                  <div className="quantity" style={{ borderRadius: "5px" }}>
+                    {element.nbrdays}
+                  </div>
+                  <div className="rest" style={{ borderRadius: "5px" }}>
+                    En cours
+                  </div>
+                  <div
+                    className="forecast-balances"
+                    style={{ borderRadius: "5px" }}
+                  >
+                    Soldes prévisionnels
+                  </div>
+                </div>
+              );
+            }
+          })} */}
       </div>
     </Layout>
   );
