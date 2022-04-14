@@ -13,6 +13,7 @@ import jwt_decode from "jwt-decode";
 import { userId, userProfil } from "../../src/userInfos";
 import { getDatabase } from "../../src/database";
 import React, { useState } from "react";
+import moment from "moment";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const accessTokken = context.req.cookies.IdToken;
@@ -29,6 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (profile === "Collaborateur") {
     const mongodb = await getDatabase();
+
     const congesInfo = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -36,6 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .then((result) => {
         return { droitCP: result?.droit_cp, soldesCP: result?.soldes_cp };
       });
+
     const infoArrayConges = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -43,16 +46,39 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .then((result) => {
         return result?.conges;
       });
-    const congesNotApprouved = infoArrayConges.filter(
-      (element: any, index: any) => element.approuved === false
-    );
 
-    return {
-      props: {
-        nbrjours: congesNotApprouved.length,
-        data: congesInfo,
-      },
-    };
+    if (infoArrayConges !== undefined) {
+      const congesNotApprouved = infoArrayConges.filter(
+        (element: any, index: any) => element.approuved === false
+      );
+      const congesApprouved = infoArrayConges.filter(
+        (element: any, index: any) => element.approuved === true
+      );
+      const congesTake = congesApprouved.map(
+        (element: any, index: any) => {
+          return element.nbrdays;
+        }
+      );
+      let sum = 0;
+      for (let i = 0; i < congesTake.length; i++) {
+        sum += congesTake[i];
+      }
+
+      return {
+        props: {
+          demandeawait: congesNotApprouved.length,
+          demandeApprouved: congesApprouved.length,
+          data: congesInfo,
+        },
+      };
+    } else {
+      return {
+        props: {
+          demandeawait: null,
+          data: congesInfo,
+        },
+      };
+    }
   } else {
     return {
       notFound: true,
@@ -63,7 +89,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Conges(props: any) {
   const [date, setMyDate] = React.useState();
   const [calendar, setCalendar] = React.useState();
+  const [showbutton, setShowButton] = React.useState(false);
+
   const pickerChange = async (ev: any) => {
+    const date: any = ev.value;
+    const dateStart = moment(date[0]);
+    const dateEnd = moment(date[1]);
+    const diffInDays = dateEnd.diff(dateStart, "day");
+
+    if (diffInDays < props.data.soldesCP) {
+      setShowButton(true);
+    }
     setMyDate(ev.value);
   };
   const sendDate = async (e: any) => {
@@ -101,9 +137,11 @@ export default function Conges(props: any) {
                     onChange={pickerChange}
                   />
                 </span>
-                <button type="button" onClick={sendDate} id="date">
+                {showbutton === true ? <button type="button" onClick={sendDate} id="date">
                   Valider
-                </button>
+                </button> : <></>
+                }
+
               </form>
             </div>
 
@@ -115,8 +153,8 @@ export default function Conges(props: any) {
               <div className="end">
                 Soldes <p>{props.data.soldesCP}</p>
               </div>
-              <div className="quantity">Demandes en cours {props.nbrjours}</div>{" "}
-              <div className="rest">Demandes accept. ou validées</div>
+              <div className="quantity">Demandes en cours <p>{props.demandeawait}</p></div>{" "}
+              <div className="rest">Demandes accept. <p>{props.demandeApprouved}</p></div>
               <div className="forecast-balances">Soldes prévitionnels</div>
             </div>
           </section>
