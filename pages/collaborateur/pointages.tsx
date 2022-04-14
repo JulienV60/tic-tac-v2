@@ -11,6 +11,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { Layout } from "../../components/LayoutCollab";
 import { userProfil } from "../../src/userInfos";
 import jwt_decode from "jwt-decode";
+import moment from "moment";
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const accessTokken = req.cookies.IdToken;
@@ -39,20 +40,28 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 export default function Pointages(props: any) {
 
   const [semaine, setMySemaine] = React.useState();
+  const [numSemaine, setNumSemaine] = React.useState(parseInt(moment().format("w"))-1);
   const [jour, setMyJour] = React.useState();
   const [afficheFormJour, setAfficheFormJour] = React.useState(false);
+  const [afficheFormPointage, setAfficheFormPointage] = React.useState(false);
   const [heurePlanif, setHeurePlanif] = React.useState(0);
-   const [heuresRea, setHeuresRea] = React.useState(0);
+  const [heuresRea, setHeuresRea] = React.useState(0);
+  const [horaireMatin, setHoraireMatin] = React.useState("");
+  const [horaireAprem, setHoraireAprem] = React.useState("");
+
 
   const pickerChangeSemaine = async (ev: any) => {
     setMySemaine(ev.value);
+    setNumSemaine(parseInt(moment((ev.value)[0]).format("w")) - 1);
 
     if (ev.value !== null) {
       setAfficheFormJour(true);
     } else {
       setAfficheFormJour(false);
     }
+
   };
+
    const pickerChangeJour = async (ev: any) => {
      setMyJour(ev.value);
      if (semaine !== null && jour !== null) {
@@ -63,15 +72,17 @@ export default function Pointages(props: any) {
          }).then((result) => result.json())
          .then((response)=>response);
 
+       setAfficheFormPointage(true)
        setHeurePlanif(parseInt(dataHoraires.heuresPlanif.toString()));
        setHeuresRea(parseInt(dataHoraires.heuresrea.toString()));
+       setHoraireMatin(dataHoraires.heureMatin);
+       setHoraireAprem(dataHoraires.heureAprem);
      }
   };
 
   return (
     <div>
       <Layout />
-
       <form  className="form-example-pointages">
         <div className="container p-5 my-5 border">
           <div className="form-example-semaines">
@@ -100,7 +111,7 @@ export default function Pointages(props: any) {
               />
             </label>
           </div> : <></>}
-          <div className="form-example-planifie">
+          {afficheFormPointage === true ? <><div className="form-example-planifie">
             <label className="LabelPointagesHoraires">Horaires planifié:</label>{" "}
             <input
               className="InputFormPointages"
@@ -139,10 +150,10 @@ export default function Pointages(props: any) {
                   controls={["time"]}
                   display="bottom"
                   themeVariant="light"
-                  select="range"
                   showRangeLabels={true}
-                  touchUi={true}
+                  touchUi={false}
                   endIcon="clock"
+                  value={`${horaireMatin}`}
                 />
               </label>
             </div>
@@ -158,6 +169,7 @@ export default function Pointages(props: any) {
                   showRangeLabels={true}
                   touchUi={true}
                   endIcon="clock"
+                  value={`${horaireAprem}`}
                 />
               </label>
             </div>
@@ -170,7 +182,7 @@ export default function Pointages(props: any) {
                 <Datepicker
                   controls={["time"]}
                   display="bottom"
-                  select="range"
+                  select="date"
                   showRangeLabels={true}
                   touchUi={true}
                   endIcon="clock"
@@ -184,7 +196,8 @@ export default function Pointages(props: any) {
                 <Datepicker
                   controls={["time"]}
                   display="bottom"
-                  select="range"
+                    select="date"
+
                   showRangeLabels={true}
                   touchUi={true}
                   endIcon="clock"
@@ -200,7 +213,7 @@ export default function Pointages(props: any) {
                 <Datepicker
                   controls={["time"]}
                   display="bottom"
-                  select="range"
+                  select="date"
                   showRangeLabels={true}
                   touchUi={true}
                   endIcon="clock"
@@ -214,7 +227,7 @@ export default function Pointages(props: any) {
                 <Datepicker
                   controls={["time"]}
                   display="bottom"
-                  select="range"
+                  select="date"
                   showRangeLabels={true}
                   touchUi={true}
                   endIcon="clock"
@@ -229,7 +242,8 @@ export default function Pointages(props: any) {
               <option value="familiale">Familiale</option>
               <option value="administratif">Administratif</option>
             </select>
-          </div>
+          </div></>: <></>}
+
         </div>
       </form>
     </div>

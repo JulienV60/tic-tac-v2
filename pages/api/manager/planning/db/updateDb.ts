@@ -109,6 +109,8 @@ export default async function handler(
                     "",
                   [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_necessaire`]:
                     "",
+                  [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_realisees`]:
+                    "",
                 },
               }
             );
