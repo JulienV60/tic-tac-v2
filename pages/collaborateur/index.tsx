@@ -88,42 +88,67 @@ export default function Home(props: any) {
         <div className="message">Message </div>
         <div className="datamessage"></div>
         <div className="horaires"> Horaires</div>
-        <div className="dataHoraires">
+        <div
+          className="dataHoraires"
+          style={{
+            backgroundColor: "#2f9dac",
+            color: "white",
+          }}
+        >
           <span
             style={{
+              borderRadius: "5px",
               backgroundColor: "#2f9dac",
               color: "white",
               fontFamily: "Bebas Neue",
-              padding: "0",
-              margin: "0",
+              fontSize: "2rem",
+              paddingTop: "3.5rem",
+              textAlign: "center",
             }}
           >
-            Semaine Actuel:{" "}
+            Semaine Actuel:
           </span>
           <br></br>
-
           {allDateActual.map((element: any) => {
             if (element !== null) {
               return (
                 <>
-                  <p>
-                    {element.nameday} <span></span>
-                    {element.date} <span></span>
-                    {element.horairesStart} <span></span>
-                    {element.horairesEnd}
-                  </p>
+                  <p
+                    style={{
+                      marginLeft: "1rem",
+                      color: "white",
+                      marginRight: "0",
+                      paddingRight: "1rem",
+                      paddingLeft: "1rem",
+                      width: "auto",
+                      height: "5rem",
+                    }}
+                  ></p>
+                  {element.nameday.toUpperCase()}
+                  <br></br>
+                  {element.date}
+                  <br></br>
+                  {element.horairesStart}
+                  <br></br>
+                  {element.horairesEnd}
+                  <br></br>
                 </>
               );
             }
-          })}
+          })}{" "}
+          <div style={{ border: "2px solid white" }}></div>
           <br></br>
           <span
             style={{
               backgroundColor: "#2f9dac",
               color: "white",
               fontFamily: "Bebas Neue",
-              padding: "0",
-              margin: "0",
+              fontSize: "2rem",
+
+              paddingTop: "3.5rem",
+              paddingRight: "1rem",
+              paddingLeft: "1rem",
+              textAlign: "center",
             }}
           >
             Semaine Suivante:
@@ -132,12 +157,25 @@ export default function Home(props: any) {
             if (element !== null) {
               return (
                 <>
-                  <p>
-                    {element.nameday} <span></span>
-                    {element.date} <span></span>
-                    {element.horairesStart} <span></span>
-                    {element.horairesEnd}
-                  </p>
+                  <p
+                    style={{
+                      marginLeft: "1rem",
+                      color: "white",
+                      margin: "0 0 0 0",
+                      paddingRight: "1rem",
+                      paddingLeft: "1rem",
+                      width: "auto",
+                      height: "5rem",
+                    }}
+                  ></p>
+                  {element.nameday.toUpperCase()}
+                  <br></br>
+                  {element.date}
+                  <br></br>
+                  {element.horairesStart}
+                  <br></br>
+                  {element.horairesEnd}
+                  <br></br>
                 </>
               );
             }
