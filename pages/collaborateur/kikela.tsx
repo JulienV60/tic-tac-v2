@@ -70,14 +70,16 @@ export default function Kikela(props: any) {
             </form>
           </div> */}
 
-
           <div>
-            <div className="container p-5 my-5 border" style={{
-              backgroundColor: "#2f9dac",
-            }}>
+            <div
+              className="container p-5 my-5 border"
+              style={{
+                backgroundColor: "#2f9dac",
+              }}
+            >
               <form className="">
                 <div className="row d-flex justify-content-between">
-                  <div className="col w-75">
+                  <div className="col w-75" style={{ marginLeft: "20rem" }}>
                     <input
                       type="text"
                       className="form-control"
@@ -86,7 +88,6 @@ export default function Kikela(props: any) {
                       onChange={(event) => {
                         setNom(event.target.value);
                       }}
-
                     />
                   </div>
                   <div className="col">
@@ -113,9 +114,12 @@ export default function Kikela(props: any) {
               </form>
             </div>
 
-            <div className="container p-5 my-5 border" style={{
-              backgroundColor: "#2f9dac",
-            }}>
+            <div
+              className="container p-5 my-5 border"
+              style={{
+                backgroundColor: "#2f9dac",
+              }}
+            >
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">Nom: {nom}</li>
                 <li className="list-group-item">Prénom: {prenom}</li>

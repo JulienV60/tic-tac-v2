@@ -261,14 +261,13 @@ export default function Home(props: any) {
           {" "}
           Contingent contractuel cumulé au {temps} : {contingentActuel} Heures
           <br></br>
-          Ecart entre contingent cumulé et ajuste : {
-            differenceCumuleActuel
-          }{" "}
-          Heures
           <br></br>
           Contingent contractuel ajusté au {temps} :{contingentCumule} Heures
         </div>
-        <div className="dataecarts"></div>
+        <div className="dataecarts">
+          Ecart entre contingent cumulé et ajuste : {differenceCumuleActuel}{" "}
+          Heures
+        </div>
         <div className="conges">Demandes de congés </div>
 
         {congesPending.map((element: any, index: number) => {
