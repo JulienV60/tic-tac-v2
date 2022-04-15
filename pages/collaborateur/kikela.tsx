@@ -61,21 +61,23 @@ export default function Kikela(props: any) {
     return (
       <div>
         <Layout>
-          <div className="parent">
-
+          {/* <div className="parent">
+          <form>
               <div className="div1">Entrez votre Nom</div>
               <div className="div2"></div>
               <div className="div3">Entrez votre Prénom</div>
               <div className="div4"></div>
+            </form>
+          </div> */}
 
-          </div>
 
-
-          {/* <div className="kikelaInfo">
-            <div className="div1">
-              <form>
-                <div className="row">
-                  <div className="col">
+          <div>
+            <div className="container p-5 my-5 border" style={{
+              backgroundColor: "#2f9dac",
+            }}>
+              <form className="">
+                <div className="row d-flex justify-content-between">
+                  <div className="col w-75">
                     <input
                       type="text"
                       className="form-control"
@@ -84,6 +86,7 @@ export default function Kikela(props: any) {
                       onChange={(event) => {
                         setNom(event.target.value);
                       }}
+
                     />
                   </div>
                   <div className="col">
@@ -110,14 +113,16 @@ export default function Kikela(props: any) {
               </form>
             </div>
 
-            <div className="container p-5 my-5 border">
+            <div className="container p-5 my-5 border" style={{
+              backgroundColor: "#2f9dac",
+            }}>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">Nom: {nom}</li>
                 <li className="list-group-item">Prénom: {prenom}</li>
                 <li className="list-group-item">Dispo: {dispo}</li>
               </ul>
             </div>
-          </div> */}
+          </div>
         </Layout>
       </div>
     );
