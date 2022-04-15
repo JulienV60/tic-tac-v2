@@ -571,5 +571,15 @@
   grid-area: 9 / 1 / 10 / 11;
 }
 .dataconges {
+  background-color: #2f9dac;
+  width: 20rem;
+  color: white;
+  display: flex;
+  margin-right: 1rem;
+  padding-top: 1rem;
+  text-align: center;
+  flex-direction: row;
+  justify-content: flex-start;
+
   grid-area: 10 / 1 / 11 / 11;
 }

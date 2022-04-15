@@ -23,7 +23,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     rayon = await userRayon(decoded.email);
   }
   if (profile === "Manager") {
-
     const searchconges = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -34,7 +33,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         data.map((element: any) => {
           let arrayAllCongeTraited: any = [];
           if (element.conges.length !== 0) {
-
             return {
               firstName: element.prenom,
               lastName: element.nom,
@@ -45,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                   arrayAllCongeTraited.push(false);
                   return `${element.start}/${element.end}/${
                     element.nbrdays
-                  }/${element.id.toString()}/${element.nbrdays}`;
+                  }/${element.id.toString()}/${element.nbrdays}/${element.id}`;
                 } else {
                   arrayAllCongeTraited.push(true);
                 }
@@ -70,8 +68,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 function Conges(props: any) {
+  const [message, setMessage] = React.useState("");
+  const [index, setIndex] = React.useState<number>();
   const result = JSON.parse(props.conges);
-
+  const [id, setId] = React.useState("");
+  async function handleSubmit(event: any) {
+    if (message !== "") {
+      console.log(window.localStorage);
+      console.log("coucou-------", event.target.value);
+      const test = await fetch("/api/manager/conges/message", {
+        method: "POST",
+        body: JSON.stringify({ message: message, id: id, index: index }),
+      }).then((result) => result.json());
+    }
+  }
   return (
     <LayoutManager>
       <div className="">
@@ -117,27 +127,29 @@ function Conges(props: any) {
                                 Nombre de jours <br></br>
                                 {e.split("/")[2]}
                               </div>{" "}
-                              {element.soldes_cp - e.split("/")[2] < 0 ? <></> :    <form
-                                action={`/api/manager/conges/validConges?${
-                                  e.split("/")[3]
-                                }&i=${index}&day=${e.split("/")[4]}`}
-                                method="POST"
-                              >
-
-                                <button
-                                  className="btn"
-                                  style={{
-                                    backgroundColor: "green",
-                                    width: "3rem",
-
-                                    color: "white",
-                                    borderRadius: "10px",
-                                  }}
+                              {element.soldes_cp - e.split("/")[2] < 0 ? (
+                                <></>
+                              ) : (
+                                <form
+                                  action={`/api/manager/conges/validConges?${
+                                    e.split("/")[3]
+                                  }&i=${index}&day=${e.split("/")[4]}`}
+                                  method="POST"
                                 >
-                                  <DoneIcon />
-                                </button>
-                              </form>}
+                                  <button
+                                    className="btn"
+                                    style={{
+                                      backgroundColor: "green",
+                                      width: "3rem",
 
+                                      color: "white",
+                                      borderRadius: "10px",
+                                    }}
+                                  >
+                                    <DoneIcon />
+                                  </button>
+                                </form>
+                              )}
                               <form
                                 action={`/api/manager/conges/deleteConges?${
                                   e.split("/")[3]
@@ -157,6 +169,27 @@ function Conges(props: any) {
                                   <CloseIcon />
                                 </button>
                               </form>
+                              <input
+                                id={e.split("/")[5]}
+                                className="form-control"
+                                placeholder="Entrer votre message"
+                                type="text"
+                                onChange={(event) => {
+                                  setId(e.split("/")[5]);
+                                  setIndex(index);
+                                  setMessage(event.target.value);
+                                }}
+                              ></input>
+                              <button
+                                id={e.split("/")[5]}
+                                className="btn"
+                                key={e.split("/")[5]}
+                                style={{ backgroundColor: "#2f9dac" }}
+                                type="button"
+                                onClick={handleSubmit}
+                              >
+                                Valider le message
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -171,6 +204,6 @@ function Conges(props: any) {
       </div>
     </LayoutManager>
   );
-};
+}
 
 export default Conges;
