@@ -58,6 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
       }
     });
+
     const infoArrayConges = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -74,10 +75,52 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.message);
-    console.log(searchMessage);
-    console.log(searchMessage);
+    const numSemaine = parseInt(moment().locale("fr").format("w")) - 1;
+
+    const contingentActuel = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => result?.horaires);
+    const heures: any[] = [];
+
+    for (let i = 0; i <= numSemaine; i++) {
+      for (let j = 0; j < 7; j++) {
+        heures.push(contingentActuel[i][j].heure_necessaire);
+      }
+    }
+
+    const sommeHeures = heures.filter((element: any) => {
+      return parseInt(element + element);
+    });
+
+    let sumTotalHeuresRea = 0;
+    for (let i = 0; i < sommeHeures.length; i++) {
+      sumTotalHeuresRea += parseInt(sommeHeures[i]);
+    }
+    const heuresSUp: any[] = [];
+    for (let z = 0; z <= numSemaine; z++) {
+      for (let x = 0; x < 7; x++) {
+        heuresSUp.push(contingentActuel[z][x].heure_realisees);
+      }
+    }
+    const sommesHeuresSup = heuresSUp.filter((element: any) => {
+      return parseInt(element + element);
+    });
+    let sumTotalHeuresSup = 0;
+    for (let i = 0; i < sommesHeuresSup.length; i++) {
+      sumTotalHeuresSup += parseInt(sommesHeuresSup[i]);
+    }
+    const differenceHeureReaetHeuresFaites =
+      parseInt(sumTotalHeuresRea.toString()) -
+      parseInt(sumTotalHeuresSup.toString());
+
+    console.log(differenceHeureReaetHeuresFaites);
     return {
       props: {
+        differenceCumuleActuel: differenceHeureReaetHeuresFaites,
+        contigentCumule: sumTotalHeuresSup,
+        contingentActuel: sumTotalHeuresRea,
         message: JSON.stringify(searchMessage),
         congesPending: JSON.stringify(congesNotApprouved),
         allDate: JSON.stringify(allDateActuel),
@@ -96,7 +139,11 @@ export default function Home(props: any) {
   const allDateActual = JSON.parse(props.allDate);
   const allDateNext = JSON.parse(props.allDateNext);
   const congesPending = JSON.parse(props.congesPending);
-  console.log(message);
+  const contingentActuel = props.contingentActuel;
+  const contingentCumule = props.contigentCumule;
+  const differenceCumuleActuel = props.differenceCumuleActuel;
+  const temps = moment().locale("FR").format("DD-MM-YYYY");
+
   return (
     <Layout>
       <div className="dashboard">
@@ -210,7 +257,17 @@ export default function Home(props: any) {
         </div>
         <div className="compteurs">Compteurs </div>
         <div className="ecarts">Ecarts </div>
-        <div className="datacompteurs"></div>
+        <div className="datacompteurs">
+          {" "}
+          Contingent contractuel cumulé au {temps} : {contingentActuel} Heures
+          <br></br>
+          Ecart entre contingent cumulé et ajuste : {
+            differenceCumuleActuel
+          }{" "}
+          Heures
+          <br></br>
+          Contingent contractuel ajusté au {temps} :{contingentCumule} Heures
+        </div>
         <div className="dataecarts"></div>
         <div className="conges">Demandes de congés </div>
 

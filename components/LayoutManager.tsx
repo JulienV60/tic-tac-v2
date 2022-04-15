@@ -33,50 +33,50 @@ const Layout: React.FC<any> = ({ children }) => {
     <div>
       <Navbar bg="#2f9dac" expand={false}>
         <Container fluid>
-          <Navbar.Toggle
-            aria-controls="offcanvasNavbar"
-            style={{
-              backgroundColor: "white",
-              marginLeft: "0.2rem",
-              color: "2f9dac",
-            }}
-          />{" "}
           <div
-            className="infoUser"
-            style={{
-              fontFamily: "Bebas Neue",
-              color: "white",
-              fontSize: "1.6rem",
-            }}
+            className="d-flex justify-content-between "
+            style={{ width: "100%" }}
           >
-            {" "}
-            Manager:{" "}
-            {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}
-            <span> </span>
+            <div
+              style={{
+                fontFamily: "Bebas Neue",
+                color: "white",
+                fontSize: "1.6rem",
+              }}
+            >
+              <Navbar.Toggle
+                aria-controls="offcanvasNavbar"
+                style={{
+                  backgroundColor: "white",
+                  margin: "0.8rem 2rem",
+                  color: "2f9dac",
+                }}
+              />
+              Manager:{" "}
+              {user?.img === null ? <></> : <img src={`${user?.img}`}></img>}{" "}
+            </div>
+            <Navbar.Brand
+              href="/manager"
+              style={{
+                color: "white",
+                width: "15rem",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+                fontFamily: "Bebas Neue",
+              }}
+            >
+              {user?.nom === null ? <>nom</> : user?.nom}
+              <span></span>
+              {user?.prenom === null ? <>prenom</> : user?.prenom}
+              <span></span>
+              <HomeIcon />
+              <Link href="/api/auth/logout" passHref={true}>
+                <LogoutIcon />
+              </Link>
+            </Navbar.Brand>
           </div>
-          <Navbar.Brand
-            href="/manager"
-            style={{
-              color: "white",
-              width: "20rem",
-              display: "flex",
-              margin: "0.8rem",
-              flexDirection: "row",
-              justifyContent: "space-around",
-              alignItems: "center",
-              fontFamily: "Bebas Neue",
-              borderRadius: "50%",
-            }}
-          >
-            {user?.nom === null ? <>nom</> : user?.nom}
-            <span></span>
-            {user?.prenom === null ? <>prenom</> : user?.prenom}
-            <span></span>
-            <HomeIcon />
-            <Link href="/api/auth/logout" passHref={true}>
-              <LogoutIcon />
-            </Link>
-          </Navbar.Brand>
           <Navbar.Offcanvas
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
@@ -114,7 +114,6 @@ const Layout: React.FC<any> = ({ children }) => {
                 paddingTop: "5rem",
                 color: "#2f9dac",
                 fontFamily: "Bebas Neue",
-
                 lineHeight: "6rem",
               }}
             >
