@@ -53,14 +53,24 @@ export default async function handler(
         (horaires) => horaires[numeroSemaine][numeroJourSemaine].heure_realisees
       );
 
+    const regulariser = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((result) => result?.horaires)
+      .then(
+        (horaires) => horaires[numeroSemaine][numeroJourSemaine].regulariser
+      );
+
     let heureMatin;
     let heureAprem;
+
     if (heurePlannifJour.length === 0) {
       heureMatin = "";
       heureAprem = "";
     } else {
-      heureMatin = moment(heurePlannifJour.split("/")[0]).format("HH:ss");
-      heureAprem = moment(heurePlannifJour.split("/")[1]).format("HH:ss");
+      heureMatin = moment(heurePlannifJour.split("/")[0]).format("HH:mm");
+      heureAprem = moment(heurePlannifJour.split("/")[1]).format("HH:mm");
     }
     const heureReaMatin = "06:00";
     const heureReaAprem = `${parseInt(heureRea) + 6}:00`;
@@ -95,6 +105,7 @@ export default async function handler(
         heureAprem: heureAprem,
         heureReaMatin: heureReaMatin,
         heureReaAprem: heureReaAprem,
+        regulariser: regulariser,
       })
     );
   } else {
