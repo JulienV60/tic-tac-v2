@@ -42,16 +42,19 @@ export default function Pointages(props: any) {
   const [numSemaine, setNumSemaine] = React.useState(
     parseInt(moment().format("w")) - 1
   );
-  const [jour, setMyJour] = React.useState();
+  const [jour, setMyJour] = React.useState("");
   const [afficheFormJour, setAfficheFormJour] = React.useState(false);
   const [afficheFormPointage, setAfficheFormPointage] = React.useState(false);
   const [afficheButtonValide, setAfficheButtonValide] = React.useState(false);
+  const [regulariser, setRegulariser] = React.useState(false);
   const [heurePlanif, setHeurePlanif] = React.useState(0);
   const [heuresRea, setHeuresRea] = React.useState(0);
   const [horaireMatin, setHoraireMatin] = React.useState("");
   const [horaireAprem, setHoraireAprem] = React.useState("");
   const [heureReaMatin, setHeureReaMatin] = React.useState("");
   const [heureReaAprem, setHeureReaAprem] = React.useState("");
+   const [heureMatinCorrige, setHeureMatinCorrige] = React.useState("");
+  const [heureApremCorrige, setHeureApremCorrige] = React.useState("");
    const [motif, setMotif] = React.useState("autres");
 
   const pickerChangeSemaine = async (ev: any) => {
@@ -67,16 +70,28 @@ export default function Pointages(props: any) {
 
   const motifChange = async (ev: any) => {
     setMotif(ev);
+  };
+  const changeMatinCorrection = async (ev: any) => {
+    setHeureMatinCorrige(ev.value);
+   };
+ const changeApremCorrection = async (ev: any) => {
+   setHeureApremCorrige(ev.value);
+
+   if (heureMatinCorrige !== null && ev.value !== null) {
+     setAfficheButtonValide(true);
+   }
+   else {
+     setAfficheButtonValide(false);
+  }
    };
 
-
-    //  const sendPointage = async () => {
-    //    const send = await fetch("/api/collaborateur/pointages/update",
-    //      {
-    //        method: "POST",
-    //        body:JSON.stringify({ jour:jour,heureMatin: horairePointageMatin, heureAprem: horairePointageAprem ,motif:motif})
-    //      })
-    //  };
+     const sendPointage = async () => {
+       const send = await fetch("/api/collaborateur/pointages/update",
+         {
+           method: "POST",
+           body:JSON.stringify({ jour:new Date(jour).toDateString(),heureMatin: heureMatinCorrige, heureAprem: heureApremCorrige ,motif:motif})
+         })
+     };
 
 
   const pickerChangeJour = async (ev: any) => {
@@ -84,7 +99,7 @@ export default function Pointages(props: any) {
     if (semaine !== null && jour !== null) {
       const dataHoraires = await fetch("/api/collaborateur/pointages", {
         method: "POST",
-        body: JSON.stringify({ semaine: semaine, jour: jour }),
+        body: JSON.stringify({ semaine: semaine, jour: ev.value }),
       })
         .then((result) => result.json())
         .then((response) => response);
@@ -92,20 +107,20 @@ export default function Pointages(props: any) {
       setAfficheFormPointage(true);
       setHeurePlanif(parseInt(dataHoraires.heuresPlanif.toString()));
       setHeuresRea(parseInt(dataHoraires.heuresrea.toString()));
-      if (horaireMatin === "") {
+      console.log("***$****************",dataHoraires.heureMartin)
+      if (dataHoraires.heureMatin === "") {
         setHoraireMatin("Aucunes heures");
         setHoraireAprem("Aucunes heures");
         setHeureReaMatin("Aucunes heures");
         setHeureReaAprem("Aucunes heures");
       } else {
+        console.log(dataHoraires.regulariser)
         setHoraireMatin(dataHoraires.heureMatin);
         setHoraireAprem(dataHoraires.heureAprem);
         setHeureReaMatin(dataHoraires.heureReaMatin);
         setHeureReaAprem(dataHoraires.heureReaAprem);
+        setRegulariser(dataHoraires.regulariser);
       }
-
-
-
     }
   };
 
@@ -144,7 +159,7 @@ export default function Pointages(props: any) {
           ) : (
             <></>
           )}
-          {afficheFormPointage === true ? (
+          {afficheFormPointage === true  ? (
             <>
               <div className="form-example-planifie">
                 <label className="LabelPointagesHoraires">
@@ -220,8 +235,7 @@ export default function Pointages(props: any) {
                     />
                   </label>
                 </div>
-
-                <div className="form-example-horaires">
+              {regulariser === true ? <div className="form-example-horaires">
                   <label className="LabelPointagesHoraires">
                     Après-midi
                     <Datepicker
@@ -236,9 +250,25 @@ export default function Pointages(props: any) {
                       value={`${heureReaAprem}`}
                     />
                   </label>
-                </div>
+                </div>:<div className="form-example-horaires">
+                  <label className="LabelPointagesHoraires">
+                    Après-midi
+                    <Datepicker
+                      controls={["time"]}
+                      themeVariant="light"
+                      display="bottom"
+                      select="date"
+                      returnFormat="iso8601"
+                      showRangeLabels={true}
+                      touchUi={true}
+                      endIcon="clock"
+                      value={`${heureReaAprem}`}
+                    />
+                  </label>
+                </div>}
+
               </div>
-              <div className="correctionHoraires">
+              {horaireMatin !== "Aucunes heures" && regulariser === false? <><div className="correctionHoraires">
                 <p>Correction</p>
                 <div className="form-example-horaires">
                   <label className="LabelCorrectionHoraires">
@@ -251,6 +281,7 @@ export default function Pointages(props: any) {
                       showRangeLabels={true}
                       touchUi={true}
                       endIcon="clock"
+                      onChange={changeMatinCorrection}
                     />
                   </label>
                 </div>
@@ -266,6 +297,7 @@ export default function Pointages(props: any) {
                       showRangeLabels={true}
                       touchUi={true}
                       endIcon="clock"
+                      onChange={changeApremCorrection}
                     />
                   </label>
                 </div>
@@ -279,8 +311,9 @@ export default function Pointages(props: any) {
                   <option value="formation">Formation</option>
                   <option value="autres" selected>Autres</option>
                 </select>
-              </div>
-              {afficheButtonValide === true ? <button >Valider</button> : <></>}
+              </div></>:<><div>Ancun horaire à corriger</div></>}
+
+              {afficheButtonValide === true ? <button onClick={sendPointage}>Valider</button> : <></>}
             </>
           ) : (
             <></>

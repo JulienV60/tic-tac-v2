@@ -12,22 +12,23 @@ export default async function handler(
   if (req.method === "POST") {
     const accessTokken = req.cookies.IdToken;
     const data = JSON.parse(req.body);
-    const heureMatin = data.heureMatin;
-    const heureAprem = data.heureAprem;
+    const heureMatin = new Date(data.heureMatin).toString();
+    const heureAprem = new Date(data.heureAprem).toString();
     const motif = data.motif;
-    const jour = moment(data.jour).format("L");
-
+    const jour = data.jour;
+    const heureMatinFormat = `${jour} ${heureMatin.substring(
+      16,
+      heureMatin.length
+    )}`;
+    const heureApremFormat = `${jour} ${heureAprem.substring(
+      16,
+      heureAprem.length
+    )}`;
+    console.log("--------");
     const numeroSemaine = parseInt(moment(jour).locale("fr").format("w")) - 1;
 
     const numeroJourSemaine =
       parseInt(moment(jour).locale("fr").format("e")) + 1;
-
-    console.log(heureMatin);
-    console.log(heureAprem);
-    console.log(motif);
-    console.log(jour);
-    console.log(numeroJourSemaine);
-    console.log(numeroSemaine);
 
     let profile;
     let idUser;
@@ -40,18 +41,25 @@ export default async function handler(
       idUser = await userId(decoded.email);
     }
     const mongodb = await getDatabase();
+
+    //Thu Apr 14 2022 06:15:00 GMT+0200 (heure d’été d’Europe centrale)/Thu Apr 14 2022 15:30:00 GMT+0200 (heure d’été d’Europe centrale)
     const collaborateur = await mongodb
       .db()
       .collection("Collaborateurs")
       .updateOne(
         {
-          idUser: idUser,
+          idUser: idUser?.toString(),
         },
         {
           $set: {
-            [`horaires.${numeroSemaine}.${numeroJourSemaine}.horaires`]: "",
-            [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_pointage_matin`]: `${heureMatin}`,
-            [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_pointage_aprem`]: `${heureAprem}`,
+            [`horaires.${numeroSemaine}.${numeroJourSemaine}.horaires`]: `${heureMatinFormat}/${heureApremFormat}`,
+            [`horaires.${numeroSemaine}.${numeroJourSemaine}.regulariser`]:
+              true,
+            [`horaires.${numeroSemaine}.${numeroJourSemaine}.heure_realisees`]: `${parseFloat(
+              (
+                moment(heureApremFormat).diff(heureMatinFormat, "minutes") / 60
+              ).toString()
+            )}`,
           },
         }
       );
