@@ -21,14 +21,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (profile === "Collaborateur") {
     const numeroSemaine = parseInt(moment().locale("fr").format("w")) - 1;
     const numeroSemaineSuivante = parseInt(moment().locale("fr").format("w"));
-    console.log(numeroSemaine);
-    console.log(numeroSemaineSuivante);
     const mongodb = await getDatabase();
     const searchCongesActual = await mongodb
       .db()
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.horaires[numeroSemaine]);
+
     const searchCongesNext = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -48,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
       }
     );
-    console.log(allDateActuel);
+
     const allDateNext = searchCongesNext.map((element: any, index: number) => {
       if (index !== 0) {
         return {
@@ -66,11 +65,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .then((result) => {
         return result?.conges;
       });
+
     const congesNotApprouved = infoArrayConges.filter(
       (element: any, index: any) => element.traited === false
     );
+    const searchMessage = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((data) => data?.message);
+    console.log(searchMessage);
+    console.log(searchMessage);
     return {
       props: {
+        message: JSON.stringify(searchMessage),
         congesPending: JSON.stringify(congesNotApprouved),
         allDate: JSON.stringify(allDateActuel),
         allDateNext: JSON.stringify(allDateNext),
@@ -84,21 +92,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 export default function Home(props: any) {
+  const message = JSON.parse(props.message);
   const allDateActual = JSON.parse(props.allDate);
   const allDateNext = JSON.parse(props.allDateNext);
-  // const congesPending = JSON.parse(props.congesPending);
+  const congesPending = JSON.parse(props.congesPending);
+  console.log(message);
   return (
     <Layout>
       <div className="dashboard">
         <div className="anomalie">Anomalie</div>
-        <div className="dataAnomalie">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. At minima,
-          magnam porro, eaque beatae alias nam quod asperiores molestiae
-          blanditiis reiciendis quas. Tempore dignissimos eveniet et recusandae
-          veritatis magnam totam.
+        <div className="dataAnomalie"></div>
+        <div className="message">Message</div>
+
+        <div
+          className="datamessage"
+          style={{
+            fontFamily: "Bebas Neue",
+            fontSize: "2rem",
+            textAlign: "center",
+          }}
+        >
+          {message}
         </div>
-        <div className="message">Message </div>
-        <div className="datamessage"></div>
         <div className="horaires"> Horaires</div>
         <div
           className="dataHoraires"
@@ -199,37 +214,21 @@ export default function Home(props: any) {
         <div className="dataecarts"></div>
         <div className="conges">Demandes de congés </div>
 
-        {/* {congesPending.map((element: any, index: number) => {
-            if (element.traited === false) {
-              return (
-                <div
-                  key={index}
-                  className="leave-history"
-                  style={{ borderRadius: "5px" }}
-                >
-                  <div className="start" style={{ borderRadius: "5px" }}>
-                    {moment(element.start).format("L")}
-                  </div>
-                  <div className="end" style={{ borderRadius: "5px" }}>
-                    {" "}
-                    {moment(element.end).format("L")}
-                  </div>
-                  <div className="quantity" style={{ borderRadius: "5px" }}>
-                    {element.nbrdays}
-                  </div>
-                  <div className="rest" style={{ borderRadius: "5px" }}>
-                    En cours
-                  </div>
-                  <div
-                    className="forecast-balances"
-                    style={{ borderRadius: "5px" }}
-                  >
-                    Soldes prévisionnels
-                  </div>
-                </div>
-              );
-            }
-          })} */}
+        {congesPending.map((element: any, index: number) => {
+          if (element.traited === false) {
+            return (
+              <div
+                key={index}
+                className="dataconges"
+                style={{ borderRadius: "5px" }}
+              >
+                <p> Commence le : {moment(element.start).format("L")}</p>{" "}
+                <p> Finis le : {moment(element.end).format("L")}</p>{" "}
+                <p> Nombres de jours : {element.nbrdays}</p>
+              </div>
+            );
+          }
+        })}
       </div>
     </Layout>
   );
