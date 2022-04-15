@@ -74,8 +74,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.message);
-    console.log(searchMessage);
-    console.log(searchMessage);
+    const searchUser = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((data) => data?.horaires);
+
+    const horairesRea = searchUser.map((element: any, index: number) => {
+      return element;
+    });
+    console.log(horairesRea);
     return {
       props: {
         message: JSON.stringify(searchMessage),
@@ -96,7 +104,9 @@ export default function Home(props: any) {
   const allDateActual = JSON.parse(props.allDate);
   const allDateNext = JSON.parse(props.allDateNext);
   const congesPending = JSON.parse(props.congesPending);
-  console.log(message);
+
+  const temps = moment().locale("FR").format("DD-MM-YYYY");
+
   return (
     <Layout>
       <div className="dashboard">
@@ -210,7 +220,9 @@ export default function Home(props: any) {
         </div>
         <div className="compteurs">Compteurs </div>
         <div className="ecarts">Ecarts </div>
-        <div className="datacompteurs"></div>
+        <div className="datacompteurs">
+          Contingent contractuel cumulé au {temps}
+        </div>
         <div className="dataecarts"></div>
         <div className="conges">Demandes de congés </div>
 
