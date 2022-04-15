@@ -32,11 +32,11 @@ export default async function handler(
 
         const numeroSemaine =
           parseInt(moment(elementFormatJson.start).locale("fr").format("w")) -
-          1;
+          2;
 
         const numeroJourSemaine =
           parseInt(moment(elementFormatJson.start).locale("fr").format("e")) +
-          1;
+          2;
 
         const mongodb = await getDatabase();
 

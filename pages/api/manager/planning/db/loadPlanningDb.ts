@@ -13,11 +13,11 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     const mongodb = await getDatabase();
-    const semaineSelected = parseInt(req.query.semaine.toString()) - 1;
+    const semaineSelected = parseInt(req.query.semaine.toString()) - 2;
     const idUser = req.query.id;
     let planning = null;
 
-    if (semaineSelected !== -1) {
+    if (semaineSelected !== -2) {
       planning = await mongodb
         .db()
         .collection("Collaborateurs")
