@@ -45,10 +45,14 @@ export default function Pointages(props: any) {
   const [jour, setMyJour] = React.useState();
   const [afficheFormJour, setAfficheFormJour] = React.useState(false);
   const [afficheFormPointage, setAfficheFormPointage] = React.useState(false);
+  const [afficheButtonValide, setAfficheButtonValide] = React.useState(false);
   const [heurePlanif, setHeurePlanif] = React.useState(0);
   const [heuresRea, setHeuresRea] = React.useState(0);
   const [horaireMatin, setHoraireMatin] = React.useState("");
   const [horaireAprem, setHoraireAprem] = React.useState("");
+  const [heureReaMatin, setHeureReaMatin] = React.useState("");
+  const [heureReaAprem, setHeureReaAprem] = React.useState("");
+   const [motif, setMotif] = React.useState("autres");
 
   const pickerChangeSemaine = async (ev: any) => {
     setMySemaine(ev.value);
@@ -60,6 +64,20 @@ export default function Pointages(props: any) {
       setAfficheFormJour(false);
     }
   };
+
+  const motifChange = async (ev: any) => {
+    setMotif(ev);
+   };
+
+
+    //  const sendPointage = async () => {
+    //    const send = await fetch("/api/collaborateur/pointages/update",
+    //      {
+    //        method: "POST",
+    //        body:JSON.stringify({ jour:jour,heureMatin: horairePointageMatin, heureAprem: horairePointageAprem ,motif:motif})
+    //      })
+    //  };
+
 
   const pickerChangeJour = async (ev: any) => {
     setMyJour(ev.value);
@@ -74,8 +92,20 @@ export default function Pointages(props: any) {
       setAfficheFormPointage(true);
       setHeurePlanif(parseInt(dataHoraires.heuresPlanif.toString()));
       setHeuresRea(parseInt(dataHoraires.heuresrea.toString()));
-      setHoraireMatin(dataHoraires.heureMatin);
-      setHoraireAprem(dataHoraires.heureAprem);
+      if (horaireMatin === "") {
+        setHoraireMatin("Aucunes heures");
+        setHoraireAprem("Aucunes heures");
+        setHeureReaMatin("Aucunes heures");
+        setHeureReaAprem("Aucunes heures");
+      } else {
+        setHoraireMatin(dataHoraires.heureMatin);
+        setHoraireAprem(dataHoraires.heureAprem);
+        setHeureReaMatin(dataHoraires.heureReaMatin);
+        setHeureReaAprem(dataHoraires.heureReaAprem);
+      }
+
+
+
     }
   };
 
@@ -182,9 +212,11 @@ export default function Pointages(props: any) {
                       display="bottom"
                       themeVariant="light"
                       select="date"
+                      returnFormat="iso8601"
                       showRangeLabels={true}
                       touchUi={true}
                       endIcon="clock"
+                      value={`${heureReaMatin}`}
                     />
                   </label>
                 </div>
@@ -197,9 +229,11 @@ export default function Pointages(props: any) {
                       themeVariant="light"
                       display="bottom"
                       select="date"
+                      returnFormat="iso8601"
                       showRangeLabels={true}
                       touchUi={true}
                       endIcon="clock"
+                      value={`${heureReaAprem}`}
                     />
                   </label>
                 </div>
@@ -238,14 +272,15 @@ export default function Pointages(props: any) {
               </div>
               <div className="MotifPointages">
                 <p>Motif: </p>
-                <select id="motifs" name="motifs">
+                <select id="motifs" name="motifs" onChange={(event)=>{motifChange(event.target.value)}}>
                   <option value="medicale">Médicale</option>
                   <option value="familiale">Familiale</option>
                   <option value="administratif">Administratif</option>{" "}
-                  <option value="familiale">Formation</option>
-                  <option value="administratif">Autres</option>
+                  <option value="formation">Formation</option>
+                  <option value="autres" selected>Autres</option>
                 </select>
               </div>
+              {afficheButtonValide === true ? <button >Valider</button> : <></>}
             </>
           ) : (
             <></>
