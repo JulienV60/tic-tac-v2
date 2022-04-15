@@ -58,6 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
       }
     });
+
     const infoArrayConges = await mongodb
       .db()
       .collection("Collaborateurs")
@@ -74,16 +75,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.message);
-    const searchUser = await mongodb
+    const numSemaine = parseInt(moment().locale("fr").format("w")) - 1;
+
+    const contingentActuel = await mongodb
       .db()
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
-      .then((data) => data?.horaires);
+      .then((result) => result?.horaires);
+    const heures: any[] = [];
 
-    const horairesRea = searchUser.map((element: any, index: number) => {
-      return element;
-    });
-    console.log(horairesRea);
+    for (let i = 0; i <= numSemaine; i++) {
+      for (let j = 0; j < 7; j++) {
+        heures.push(contingentActuel[i][j].heure_necessaire);
+      }
+    }
+    console.log(heures);
     return {
       props: {
         message: JSON.stringify(searchMessage),
