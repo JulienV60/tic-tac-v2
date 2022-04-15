@@ -1,15 +1,18 @@
-import { NextPage } from "next";
-import { userProfil } from "../../src/userInfos";
 import { GetServerSideProps } from "next";
-import jwt_decode from "jwt-decode";
 import React from "react";
-import Layout from "../../components/LayoutManager";
+import { Layout } from "../../components/LayoutCollab";
+import moment from "moment";
+
+import { AnyError } from "mongodb";
+import { PrecisionManufacturing } from "@mui/icons-material";
+import jwt_decode from "jwt-decode";
+import PageNotFound from "../../components/PageNotFound";
+import { userProfil } from "../../src/userInfos";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-
- const accessTokken = context.req.cookies.IdToken;
+  const accessTokken = context.req.cookies.IdToken;
   let profile;
-  let decoded:any;
+  let decoded: any;
   if (accessTokken === undefined) {
     profile = null;
   } else {
@@ -17,55 +20,66 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     profile = await userProfil(decoded.email);
   }
 
-  if (profile === "Manager") {
-    const fetchCookie = await fetch(
-      `${process.env.AUTH0_LOCAL}/api/cookies`
-    ).then((data) => data.json());
-
+  if (profile === "Collaborateur") {
     return {
       props: {
-        user: JSON.stringify(fetchCookie),
+        profileUser: profile,
       },
     };
   } else {
-     return {
-      notFound: true,
-    }
+    return {
+      props: {
+        profileUser: null,
+      },
+    };
   }
 };
 
-export default function Kikela(props:any) {
+export default function Kikela(props: any) {
+  const [prenom, setPrenom] = React.useState("");
+  const [nom, setNom] = React.useState("");
+  const [dispo, setDispo] = React.useState("");
+  const handleSubmit = async (event: any) => {
+    if (prenom !== "" || nom !== "") {
+      const test = await fetch("/api/kikela", {
+        method: "POST",
+        body: JSON.stringify({ nom: nom, prenom: prenom }),
+      }).then((result) => result.json());
+      console.log(test);
 
-    const [prenom, setPrenom] = React.useState("");
-    const [nom, setNom] = React.useState("");
-    const [dispo, setDispo] = React.useState("");
-     const data = JSON.parse(props.user);
-    const handleSubmit = async (event: any) => {
-      if (prenom !== "" || nom !== "") {
-        const test = await fetch("/api/kikela", {
-          method: "POST",
-          body: JSON.stringify({ nom: nom, prenom: prenom }),
-        }).then((result) => result.json());
-
-
-        if (test === true) {
-          setDispo("Present sur la base du planning");
-        } else {
-          setDispo("Absent sur la base du planning");
-        }
+      if (test === true) {
+        setDispo("Present sur la base du planning");
       } else {
-        setDispo("");
+        setDispo("Absent sur la base du planning");
       }
-    };
+    } else {
+      setDispo("");
+    }
+  };
 
+  if (props.profileUser === "Collaborateur") {
     return (
       <div>
         <Layout>
-          <div className="kikelaInfo">
-            <div className="div1">
-              <form>
-                <div className="row">
-                  <div className="col">
+          {/* <div className="parent">
+          <form>
+              <div className="div1">Entrez votre Nom</div>
+              <div className="div2"></div>
+              <div className="div3">Entrez votre Prénom</div>
+              <div className="div4"></div>
+            </form>
+          </div> */}
+
+          <div>
+            <div
+              className="container p-5 my-5 border"
+              style={{
+                backgroundColor: "#2f9dac",
+              }}
+            >
+              <form className="">
+                <div className="row d-flex justify-content-between">
+                  <div className="col w-75">
                     <input
                       type="text"
                       className="form-control"
@@ -100,7 +114,12 @@ export default function Kikela(props:any) {
               </form>
             </div>
 
-            <div className="container p-5 my-5 border">
+            <div
+              className="container p-5 my-5 border"
+              style={{
+                backgroundColor: "#2f9dac",
+              }}
+            >
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">Nom: {nom}</li>
                 <li className="list-group-item">Prénom: {prenom}</li>
@@ -111,7 +130,7 @@ export default function Kikela(props:any) {
         </Layout>
       </div>
     );
-
+  } else {
+    return <PageNotFound />;
+  }
 }
-
-
