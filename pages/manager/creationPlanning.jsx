@@ -145,7 +145,9 @@ function App(props) {
 
   //function recuperation de la data mongo par semaine
   async function getDataPlanningDb(semaineShow) {
+
     const data = await Promise.all(
+
       prenoms.map(async (element) => {
         return await fetch(
           `/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow}&id=${element._id}`
@@ -174,20 +176,21 @@ function App(props) {
       });
 
       const eventsPlanning = dataPlanningDbFilter.map((element, index) => {
+
         const colorRandom =
           "#" + ((Math.random() * 0xffffff) << 0).toString(16);
         const splitHoraires = element.event.horaires.split("/");
 
         if (semaineShow !== 0) {
-          fetch("/api/manager/planning/addSlot", {
-            method: "POST",
-            body: JSON.stringify({
-              id: index,
-              collaborateur: element.id,
-              start: splitHoraires[0],
-              end: splitHoraires[1],
-            }),
-          });
+          // fetch("/api/manager/planning/addSlot", {
+          //   method: "POST",
+          //   body: JSON.stringify({
+          //     id: index,
+          //     collaborateur: element.id,
+          //     start: splitHoraires[0],
+          //     end: splitHoraires[1],
+          //   }),
+          // });
         }
         return {
           id: index,
