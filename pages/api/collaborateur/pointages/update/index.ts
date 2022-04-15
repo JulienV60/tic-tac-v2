@@ -24,7 +24,7 @@ export default async function handler(
       16,
       heureAprem.length
     )}`;
-    console.log("--------");
+
     const numeroSemaine = parseInt(moment(jour).locale("fr").format("w")) - 1;
 
     const numeroJourSemaine =

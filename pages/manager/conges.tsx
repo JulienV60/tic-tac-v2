@@ -74,8 +74,7 @@ function Conges(props: any) {
   const [id, setId] = React.useState("");
   async function handleSubmit(event: any) {
     if (message !== "") {
-      console.log(window.localStorage);
-      console.log("coucou-------", event.target.value);
+
       const test = await fetch("/api/manager/conges/message", {
         method: "POST",
         body: JSON.stringify({ message: message, id: id, index: index }),

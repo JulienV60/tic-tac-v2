@@ -49,7 +49,9 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
           `${process.env.AUTH0_LOCAL
           }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
             moment().locale("fr").format("w")
-          )}&id=${element._id}`
+          )}&id=${element._id}&day=${parseInt(
+            moment().locale("fr").format("e")
+          )}`
         ).then((result) => result.json());
       })
     );
@@ -76,26 +78,41 @@ export default function IndexManager(props: any) {
     const prenoms = JSON.parse(props.prenoms);
     const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
     const [selectedDate, setSelectedDate] = React.useState(
-      new Date(moment().format("L"))
+      moment().format("DD/MM/YYYY").toString()
     );
-  function onSelectedDateChange() {
-      setSelectedDate(new Date(moment().format("L")));
+    const [semaineShow, setsemaineShow] = React.useState(
+    parseInt(moment().locale("fr").format("w")) - 1
+  );
+
+  async function onSelectedDateChange(args: any) {
+    if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
+      const data = await Promise.all(
+        prenoms.map(async (element: any) => {
+          return await fetch(
+            `/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment(args).locale("fr").format("w"))-1}&id=${element._id}&day=${parseInt(
+              moment().locale("fr").format("e")
+            )}`
+          ).then((result) => result.json());
+        })
+      );
+      setDataPlanning(data);
+      setsemaineShow(parseInt(moment(args).locale("fr").format("w")) - 1);
+      setSelectedDate(moment(args).format("DD/MM/YYYY").toString());
+    } else {
+      setSelectedDate(moment(args).format("DD/MM/YYYY").toString());
     }
 
-    function setDate() {
-      setSelectedDate(new Date(moment().format("L")));
     }
 
     const view = React.useMemo<MbscEventcalendarView>(() => {
       return {
         schedule: {
-          type: "day",
-          allDay: false,
-          startDay: 0,
-          endDay: -1,
-          startTime: "06:00",
-          endTime: "20:00",
-          editable: false,
+         type: "day",
+        allDay: false,
+        startDay: 1,
+        endDay: 6,
+        startTime: "06:00",
+        endTime: "21:00",
         },
       };
     }, []);
@@ -116,9 +133,10 @@ export default function IndexManager(props: any) {
       const dataPlanningDb = dataPlanning.forEach(
         (element: any, index: number) => {
           element.planningData.forEach((ele: any) => {
+
             if (
               ele.horaires !== "" &&
-              moment().format("DD/MM/YYYY").toString() === ele.date
+              selectedDate === ele.date
             ) {
               dataPlanningDbFilter.push({ id: element.id, event: ele });
             } else {
@@ -164,16 +182,16 @@ export default function IndexManager(props: any) {
       );
 
       setEvents(eventsPlanning);
-    }, []);
+    }, [selectedDate]);
 
 
 
     const renderDay = (args: any) => {
       const date = args.date;
 
-
       return (
         <div className="header-template-container">
+          <p>ko</p>
           <div className="header-template-date">
             <div className="header-template-day-name">
               {formatDate("DDDD", date)}
@@ -201,17 +219,17 @@ export default function IndexManager(props: any) {
     return (
       <LayoutManager>
         <Eventcalendar
-          theme="ios"
-          themeVariant="light"
-          locale={localeFr}
-          view={view}
-          data={myEvents}
-          resources={myResources}
-          groupBy="date"
-          renderDay={renderDay}
-          selectedDate={selectedDate}
-          onSelectedDateChange={onSelectedDateChange}
-          renderResource={renderCustomResource}
+        className="planning"
+        theme="ios"
+        themeVariant="light"
+        locale={localeFr}
+        view={view}
+        data={myEvents}
+        resources={myResources}
+        groupBy="date"
+        renderDay={renderDay}
+        onSelectedDateChange={(args)=>onSelectedDateChange(args.date)}
+        renderResource={renderCustomResource}
         />
       </LayoutManager>
     );

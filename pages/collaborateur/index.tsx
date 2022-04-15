@@ -115,7 +115,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       parseInt(sumTotalHeuresRea.toString()) -
       parseInt(sumTotalHeuresSup.toString());
 
-    console.log(differenceHeureReaetHeuresFaites);
     return {
       props: {
         differenceCumuleActuel: differenceHeureReaetHeuresFaites,

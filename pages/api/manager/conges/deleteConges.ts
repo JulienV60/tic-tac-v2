@@ -20,7 +20,7 @@ export default async function handler(
       return cp?.soldes_cp;
     });
   const newSoldes = searchSoldesCp - parseInt(queryDay.toString());
-  console.log(newSoldes);
+
   const searchConges = await mongodb
     .db()
     .collection("Collaborateurs")
