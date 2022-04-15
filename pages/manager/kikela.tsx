@@ -45,7 +45,6 @@ export default function Kikela(props: any) {
         method: "POST",
         body: JSON.stringify({ nom: nom, prenom: prenom }),
       }).then((result) => result.json());
-      console.log(test);
 
       if (test === true) {
         setDispo("Present sur la base du planning");

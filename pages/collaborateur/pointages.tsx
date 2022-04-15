@@ -107,14 +107,13 @@ export default function Pointages(props: any) {
       setAfficheFormPointage(true);
       setHeurePlanif(parseInt(dataHoraires.heuresPlanif.toString()));
       setHeuresRea(parseInt(dataHoraires.heuresrea.toString()));
-      console.log("***$****************",dataHoraires.heureMartin)
+
       if (dataHoraires.heureMatin === "") {
         setHoraireMatin("Aucunes heures");
         setHoraireAprem("Aucunes heures");
         setHeureReaMatin("Aucunes heures");
         setHeureReaAprem("Aucunes heures");
       } else {
-        console.log(dataHoraires.regulariser)
         setHoraireMatin(dataHoraires.heureMatin);
         setHoraireAprem(dataHoraires.heureAprem);
         setHeureReaMatin(dataHoraires.heureReaMatin);

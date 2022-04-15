@@ -12,8 +12,7 @@ export default async function handler(
     const message = body.message;
     const id = body.id;
     const index = body.index;
-    console.log(message);
-    console.log(id);
+
     const mongodb = await getDatabase();
     const accessTokken = req.cookies.IdToken;
 
@@ -38,7 +37,7 @@ export default async function handler(
           },
         }
       );
-    console.log(searchConges);
+
     res.redirect(303, "/manager/conges");
   }
 }
