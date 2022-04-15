@@ -1,6 +1,7 @@
 import { Layout } from "../../components/LayoutCollab";
 import { GetServerSideProps } from "next";
 import { getDatabase } from "../../src/database";
+const milestones: any[] = [];
 import moment from "moment";
 import {
   Eventcalendar,
@@ -86,14 +87,12 @@ export default function IndexManager(props: any) {
 
   const view = React.useMemo<MbscEventcalendarView>(() => {
     return {
-      schedule: {
+        schedule: {
         type: "day",
         allDay: false,
-        startDay: 0,
-        endDay: -1,
+        size:15,
         startTime: "06:00",
-        endTime: "20:00",
-        editable: false,
+        endTime: "21:00",
       },
     };
   }, []);
@@ -165,8 +164,15 @@ export default function IndexManager(props: any) {
     setEvents(eventsPlanning);
   }, []);
 
-  const renderDay = (args: any) => {
+  const renderDay = (args:any) => {
     const date = args.date;
+
+    const dayNr = date.getDay();
+    const task =
+      milestones.find((obj) => {
+        return +new Date(obj.date) === +date;
+      }) || {};
+
 
     return (
       <div className="header-template-container">
@@ -177,6 +183,12 @@ export default function IndexManager(props: any) {
           <div className="header-template-day">
             {formatDate("MMMM DD", date)}
           </div>
+        </div>
+        <div
+          className="header-template-task"
+          style={{ background: task.color }}
+        >
+          {task.name}
         </div>
       </div>
     );
