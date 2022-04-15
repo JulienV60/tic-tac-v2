@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     idUser = await userId(decoded.email);
   }
   if (profile === "Collaborateur") {
-    const numeroSemaine = parseInt(moment().locale("fr").format("w")) - 2;
+    const numeroSemaine = parseInt(moment().locale("fr").format("w")) - 1;
     const numeroSemaineSuivante = parseInt(moment().locale("fr").format("w"));
     const mongodb = await getDatabase();
     const searchCongesActual = await mongodb
