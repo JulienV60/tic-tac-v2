@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import React from "react";
-import Layout from "../../components/LayoutManager";
+import LayoutManager from "../../components/LayoutManager";
 import moment from "moment";
 
 import { AnyError } from "mongodb";
@@ -59,7 +59,7 @@ export default function Kikela(props: any) {
   if (props.profileUser === "Manager") {
     return (
       <div>
-        <Layout>
+        <LayoutManager>
           {/* <div className="parent">
           <form>
               <div className="div1">Entrez votre Nom</div>
@@ -105,6 +105,7 @@ export default function Kikela(props: any) {
                       onClick={handleSubmit}
                       type="button"
                       className="btn btn-primary"
+                      style={{ backgroundColor: "white", color: "#2f9dac" }}
                     >
                       Submit
                     </button>
@@ -126,7 +127,7 @@ export default function Kikela(props: any) {
               </ul>
             </div>
           </div>
-        </Layout>
+        </LayoutManager>
       </div>
     );
   } else {
