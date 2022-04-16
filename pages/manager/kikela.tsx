@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import React from "react";
-import { Layout } from "../../components/LayoutCollab";
+import Layout from "../../components/LayoutManager";
 import moment from "moment";
 
 import { AnyError } from "mongodb";
@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     profile = await userProfil(decoded.email);
   }
 
-  if (profile === "Collaborateur") {
+  if (profile === "Manager") {
     return {
       props: {
         profileUser: profile,
@@ -56,7 +56,7 @@ export default function Kikela(props: any) {
     }
   };
 
-  if (props.profileUser === "Collaborateur") {
+  if (props.profileUser === "Manager") {
     return (
       <div>
         <Layout>
