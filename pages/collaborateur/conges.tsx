@@ -122,6 +122,8 @@ export default function Conges(props: any) {
 
     if (diffInDays <= soldePrevision) {
       setShowButton(true);
+    } else {
+      setShowButton(false)
     }
     setMyDate(ev.value);
   };
