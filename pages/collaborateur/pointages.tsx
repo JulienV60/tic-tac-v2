@@ -57,16 +57,6 @@ export default function Pointages(props: any) {
   const [heureApremCorrige, setHeureApremCorrige] = React.useState("");
    const [motif, setMotif] = React.useState("autres");
 
-  const pickerChangeSemaine = async (ev: any) => {
-    setMySemaine(ev.value);
-    setNumSemaine(parseInt(moment(ev.value[0]).format("w")) - 1);
-
-    if (ev.value !== null) {
-      setAfficheFormJour(true);
-    } else {
-      setAfficheFormJour(false);
-    }
-  };
 
   const motifChange = async (ev: any) => {
     setMotif(ev);
@@ -95,11 +85,13 @@ export default function Pointages(props: any) {
 
 
   const pickerChangeJour = async (ev: any) => {
+
     setMyJour(ev.value);
-    if (semaine !== null && jour !== null) {
+    if (jour !== null) {
       const dataHoraires = await fetch("/api/collaborateur/pointages", {
         method: "POST",
-        body: JSON.stringify({ semaine: semaine, jour: ev.value }),
+        body: JSON.stringify({
+          semaine: (parseInt(moment(ev.value).locale("fr").format("w"))-1), jour: ev.value }),
       })
         .then((result) => result.json())
         .then((response) => response);
@@ -128,26 +120,11 @@ export default function Pointages(props: any) {
       <Layout />
       <form className="form-example-pointages">
         <div className="container p-5 my-5 border">
-          <div className="form-example-semaines">
-            <label className="LabelPointages">
-              Semaine
-              <Datepicker
-                controls={["calendar"]}
-                select="preset-range"
-                firstSelectDay={1}
-                selectSize={7}
-                display="anchored"
-                endIcon="calendar"
-                onChange={pickerChangeSemaine}
-              />
-            </label>
-          </div>
-          {afficheFormJour === true ? (
             <div className="form-example-jour">
               <label className="LabelPointagesHoraires">
                 Jour
                 <Datepicker
-                  calendarType="week"
+                  calendarType="month"
                   calendarSize={1}
                   display="anchored"
                   endIcon="calendar"
@@ -155,9 +132,6 @@ export default function Pointages(props: any) {
                 />
               </label>
             </div>
-          ) : (
-            <></>
-          )}
           {afficheFormPointage === true  ? (
             <>
               <div className="form-example-planifie">

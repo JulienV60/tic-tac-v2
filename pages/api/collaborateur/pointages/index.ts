@@ -24,8 +24,7 @@ export default async function handler(
     }
     const mongodb = await getDatabase();
 
-    const numeroSemaine =
-      parseInt(moment(date.semaine[0]).locale("fr").format("w")) - 1;
+    const numeroSemaine = date.semaine - 1;
 
     const numeroJourSemaine =
       parseInt(moment(date.jour).locale("fr").format("e")) + 1;

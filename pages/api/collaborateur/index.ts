@@ -11,6 +11,7 @@ export default async function handler(
   if (req.method === "POST") {
     const accessTokken = req.cookies.IdToken;
     const date = JSON.parse(req.body);
+
     const alldate = date.date;
     let profile;
     let idUser;

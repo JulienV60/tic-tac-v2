@@ -72,6 +72,7 @@ function Conges(props: any) {
   const [index, setIndex] = React.useState<number>();
   const result = JSON.parse(props.conges);
   const [id, setId] = React.useState("");
+
   async function handleSubmit(event: any) {
     if (message !== "") {
 
@@ -111,7 +112,7 @@ function Conges(props: any) {
                   {element.conges.map((e: any, index: number) => {
                     if (e !== null) {
                       return (
-                        <div className="col-2">
+                        <div className="col-2 ">
                           <div style={{ width: "18rem" }}>
                             <div>
                               <div>
@@ -127,29 +128,7 @@ function Conges(props: any) {
                                 {e.split("/")[2]}
                               </div>{" "}
                               {element.soldes_cp - e.split("/")[2] < 0 ? (
-                                <></>
-                              ) : (
                                 <form
-                                  action={`/api/manager/conges/validConges?${
-                                    e.split("/")[3]
-                                  }&i=${index}&day=${e.split("/")[4]}`}
-                                  method="POST"
-                                >
-                                  <button
-                                    className="btn"
-                                    style={{
-                                      backgroundColor: "green",
-                                      width: "3rem",
-
-                                      color: "white",
-                                      borderRadius: "10px",
-                                    }}
-                                  >
-                                    <DoneIcon />
-                                  </button>
-                                </form>
-                              )}
-                              <form
                                 action={`/api/manager/conges/deleteConges?${
                                   e.split("/")[3]
                                 }&i=${index}&day=${e.split("/")[4]}`}
@@ -168,6 +147,52 @@ function Conges(props: any) {
                                   <CloseIcon />
                                 </button>
                               </form>
+                              ) : (
+                                  <div className="row" >
+                                  <div className="col-6">
+                                <form
+                                  action={`/api/manager/conges/validConges?${
+                                    e.split("/")[3]
+                                  }&i=${index}&day=${e.split("/")[4]}`}
+                                  method="POST"
+                                >
+                                  <button
+                                    className="btn"
+                                    style={{
+                                      backgroundColor: "green",
+                                      width: "3rem",
+
+                                      color: "white",
+                                      borderRadius: "10px",
+                                    }}
+                                  >
+                                    <DoneIcon />
+                                  </button>
+                                    </form>
+                                    </div>
+                                    <div className="col-6">
+                                    <form
+                                action={`/api/manager/conges/deleteConges?${
+                                  e.split("/")[3]
+                                }&i=${index}&day=${e.split("/")[4]}`}
+                                method="POST"
+                              >
+                                <button
+                                  className="btn"
+                                  style={{
+                                    backgroundColor: "red",
+                                    width: "3rem",
+                                    marginLeft: "4.4rem",
+                                    color: "white",
+                                    borderRadius: "10px",
+                                  }}
+                                >
+                                  <CloseIcon />
+                                </button>
+                                      </form>
+                                      </div>
+                                </div>
+                              )}
                               <input
                                 id={e.split("/")[5]}
                                 className="form-control"

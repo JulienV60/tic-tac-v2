@@ -390,7 +390,14 @@
   grid-column-gap: 5px;
   grid-row-gap: 5px;
 }
-
+.cardConge div{
+  text-align: center;
+  width: 288px;
+  background-color: #2f9dac;
+}
+.toast{
+  z-index: 11;
+}
 .titreDemande {
   margin-top: 2rem;
   display: flex;
