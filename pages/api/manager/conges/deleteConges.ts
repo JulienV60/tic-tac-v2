@@ -7,9 +7,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const queryId = Object.keys(req.query)[0];
-  const queryIndex = req.query.i;
-  const queryDay = req.query.day;
+  const data = JSON.parse(req.body.split("/")[0]);
+  const message = req.body.split("/")[1];
+  const queryId = data.test;
+  const queryIndex = data.i;
+  const queryDay = data.day;
 
   const mongodb = await getDatabase();
   const searchSoldesCp = await mongodb
@@ -29,6 +31,7 @@ export default async function handler(
       {
         $set: {
           [`conges.${queryIndex}.traited`]: true,
+          message: message,
         },
       }
     );

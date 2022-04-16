@@ -8,6 +8,7 @@ import moment from "moment";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
+import { Button, Modal } from "react-bootstrap";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const mongodb = await getDatabase();
 
@@ -72,21 +73,109 @@ function Conges(props: any) {
   const [index, setIndex] = React.useState<number>();
   const result = JSON.parse(props.conges);
   const [id, setId] = React.useState("");
-
+  const [showTrue, setShowTrue] = React.useState(false);
+  const handleCloseTrue = () => setShowTrue(false);
+  const handleShowTrue = () => setShowTrue(true);
+  const [showFalse, setShowFalse] = React.useState(false);
+  const handleCloseFalse = () => setShowFalse(false);
+  const handleShowFalse = () => setShowFalse(true);
+  const [toSend, setToSend] = React.useState("");
   async function handleSubmit(event: any) {
     if (message !== "") {
-
       const test = await fetch("/api/manager/conges/message", {
         method: "POST",
         body: JSON.stringify({ message: message, id: id, index: index }),
       }).then((result) => result.json());
     }
   }
+
+  async function modalTrue(objet: any) {
+    handleShowTrue();
+    setToSend(JSON.stringify(objet));
+  }
+
+  async function modalFalse(objet: any) {
+    handleShowFalse();
+    setToSend(JSON.stringify(objet));
+  }
+  async function acceptConges() {
+    handleCloseTrue();
+    const data = JSON.parse(toSend);
+    const idDemande = data?.test;
+    const indexDemande = data.i;
+    const dayDemande = data.day;
+    message;
+    const api = await fetch(`/api/manager/conges/validConges`, {
+      method: "POST",
+
+      body: `${toSend}/${message}`,
+    });
+    window.location.reload();
+  }
+  async function refusConges() {
+    handleCloseFalse();
+    const data = JSON.parse(toSend);
+    const idDemande = data?.test;
+    const indexDemande = data.i;
+    const dayDemande = data.day;
+    message;
+    const api = await fetch(`/api/manager/conges/deleteConges`, {
+      method: "POST",
+      body: `${toSend}/${message}`,
+    });
+    window.location.reload();
+  }
+
   return (
     <LayoutManager>
       <div className="">
+        <Modal show={showTrue} onHide={handleCloseTrue} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Entrer votre message </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              className="form-control"
+              placeholder="Entrer votre message"
+              onChange={(event) => {
+                setMessage(event.target.value);
+              }}
+              type="text"
+            ></input>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseTrue}>
+              Fermer
+            </Button>
+            <Button variant="primary" onClick={acceptConges}>
+              Sauvegarder
+            </Button>
+          </Modal.Footer>
+        </Modal>{" "}
+        <Modal show={showFalse} onHide={handleCloseFalse} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Entrer votre message</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              className="form-control"
+              placeholder="Entrer votre message"
+              type="text"
+              onChange={(event) => {
+                setMessage(event.target.value);
+              }}
+            ></input>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseFalse}>
+              Fermer
+            </Button>
+            <Button variant="primary" onClick={refusConges}>
+              Sauvegarder
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <div className="titreDemande">Demande de congés</div>
-
         {result.map((element: any) => {
           if (element !== null) {
             if (element.allCongeTraited.includes(false)) {
@@ -129,29 +218,7 @@ function Conges(props: any) {
                               </div>{" "}
                               {element.soldes_cp - e.split("/")[2] < 0 ? (
                                 <form
-                                action={`/api/manager/conges/deleteConges?${
-                                  e.split("/")[3]
-                                }&i=${index}&day=${e.split("/")[4]}`}
-                                method="POST"
-                              >
-                                <button
-                                  className="btn"
-                                  style={{
-                                    backgroundColor: "red",
-                                    width: "3rem",
-                                    marginLeft: "4.4rem",
-                                    color: "white",
-                                    borderRadius: "10px",
-                                  }}
-                                >
-                                  <CloseIcon />
-                                </button>
-                              </form>
-                              ) : (
-                                  <div className="row" >
-                                  <div className="col-6">
-                                <form
-                                  action={`/api/manager/conges/validConges?${
+                                  action={`/api/manager/conges/deleteConges?${
                                     e.split("/")[3]
                                   }&i=${index}&day=${e.split("/")[4]}`}
                                   method="POST"
@@ -159,61 +226,61 @@ function Conges(props: any) {
                                   <button
                                     className="btn"
                                     style={{
-                                      backgroundColor: "green",
+                                      backgroundColor: "red",
                                       width: "3rem",
-
+                                      marginLeft: "4.4rem",
                                       color: "white",
                                       borderRadius: "10px",
                                     }}
                                   >
-                                    <DoneIcon />
+                                    <CloseIcon />
                                   </button>
-                                    </form>
-                                    </div>
-                                    <div className="col-6">
-                                    <form
-                                action={`/api/manager/conges/deleteConges?${
-                                  e.split("/")[3]
-                                }&i=${index}&day=${e.split("/")[4]}`}
-                                method="POST"
-                              >
-                                <button
-                                  className="btn"
-                                  style={{
-                                    backgroundColor: "red",
-                                    width: "3rem",
-                                    marginLeft: "4.4rem",
-                                    color: "white",
-                                    borderRadius: "10px",
-                                  }}
-                                >
-                                  <CloseIcon />
-                                </button>
-                                      </form>
-                                      </div>
+                                </form>
+                              ) : (
+                                <div className="row">
+                                  <div className="col-6">
+                                    <button
+                                      className="btn"
+                                      style={{
+                                        backgroundColor: "green",
+                                        width: "3rem",
+                                        color: "white",
+                                        borderRadius: "10px",
+                                      }}
+                                      onClick={() =>
+                                        modalTrue({
+                                          test: e.split("/")[3],
+                                          i: index,
+                                          day: e.split("/")[4],
+                                        })
+                                      }
+                                    >
+                                      <DoneIcon />
+                                    </button>
+                                  </div>
+                                  <div className="col-6">
+                                    <button
+                                      className="btn"
+                                      style={{
+                                        backgroundColor: "red",
+                                        width: "3rem",
+                                        marginLeft: "4.4rem",
+                                        color: "white",
+                                        borderRadius: "10px",
+                                      }}
+                                      onClick={() =>
+                                        modalFalse({
+                                          test: e.split("/")[3],
+                                          i: index,
+                                          day: e.split("/")[4],
+                                        })
+                                      }
+                                    >
+                                      <CloseIcon />
+                                    </button>
+                                  </div>
                                 </div>
                               )}
-                              <input
-                                id={e.split("/")[5]}
-                                className="form-control"
-                                placeholder="Entrer votre message"
-                                type="text"
-                                onChange={(event) => {
-                                  setId(e.split("/")[5]);
-                                  setIndex(index);
-                                  setMessage(event.target.value);
-                                }}
-                              ></input>
-                              <button
-                                id={e.split("/")[5]}
-                                className="btn"
-                                key={e.split("/")[5]}
-                                style={{ backgroundColor: "#2f9dac" }}
-                                type="button"
-                                onClick={handleSubmit}
-                              >
-                                Valider le message
-                              </button>
                             </div>
                           </div>
                         </div>

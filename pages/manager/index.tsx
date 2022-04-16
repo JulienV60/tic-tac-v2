@@ -73,7 +73,7 @@ export default function IndexManager(props: any) {
   return (
     <LayoutManager>
       <div className="parent">
-        <div className="div1">Anomalie</div>
+        <div className="div1">CA du Jour</div>
         <div className="div2"></div>
         <div className="div3">Message </div>
         <div className="div4"></div>
