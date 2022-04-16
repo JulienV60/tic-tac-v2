@@ -1,4 +1,4 @@
-import LayoutManager from "../../components/LayoutManager";
+import { Layout } from "../../components/LayoutCollab";
 import { GetServerSideProps } from "next";
 import { getDatabase } from "../../src/database";
 import moment from "moment";
@@ -218,7 +218,7 @@ export default function IndexManager(props: any) {
     };
 
     return (
-      <LayoutManager>
+      <Layout>
         <Eventcalendar
         className="planning"
         theme="ios"
@@ -232,6 +232,6 @@ export default function IndexManager(props: any) {
         onSelectedDateChange={(args)=>onSelectedDateChange(args.date)}
           renderResource={renderCustomResource}
         />
-      </LayoutManager>
+      </Layout>
     );
 }
