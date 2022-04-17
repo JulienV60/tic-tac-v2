@@ -154,8 +154,6 @@ export default function Home(props: any) {
           className="datamessage"
           style={{
             fontFamily: "Bebas Neue",
-            fontSize: "2rem",
-            textAlign: "center",
           }}
         >
           {message}
@@ -177,6 +175,7 @@ export default function Home(props: any) {
               fontSize: "2rem",
               paddingTop: "3.5rem",
               textAlign: "center",
+              borderRight: "4px Solid white",
             }}
           >
             Semaine Actuel:
@@ -190,9 +189,7 @@ export default function Home(props: any) {
                     style={{
                       marginLeft: "1rem",
                       color: "white",
-                      marginRight: "0",
-                      paddingRight: "1rem",
-                      paddingLeft: "1rem",
+
                       width: "auto",
                       height: "5rem",
                     }}
@@ -209,7 +206,7 @@ export default function Home(props: any) {
               );
             }
           })}{" "}
-          <div style={{ border: "2px solid white" }}></div>
+          <div style={{ borderRight: "4px Solid white" }}></div>
           <br></br>
           <span
             style={{
@@ -217,11 +214,11 @@ export default function Home(props: any) {
               color: "white",
               fontFamily: "Bebas Neue",
               fontSize: "2rem",
-
               paddingTop: "3.5rem",
               paddingRight: "1rem",
               paddingLeft: "1rem",
               textAlign: "center",
+              borderRight: "4px Solid white",
             }}
           >
             Semaine Suivante:
@@ -234,9 +231,6 @@ export default function Home(props: any) {
                     style={{
                       marginLeft: "1rem",
                       color: "white",
-                      margin: "0 0 0 0",
-                      paddingRight: "1rem",
-                      paddingLeft: "1rem",
                       width: "auto",
                       height: "5rem",
                     }}

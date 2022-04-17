@@ -132,19 +132,7 @@ const Layout: React.FC<any> = ({ children }) => {
                   >
                     Accueil
                   </Dropdown.Item>
-                  <Dropdown.Item
-                    style={{
-                      borderRadius: "10px",
-                      color: "#333",
-                      fontFamily: "Bebas Neue",
-                      fontSize: "2rem",
-                      marginLeft: "0.5rem",
-                      marginBottom: "1rem",
-                    }}
-                    href="/manager/planning"
-                  >
-                    Plannings Collectif
-                  </Dropdown.Item>
+
                   <Dropdown.Item
                     style={{
                       borderRadius: "10px",
