@@ -608,3 +608,6 @@
 
   grid-area: 10 / 1 / 11 / 11;
 }
+.mbsc-schedule-event-inner {
+  font-size: 3rem;
+}
