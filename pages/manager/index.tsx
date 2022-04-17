@@ -14,7 +14,6 @@ import {
 import React from "react";
 import jwt_decode from "jwt-decode";
 import { userProfil } from "../../src/userInfos";
-import PageNotFound from "../../components/PageNotFound";
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const accessTokken = req.cookies.IdToken;
@@ -50,14 +49,15 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
             process.env.AUTH0_LOCAL
           }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
             moment().locale("fr").format("w")
-          )}&id=${element._id}`
+          )}&id=${element._id}&day=${parseInt(
+            moment().locale("fr").format("e")
+          )}`
         ).then((result) => result.json());
       })
     );
 
     return {
       props: {
-        profileUser: profile,
         prenoms: JSON.stringify(listPrenom),
         dataPlanningInit: JSON.stringify(data),
       },
@@ -70,22 +70,160 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 };
 
 export default function IndexManager(props: any) {
+  const [dataPlanning, setDataPlanning] = React.useState(
+    JSON.parse(props.dataPlanningInit)
+  );
+  const prenoms = JSON.parse(props.prenoms);
+  const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
+  const [selectedDate, setSelectedDate] = React.useState(
+    moment().format("DD/MM/YYYY").toString()
+  );
+  const [semaineShow, setsemaineShow] = React.useState(
+    parseInt(moment().locale("fr").format("w")) - 1
+  );
+
+  async function onSelectedDateChange(args: any) {
+    if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
+      const data = await Promise.all(
+        prenoms.map(async (element: any) => {
+          return await fetch(
+            `/api/manager/planning/db/loadPlanningDb?semaine=${
+              parseInt(moment(args).locale("fr").format("w")) - 1
+            }&id=${element._id}&day=${parseInt(
+              moment().locale("fr").format("e")
+            )}`
+          ).then((result) => result.json());
+        })
+      );
+      setDataPlanning(data);
+      setsemaineShow(parseInt(moment(args).locale("fr").format("w")) - 1);
+      setSelectedDate(moment(args).format("DD/MM/YYYY").toString());
+    } else {
+      setSelectedDate(moment(args).format("DD/MM/YYYY").toString());
+    }
+  }
+
+  const view = React.useMemo<MbscEventcalendarView>(() => {
+    return {
+      schedule: {
+        type: "day",
+        allDay: false,
+        startDay: 1,
+        endDay: 6,
+        startTime: "06:00",
+        endTime: "21:00",
+      },
+    };
+  }, []);
+  const myResources = React.useMemo(() => {
+    return prenoms.map((element: any, index: number) => {
+      return {
+        id: element._id,
+        name: element.prenom,
+        color: "#f7c4b4",
+        img: element.img,
+      };
+    });
+  }, []);
+
+  React.useEffect(() => {
+    const dataPlanningDbFilter: any = [];
+    fetch("/api/manager/planning/deleteJson");
+    const dataPlanningDb = dataPlanning.forEach(
+      (element: any, index: number) => {
+        element.planningData.forEach((ele: any) => {
+          if (ele.horaires !== "" && selectedDate === ele.date) {
+            dataPlanningDbFilter.push({ id: element.id, event: ele });
+          } else {
+            null;
+          }
+        });
+      }
+    );
+
+    const eventsPlanning = dataPlanningDbFilter.map(
+      (element: any, index: number) => {
+        const colorRandom =
+          "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+        const splitHoraires = element.event.horaires.split("/");
+
+        fetch("/api/manager/planning/addSlot", {
+          method: "POST",
+          body: JSON.stringify({
+            id: index,
+            collaborateur: element.id,
+            start: splitHoraires[0],
+            end: splitHoraires[1],
+          }),
+        });
+
+        return {
+          id: index,
+          color: colorRandom,
+          start: formatDate(
+            "YYYY-MM-DDTHH:mm:ss.000Z",
+            new Date(splitHoraires[0])
+          ),
+          end: formatDate(
+            "YYYY-MM-DDTHH:mm:ss.000Z",
+            new Date(splitHoraires[1])
+          ),
+          busy: true,
+          description: "Weekly meeting with team",
+          location: "Office",
+          resource: `${element.id}`,
+        };
+      }
+    );
+
+    setEvents(eventsPlanning);
+  }, [selectedDate]);
+
+  const renderDay = (args: any) => {
+    const date = args.date;
+
+    return (
+      <div className="header-template-container">
+        <p>ko</p>
+        <div className="header-template-date">
+          <div className="header-template-day-name">
+            {formatDate("DDDD", date)}
+          </div>
+          <div className="header-template-day">
+            {formatDate("MMMM DD", date)}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderCustomResource = (resource: MbscResource) => {
+    return (
+      <div className="header-resource-template-content">
+        <img
+          className="header-resource-avatar pictures_creationPlanning"
+          src={resource.img}
+        />
+        <div className="header-resource-name">{resource.name}</div>
+      </div>
+    );
+  };
+
   return (
     <LayoutManager>
-      <div className="parent">
-        <div className="div1">CA du Jour</div>
-        <div className="div2"></div>
-        <div className="div3">Message </div>
-        <div className="div4"></div>
-        <div className="div5"> Horaires</div>
-        <div className="div6"></div>
-        <div className="div7">Compteurs </div>
-        <div className="div8">Ecarts </div>
-        <div className="div9"></div>
-        <div className="div10"></div>
-        <div className="div11">Demandes de congés </div>
-        <div className="div12"></div>
-      </div>
+      <Eventcalendar
+        className="planning"
+        theme="ios"
+        themeVariant="light"
+        locale={localeFr}
+        view={view}
+        data={myEvents}
+        resources={myResources}
+        groupBy="date"
+        renderDay={renderDay}
+        onSelectedDateChange={(args) => onSelectedDateChange(args.date)}
+        renderResource={renderCustomResource}
+      />
     </LayoutManager>
   );
 }

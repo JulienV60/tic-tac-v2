@@ -390,12 +390,12 @@
   grid-column-gap: 5px;
   grid-row-gap: 5px;
 }
-.cardConge div{
+.cardConge div {
   text-align: center;
   width: 288px;
   background-color: #2f9dac;
 }
-.toast{
+.toast {
   z-index: 11;
 }
 .titreDemande {
@@ -501,7 +501,6 @@
 .message {
   background-color: #2f9dac;
   text-align: center;
-
   color: white;
   height: 2.9rem;
   font-family: "Bebas Neue", cursive;
@@ -512,7 +511,13 @@
   grid-area: 1 / 6 / 2 / 11;
 }
 .datamessage {
-  grid-area: 2 / 6 / 3 / 11;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 .horaires {
   background-color: #2f9dac;
@@ -527,7 +532,8 @@
   grid-area: 3 / 1 / 4 / 11;
 }
 .dataHoraires {
-  border-radius: 20px;
+  border-radius: 5px;
+  width: auto;
   display: flex;
   flex-direction: row nowrap;
   direction: inherit;
@@ -536,6 +542,7 @@
   grid-area: 4 / 1 / 7 / 11;
 }
 .compteurs {
+  margin-top: 1rem;
   background-color: #2f9dac;
   text-align: center;
   color: white;
@@ -548,6 +555,7 @@
   grid-area: 7 / 1 / 8 / 6;
 }
 .ecarts {
+  margin-top: 1rem;
   background-color: #2f9dac;
   text-align: center;
   color: white;
