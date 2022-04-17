@@ -6,6 +6,7 @@ import React from "react";
 import { userId, userProfil } from "../../src/userInfos";
 import { getDatabase } from "../../src/database";
 import moment from "moment";
+import { stringify } from "querystring";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const accessTokken = context.req.cookies.IdToken;
   let profile;
@@ -115,8 +116,34 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       parseInt(sumTotalHeuresRea.toString()) -
       parseInt(sumTotalHeuresSup.toString());
 
+    const numeroJourSemaine = parseInt(moment().locale("fr").format("W"));
+
+    const searchUserConnected = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .findOne({ idUser: idUser?.toString() })
+      .then((data) => data?.horaires)
+      .then((semaine) => semaine[numeroJourSemaine]);
+
+    const diff = searchUserConnected.map((element: any, index: any) => {
+      if (element.heure_realisees != element.heure_necessaire) {
+        if (index !== 0) {
+          return {
+            designation: element.designation,
+            date: element.date.toString(),
+            diff:
+              parseInt(element.heure_necessaire) -
+              parseInt(element.heure_realisees),
+            regulariser: element.regulariser.toString(),
+          };
+        }
+      } else {
+      }
+    });
+
     return {
       props: {
+        anomalie: JSON.stringify(diff),
         differenceCumuleActuel: differenceHeureReaetHeuresFaites,
         contigentCumule: sumTotalHeuresSup,
         contingentActuel: sumTotalHeuresRea,
@@ -141,13 +168,28 @@ export default function Home(props: any) {
   const contingentActuel = props.contingentActuel;
   const contingentCumule = props.contigentCumule;
   const differenceCumuleActuel = props.differenceCumuleActuel;
+  const anomalie = JSON.parse(props.anomalie);
   const temps = moment().locale("FR").format("DD-MM-YYYY");
 
   return (
     <Layout>
       <div className="dashboard">
         <div className="anomalie">Anomalie</div>
-        <div className="dataAnomalie"></div>
+        <div className="dataAnomalie">
+          {anomalie.map((element: any, index: any) => {
+            if (index !== 0) {
+              return (
+                <div key={index}>
+                  {element.designation}
+                  <br></br>
+                  {element.date}
+                  <br></br>
+                  {element.diff}
+                </div>
+              );
+            }
+          })}
+        </div>
         <div className="message">Message</div>
 
         <div
@@ -187,7 +229,7 @@ export default function Home(props: any) {
                 <>
                   <p
                     style={{
-                      marginLeft: "1rem",
+                      marginLeft: "1.15rem",
                       color: "white",
 
                       width: "auto",
@@ -215,8 +257,7 @@ export default function Home(props: any) {
               fontFamily: "Bebas Neue",
               fontSize: "2rem",
               paddingTop: "3.5rem",
-              paddingRight: "1rem",
-              paddingLeft: "1rem",
+
               textAlign: "center",
               borderRight: "4px Solid white",
             }}
