@@ -81,7 +81,7 @@ export default function IndexManager(props: any) {
   const [semaineShow, setsemaineShow] = React.useState(
     parseInt(moment().locale("fr").format("w")) - 1
   );
-
+  console.log(semaineShow);
   async function onSelectedDateChange(args: any) {
     if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
       const data = await Promise.all(
