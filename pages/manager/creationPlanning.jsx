@@ -135,7 +135,6 @@ function App(props) {
 
   useEffect(() => {
     getDataPlanningDb(semaineShow);
-     //fetch("/api/manager/planning/deleteJson");
   }, [semaineShow]);
 
   //lorsque la semaine change

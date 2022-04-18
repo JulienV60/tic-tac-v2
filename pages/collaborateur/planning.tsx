@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     profile = await userProfil(decoded.email);
   }
 
-  if (profile === "Manager") {
+  if (profile === "Collaborateur") {
     const mongodb = await getDatabase();
 
     //list of collaborateurs
@@ -174,6 +174,7 @@ export default function IndexManager(props: any) {
 
   return (
     <Layout>
+      date selectionnée : {selectedDate}
       <Eventcalendar
         className="planning"
         theme="ios"
