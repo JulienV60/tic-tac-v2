@@ -120,8 +120,11 @@ export default function Pointages(props: any) {
   return (
     <div>
       <Layout />
-      <form className="form-example-pointages">
-        <div className="container p-5 my-5 border">
+      <form className="form-example-pointages container">
+        <div className="container p-5 my-5 border"
+        style={{
+          backgroundColor: "#2f9dac",
+        }}>
           <div className="form-example-jour">
             <label className="LabelPointagesHoraires">
               Jour
@@ -303,7 +306,7 @@ export default function Pointages(props: any) {
                 </>
               ) : (
                 <>
-                  <div>Ancun horaire à corriger</div>
+                  <div>Aucun horaire à corriger</div>
                 </>
               )}
 
