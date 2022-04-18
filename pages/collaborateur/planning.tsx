@@ -75,7 +75,7 @@ export default function IndexManager(props: any) {
     console.log(args);
     if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
       const data = await fetch(
-        `api/manager/planning/db/loadPlanningDb?semaine=${
+        `/api/manager/planning/db/loadPlanningDb?semaine=${
           parseInt(moment(args).locale("fr").format("w")) - 1
         }`
       ).then((result) => result.json());

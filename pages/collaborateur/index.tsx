@@ -7,7 +7,10 @@ import { userId, userProfil } from "../../src/userInfos";
 import { getDatabase } from "../../src/database";
 import moment from "moment";
 import { stringify } from "querystring";
+import getWeek from "date-fns/getWeek";
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const weekNumber = getWeek(new Date()) - 1;
+  console.log("vincent", weekNumber);
   const accessTokken = context.req.cookies.IdToken;
   let profile;
   let idUser;
@@ -20,8 +23,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     idUser = await userId(decoded.email);
   }
   if (profile === "Collaborateur") {
-    const numeroSemaine = parseInt(moment().locale("fr").format("w")) - 1;
-    const numeroSemaineSuivante = parseInt(moment().locale("fr").format("w"));
+    const numeroSemaine = weekNumber - 1;
+    const numeroSemaineSuivante = weekNumber;
     const mongodb = await getDatabase();
     const searchCongesActual = await mongodb
       .db()
@@ -76,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.message);
-    const numSemaine = parseInt(moment().locale("fr").format("w")) - 1;
+    const numSemaine = weekNumber;
 
     const contingentActuel = await mongodb
       .db()
