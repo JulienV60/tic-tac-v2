@@ -73,7 +73,7 @@ export default function IndexManager(props: any) {
   async function onSelectedDateChange(args: any) {
 
     if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
-      const data = await fetch(`${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment(args).locale("fr").format("w")) - 1}`)
+      const data = await fetch(`/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment(args).locale("fr").format("w")) - 1}`)
         .then((result) => result.json())
 
       setDataPlanning(data);
@@ -108,8 +108,6 @@ export default function IndexManager(props: any) {
   }, []);
 
   React.useEffect(() => {
-
-    const dataPlanningDbFilter: any = [];
 
     const dataEvent: any = [];
     const eventsPlanning = dataPlanning.planningData.map((element: any, index: number) => {
@@ -179,7 +177,7 @@ export default function IndexManager(props: any) {
       })}
       <>date : {selectedDate}</>
       <>semaine: {semaineShow}</>
-      <>requete : {`${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow - 1}`}</>
+      <>requete : {`/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow - 1}`}</>
       <Eventcalendar
         className="planning"
         theme="ios"
