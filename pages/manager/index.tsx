@@ -17,6 +17,7 @@ import { userProfil } from "../../src/userInfos";
 import getWeek from "date-fns/getWeek";
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
+  const weekNumber = getWeek(new Date()) - 1;
   const accessTokken = req.cookies.IdToken;
   let profile;
   let decoded: any;
@@ -43,11 +44,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     });
 
     const data = await fetch(
-      `${
-        process.env.AUTH0_LOCAL
-      }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
-        moment().locale("fr").format("w")
-      )}`
+      `${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${weekNumber}`
     ).then((result) => result.json());
 
     return {
@@ -65,30 +62,29 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 
 export default function IndexManager(props: any) {
   const weekNumber = getWeek(new Date()) - 1;
-  console.log("vincent", weekNumber);
+
   const [dataPlanning, setDataPlanning] = React.useState(
     JSON.parse(props.dataPlanningInit)
   );
   const prenoms = JSON.parse(props.prenoms);
   const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
   const [selectedDate, setSelectedDate] = React.useState(moment().format());
-  const [semaineShow, setsemaineShow] = React.useState(
-    parseInt(moment().locale("fr").format("w")) - 1
-  );
+  const [semaineShow, setsemaineShow] = React.useState(weekNumber);
 
   async function onSelectedDateChange(args: any) {
-    if (weekNumber - 1 !== semaineShow) {
+    console.log(args);
+    if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
       const data = await fetch(
-        `${
-          process.env.AUTH0_LOCAL
-        }/api/manager/planning/db/loadPlanningDb?semaine=${weekNumber - 1}`
+        `api/manager/planning/db/loadPlanningDb?semaine=${
+          parseInt(moment(args).locale("fr").format("w")) - 1
+        }`
       ).then((result) => result.json());
 
       setDataPlanning(data);
-      setsemaineShow(weekNumber - 1);
-      setSelectedDate(weekNumber.toString());
+      setsemaineShow(parseInt(moment(args).locale("fr").format("w")) - 1);
+      setSelectedDate(moment(args).format());
     } else {
-      setSelectedDate(weekNumber.toString());
+      setSelectedDate(moment(args).format());
     }
   }
 
