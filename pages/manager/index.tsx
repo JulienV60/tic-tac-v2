@@ -174,6 +174,11 @@ export default function IndexManager(props: any) {
 
   return (
     <LayoutManager>
+      {myEvents.map((element) => {
+        return <>{element.id}/{element.start}/{element.end}<br></br></>
+      })}
+      <>date : {selectedDate}</>
+      <>semaine: {semaineShow}</>
       <Eventcalendar
         className="planning"
         theme="ios"
