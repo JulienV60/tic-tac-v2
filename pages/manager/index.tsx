@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
       return { prenom: element.prenom, _id: element._id, img: element.img };
     });
 
-    const data = await fetch(`/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment().locale("fr").format("w"))}`)
+    const data = await fetch(`${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment().locale("fr").format("w"))}`)
        .then((result) => result.json())
 
     return {
@@ -105,6 +105,17 @@ export default function IndexManager(props: any) {
         img: element.img,
       };
     });
+  }, []);
+
+   async function getDataPlanningDb(semaineShow:number) {
+     const data = await fetch(`/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow}`)
+     .then((result) => result.json())
+
+    setDataPlanning(data);
+  }
+
+  React.useEffect(() => {
+    getDataPlanningDb(semaineShow);
   }, []);
 
   React.useEffect(() => {
@@ -172,12 +183,6 @@ export default function IndexManager(props: any) {
 
   return (
     <LayoutManager>
-      {myEvents.map((element) => {
-        return <>{element.id}/{element.start}/{element.end}<br></br></>
-      })}
-      <>date : {selectedDate}</>
-      <>semaine: {semaineShow}</>
-      <>requete : {`/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow - 1}`}</>
       <Eventcalendar
         className="planning"
         theme="ios"
