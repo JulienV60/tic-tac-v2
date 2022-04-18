@@ -255,7 +255,7 @@ function App(props) {
       </div>
     );
   };
-
+  console.log(myEvents);
   return (
     <LayoutManager>
       <div style={{ width: "1rem", height: "1rem" }}>

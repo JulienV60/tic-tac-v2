@@ -12,6 +12,8 @@ export default async function handler(
   const queryId = data.test;
   const queryIndex = data.i;
   const queryDay = data.day;
+  console.log(data);
+  console.log(message);
 
   const mongodb = await getDatabase();
   const searchSoldesCp = await mongodb
