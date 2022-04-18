@@ -20,8 +20,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     idUser = await userId(decoded.email);
   }
   if (profile === "Collaborateur") {
-    const numeroSemaine = parseInt(moment().locale("fr").format("w"));
-    const numeroSemaineSuivante = parseInt(moment().locale("fr").format("w")+1);
+    const numeroSemaine = parseInt(moment().locale("fr").format("w")) - 1;
+    const numeroSemaineSuivante = parseInt(moment().locale("fr").format("w"));
     const mongodb = await getDatabase();
     const searchCongesActual = await mongodb
       .db()
@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.message);
-    const numSemaine = parseInt(moment().locale("fr").format("w"));
+    const numSemaine = parseInt(moment().locale("fr").format("w")) - 1;
 
     const contingentActuel = await mongodb
       .db()
@@ -116,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       parseInt(sumTotalHeuresRea.toString()) -
       parseInt(sumTotalHeuresSup.toString());
 
-    const numeroJourSemaine = parseInt(moment().locale("fr").format("e"));
+    const numeroJourSemaine = parseInt(moment().locale("fr").format("W"));
 
     const searchUserConnected = await mongodb
       .db()
@@ -293,10 +293,10 @@ export default function Home(props: any) {
         <div className="ecarts">Ecarts </div>
         <div className="datacompteurs">
           {" "}
-          Contingent contractuel cumulé au {temps} : {contingentActuel} Heures / {parseInt(moment().locale("fr").format("w"))}
+          Contingent contractuel cumulé au {temps} : {contingentActuel} Heures / semaine moins 1 {parseInt(moment().locale("fr").format("w")) - 1}
           <br></br>
           <br></br>
-          Contingent contractuel ajusté au {temps} :{contingentCumule} Heures
+          Contingent contractuel ajusté au {temps} :{contingentCumule} Heures / semaine {parseInt(moment().locale("fr").format("w"))}
         </div>
         <div className="dataecarts">
           Ecart entre contingent cumulé et ajuste : {differenceCumuleActuel}{" "}
