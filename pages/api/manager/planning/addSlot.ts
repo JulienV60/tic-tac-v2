@@ -7,7 +7,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const fs = require("fs");
-  fs.appendFile("ArrayPlanning.json", `[${req.body}]`, function (err: any) {
+
+  fs.appendFile("ArrayPlanning.json", `${req.body}`, function (err: any) {
     if (err) throw err;
     console.log("Fichier mis à jour !");
   });
