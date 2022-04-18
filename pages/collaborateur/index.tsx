@@ -6,11 +6,10 @@ import React from "react";
 import { userId, userProfil } from "../../src/userInfos";
 import { getDatabase } from "../../src/database";
 import moment from "moment";
-import { stringify } from "querystring";
 import getWeek from "date-fns/getWeek";
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const weekNumber = getWeek(new Date()) - 1;
-  console.log("vincent", weekNumber);
   const accessTokken = context.req.cookies.IdToken;
   let profile;
   let idUser;
@@ -119,14 +118,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       parseInt(sumTotalHeuresRea.toString()) -
       parseInt(sumTotalHeuresSup.toString());
 
-    const numeroJourSemaine = parseInt(moment().locale("fr").format("e"));
-
     const searchUserConnected = await mongodb
       .db()
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.horaires)
-      .then((semaine) => semaine[numeroJourSemaine]);
+      .then((semaine) => semaine[weekNumber - 2]);
 
     const diff = searchUserConnected.map((element: any, index: any) => {
       if (element.heure_realisees != element.heure_necessaire) {
@@ -166,7 +163,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Home(props: any) {
   const message = JSON.parse(props.message);
   const allDateActual = JSON.parse(props.allDate);
+
   const allDateNext = JSON.parse(props.allDateNext);
+
   const congesPending = JSON.parse(props.congesPending);
   const contingentActuel = props.contingentActuel;
   const contingentCumule = props.contigentCumule;
