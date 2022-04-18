@@ -53,45 +53,47 @@ export default function Pointages(props: any) {
   const [horaireAprem, setHoraireAprem] = React.useState("");
   const [heureReaMatin, setHeureReaMatin] = React.useState("");
   const [heureReaAprem, setHeureReaAprem] = React.useState("");
-   const [heureMatinCorrige, setHeureMatinCorrige] = React.useState("");
+  const [heureMatinCorrige, setHeureMatinCorrige] = React.useState("");
   const [heureApremCorrige, setHeureApremCorrige] = React.useState("");
-   const [motif, setMotif] = React.useState("autres");
-
+  const [motif, setMotif] = React.useState("autres");
 
   const motifChange = async (ev: any) => {
     setMotif(ev);
   };
   const changeMatinCorrection = async (ev: any) => {
     setHeureMatinCorrige(ev.value);
-   };
- const changeApremCorrection = async (ev: any) => {
-   setHeureApremCorrige(ev.value);
+  };
+  const changeApremCorrection = async (ev: any) => {
+    setHeureApremCorrige(ev.value);
 
-   if (heureMatinCorrige !== null && ev.value !== null) {
-     setAfficheButtonValide(true);
-   }
-   else {
-     setAfficheButtonValide(false);
-  }
-   };
+    if (heureMatinCorrige !== null && ev.value !== null) {
+      setAfficheButtonValide(true);
+    } else {
+      setAfficheButtonValide(false);
+    }
+  };
 
-     const sendPointage = async () => {
-       const send = await fetch("/api/collaborateur/pointages/update",
-         {
-           method: "POST",
-           body:JSON.stringify({ jour:new Date(jour).toDateString(),heureMatin: heureMatinCorrige, heureAprem: heureApremCorrige ,motif:motif})
-         })
-     };
-
+  const sendPointage = async () => {
+    const send = await fetch("/api/collaborateur/pointages/update", {
+      method: "POST",
+      body: JSON.stringify({
+        jour: new Date(jour).toDateString(),
+        heureMatin: heureMatinCorrige,
+        heureAprem: heureApremCorrige,
+        motif: motif,
+      }),
+    });
+  };
 
   const pickerChangeJour = async (ev: any) => {
-
     setMyJour(ev.value);
     if (jour !== null) {
       const dataHoraires = await fetch("/api/collaborateur/pointages", {
         method: "POST",
         body: JSON.stringify({
-          semaine: (parseInt(moment(ev.value).locale("fr").format("w"))-1), jour: ev.value }),
+          semaine: parseInt(moment(ev.value).locale("fr").format("w")) - 1,
+          jour: ev.value,
+        }),
       })
         .then((result) => result.json())
         .then((response) => response);
@@ -120,19 +122,19 @@ export default function Pointages(props: any) {
       <Layout />
       <form className="form-example-pointages">
         <div className="container p-5 my-5 border">
-            <div className="form-example-jour">
-              <label className="LabelPointagesHoraires">
-                Jour
-                <Datepicker
-                  calendarType="month"
-                  calendarSize={1}
-                  display="anchored"
-                  endIcon="calendar"
-                  onChange={pickerChangeJour}
-                />
-              </label>
-            </div>
-          {afficheFormPointage === true  ? (
+          <div className="form-example-jour">
+            <label className="LabelPointagesHoraires">
+              Jour
+              <Datepicker
+                calendarType="month"
+                calendarSize={1}
+                display="anchored"
+                endIcon="calendar"
+                onChange={pickerChangeJour}
+              />
+            </label>
+          </div>
+          {afficheFormPointage === true ? (
             <>
               <div className="form-example-planifie">
                 <label className="LabelPointagesHoraires">
@@ -208,85 +210,114 @@ export default function Pointages(props: any) {
                     />
                   </label>
                 </div>
-              {regulariser === true ? <div className="form-example-horaires">
-                  <label className="LabelPointagesHoraires">
-                    Après-midi
-                    <Datepicker
-                      controls={["time"]}
-                      themeVariant="light"
-                      display="bottom"
-                      select="date"
-                      returnFormat="iso8601"
-                      showRangeLabels={true}
-                      touchUi={true}
-                      endIcon="clock"
-                      value={`${heureReaAprem}`}
-                    />
-                  </label>
-                </div>:<div className="form-example-horaires">
-                  <label className="LabelPointagesHoraires">
-                    Après-midi
-                    <Datepicker
-                      controls={["time"]}
-                      themeVariant="light"
-                      display="bottom"
-                      select="date"
-                      returnFormat="iso8601"
-                      showRangeLabels={true}
-                      touchUi={true}
-                      endIcon="clock"
-                      value={`${heureReaAprem}`}
-                    />
-                  </label>
-                </div>}
-
+                {regulariser === true ? (
+                  <div className="form-example-horaires">
+                    <label className="LabelPointagesHoraires">
+                      Après-midi
+                      <Datepicker
+                        controls={["time"]}
+                        themeVariant="light"
+                        display="bottom"
+                        select="date"
+                        returnFormat="iso8601"
+                        showRangeLabels={true}
+                        touchUi={true}
+                        endIcon="clock"
+                        value={`${heureReaAprem}`}
+                      />
+                    </label>
+                  </div>
+                ) : (
+                  <div className="form-example-horaires">
+                    <label className="LabelPointagesHoraires">
+                      Après-midi
+                      <Datepicker
+                        controls={["time"]}
+                        themeVariant="light"
+                        display="bottom"
+                        select="date"
+                        returnFormat="iso8601"
+                        showRangeLabels={true}
+                        touchUi={true}
+                        endIcon="clock"
+                        value={`${heureReaAprem}`}
+                      />
+                    </label>
+                  </div>
+                )}
               </div>
-              {horaireMatin !== "Aucunes heures" && regulariser === false? <><div className="correctionHoraires">
-                <p>Correction</p>
-                <div className="form-example-horaires">
-                  <label className="LabelCorrectionHoraires">
-                    Matin
-                    <Datepicker
-                      controls={["time"]}
-                      themeVariant="light"
-                      display="bottom"
-                      select="date"
-                      showRangeLabels={true}
-                      touchUi={true}
-                      endIcon="clock"
-                      onChange={changeMatinCorrection}
-                    />
-                  </label>
-                </div>
+              {horaireMatin !== "Aucunes heures" && regulariser === false ? (
+                <>
+                  <div className="correctionHoraires">
+                    <p>Correction</p>
+                    <div className="form-example-horaires">
+                      <label className="LabelCorrectionHoraires">
+                        Matin
+                        <Datepicker
+                          controls={["time"]}
+                          themeVariant="light"
+                          display="bottom"
+                          select="date"
+                          showRangeLabels={true}
+                          touchUi={true}
+                          endIcon="clock"
+                          onChange={changeMatinCorrection}
+                        />
+                      </label>
+                    </div>
 
-                <div className="form-example-horaires">
-                  <label className="LabelCorrectionHoraires">
-                    Après-midi
-                    <Datepicker
-                      controls={["time"]}
-                      display="bottom"
-                      themeVariant="light"
-                      select="date"
-                      showRangeLabels={true}
-                      touchUi={true}
-                      endIcon="clock"
-                      onChange={changeApremCorrection}
-                    />
-                  </label>
-                </div>
-              </div>
-              <div className="MotifPointages">
-                <p>Motif: </p>
-                <select id="motifs" name="motifs" onChange={(event)=>{motifChange(event.target.value)}}>
-                  <option value="medicale">Médicale</option>
-                  <option value="familiale">Familiale</option>
-                  <option value="administratif">Administratif</option>{" "}
-                  <option value="formation">Formation</option>
-                  <option value="autres" selected>Autres</option>
-                </select>
-              </div></>:<><div>Ancun horaire à corriger</div></>}
+                    <div className="form-example-horaires">
+                      <label className="LabelCorrectionHoraires">
+                        Après-midi
+                        <Datepicker
+                          controls={["time"]}
+                          display="bottom"
+                          themeVariant="light"
+                          select="date"
+                          showRangeLabels={true}
+                          touchUi={true}
+                          endIcon="clock"
+                          onChange={changeApremCorrection}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <div className="MotifPointages">
+                    <p>Motif: </p>
+                    <select
+                      id="motifs"
+                      name="motifs"
+                      onChange={(event) => {
+                        motifChange(event.target.value);
+                      }}
+                    >
+                      <option value="medicale">Médicale</option>
+                      <option value="familiale">Familiale</option>
+                      <option value="administratif">Administratif</option>{" "}
+                      <option value="formation">Formation</option>
+                      <option value="autres" selected>
+                        Autres
+                      </option>
+                    </select>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>Ancun horaire à corriger</div>
+                </>
+              )}
 
-              {afficheButtonValide === true ? <button onClick={sendPointage}>Valider</button> : <></>}
+              {afficheButtonValide === true ? (
+                <button
+                  onClick={sendPointage}
+                  type="button"
+                  className="boutonValidation btn btn-primary"
+                >
+                  Valider
+                </button>
+              ) : (
+                <></>
+              )}
             </>
           ) : (
             <></>
