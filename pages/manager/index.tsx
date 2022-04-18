@@ -183,6 +183,9 @@ export default function IndexManager(props: any) {
 
   return (
     <LayoutManager>
+      {myEvents.map((element) => {
+        return <>{element.id}/{element.start}/{element.end}</>
+      })}
       <Eventcalendar
         className="planning"
         theme="ios"
