@@ -116,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       parseInt(sumTotalHeuresRea.toString()) -
       parseInt(sumTotalHeuresSup.toString());
 
-    const numeroJourSemaine = parseInt(moment().locale("fr").format("W"));
+    const numeroJourSemaine = parseInt(moment().locale("fr").format("W")) - 2;
 
     const searchUserConnected = await mongodb
       .db()
@@ -179,12 +179,13 @@ export default function Home(props: any) {
           {anomalie.map((element: any, index: any) => {
             if (index !== 0) {
               return (
-                <div key={index}>
+                <div key={index} style={{ paddingLeft: "1rem" }}>
                   {element.designation}
                   <br></br>
                   {element.date}
                   <br></br>
-                  {element.diff}
+                  {element.diff} H<br></br>
+                  {element.regulariser}
                 </div>
               );
             }
