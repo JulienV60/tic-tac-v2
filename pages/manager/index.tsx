@@ -81,7 +81,7 @@ export default function IndexManager(props: any) {
   const [semaineShow, setsemaineShow] = React.useState(
     parseInt(moment().locale("fr").format("w")) - 1
   );
-
+  console.log(semaineShow);
   async function onSelectedDateChange(args: any) {
     if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
       const data = await Promise.all(
@@ -120,7 +120,7 @@ export default function IndexManager(props: any) {
       return {
         id: element._id,
         name: element.prenom,
-        color: "#f7c4b4",
+        color: "#2f9dac",
         img: element.img,
       };
     });
@@ -159,7 +159,7 @@ export default function IndexManager(props: any) {
 
         return {
           id: index,
-          color: colorRandom,
+          color: "#2f9dac",
           start: formatDate(
             "YYYY-MM-DDTHH:mm:ss.000Z",
             new Date(splitHoraires[0])
