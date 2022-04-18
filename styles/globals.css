@@ -200,7 +200,6 @@
 .rigth-side {
   text-align: center;
   margin-left: 5em;
-  margin-top: 10em;
 }
 .rigth-side > h2 {
   font-family: "Bebas Neue", cursive;
@@ -213,9 +212,15 @@
   border-radius: 5px;
   margin-top: 3em;
   border: 1px solid #f1f1f1;
-  width: 8em;
+  width: 10em;
   cursor: pointer;
 }
+
+.home-btn .connexionText {
+  color: white;
+  margin-right: 0.5rem;
+}
+
 .home-btn:hover {
   transition: all 0.2s ease-in-out;
   color: #2f9dac;
@@ -231,6 +236,20 @@
   width: 100%;
   margin: 0 auto;
   position: relative;
+  align-items: center;
+}
+
+.rigth-side .TacTicHomepage {
+  color: #2f9dac;
+  font-family: "Bebas Neue", cursive;
+}
+
+.entireHomepage {
+  display: flex;
+  height: 100vh;
+  overflow-y: hidden;
+  background-image: url("../public/FondAdeo.png");
+  background-size: cover;
 }
 
 /* ------ HOMEPAGE NO CONNECTED : Medias queries ------- */
@@ -242,30 +261,36 @@
   .container-home-image img {
     height: 300px;
     border-right: none;
-    border-bottom: 2px solid rgb(204 204 204);
   }
   .rigth-side {
     margin-top: 5em;
   }
 }
 
-@media screen and (max-width: 1002px) {
+@media screen and (max-width: 1133px), (min-width: 1024px) {
   .container-home-image img {
-    height: 300px;
-    border-right: none;
+    height: 350px;
   }
 }
-@media screen and (max-width: 1133px), (max-width: 1024px) {
-  .container-home-image img {
-    height: 400px;
-  }
-}
+
 @media screen and (max-width: 550px) {
   .container-home-image img {
     height: 300px;
   }
   .home-btn {
     width: 5em;
+  }
+}
+
+@media screen and (max-width: 1420px), (min-width: 1134px) {
+  .container-home-image img {
+    height: 500px;
+  }
+}
+
+@media screen and (max-width: 1069px) {
+  .rigth-side {
+    margin-left: 0;
   }
 }
 /* ------ END HOMEPAGE NO CONNECTED : Medias queries ------- */
