@@ -119,6 +119,7 @@ function Conges(props: any) {
     const indexDemande = data.i;
     const dayDemande = data.day;
     message;
+    console.log(data);
     const api = await fetch(`/api/manager/conges/deleteConges`, {
       method: "POST",
       body: `${toSend}/${message}`,
@@ -182,17 +183,43 @@ function Conges(props: any) {
               return (
                 <div className="row overflow-auto" key={element.id}>
                   <div className="col-2">
-                    <div style={{ width: "18rem", marginLeft: "1rem" }}>
+                    <div
+                      style={{
+                        height: "20rem",
+                        textAlign: "center",
+                        marginLeft: "1rem",
+                        marginTop: "1rem",
+                        backgroundColor: "#888",
+                        paddingTop: "2rem",
+                        paddingLeft: "1rem",
+                        color: "white",
+                        borderRadius: "10px",
+                      }}
+                    >
                       <div>
                         <h5 className="card-title">
-                          nom : {element.firstName}
-                        </h5>
+                          <span style={{ textDecoration: "underline" }}>
+                            Nom
+                          </span>{" "}
+                          : <br></br> <br></br>
+                          {element.firstName}
+                        </h5>{" "}
+                        <br></br>
                         <h5 className="card-title">
-                          prenom : {element.lastName}
-                        </h5>
-
+                          <span style={{ textDecoration: "underline" }}>
+                            Prenom
+                          </span>{" "}
+                          : <br></br> <br></br>
+                          {element.lastName}
+                        </h5>{" "}
+                        <br></br>
                         <h5 className="card-title">
-                          soldes cp : {element.soldes_cp}
+                          <span style={{ textDecoration: "underline" }}>
+                            {" "}
+                            Soldes CP
+                          </span>{" "}
+                          :<br></br> <br></br>
+                          {element.soldes_cp}
                         </h5>
                       </div>
                     </div>
@@ -201,19 +228,48 @@ function Conges(props: any) {
                   {element.conges.map((e: any, index: number) => {
                     if (e !== null) {
                       return (
-                        <div className="col-2 ">
-                          <div style={{ width: "18rem" }}>
+                        <div className="col-2">
+                          <div
+                            style={{
+                              textAlign: "center",
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              marginTop: "1rem",
+                              border: "1px solid white",
+                              backgroundColor: "#2f9dac",
+                              color: "white",
+                              lineHeight: "3rem",
+                              borderRadius: "10px",
+                              paddingTop: "1rem",
+                              paddingBottom: "1rem",
+                              marginLeft: "1rem",
+                            }}
+                          >
                             <div>
+                              <span style={{ textDecoration: "underline" }}>
+                                Demande N°{index + 1}
+                              </span>
                               <div>
-                                Commence le <br></br>
+                                <span style={{ textDecoration: "underline" }}>
+                                  Commence le
+                                </span>{" "}
+                                : <br></br>
                                 {moment(e.split("/")[0]).format("L")}
                               </div>
                               <div className="end">
-                                Fini le <br></br>{" "}
+                                <span style={{ textDecoration: "underline" }}>
+                                  Fini le
+                                </span>
+                                : <br></br>{" "}
                                 {moment(e.split("/")[1]).format("L")}
                               </div>
                               <div>
-                                Nombre de jours <br></br>
+                                <span style={{ textDecoration: "underline" }}>
+                                  Nombre de jours
+                                </span>{" "}
+                                : <br></br>
                                 {e.split("/")[2]}
                               </div>{" "}
                               {element.soldes_cp - e.split("/")[2] < 0 ? (
@@ -238,14 +294,16 @@ function Conges(props: any) {
                                 </form>
                               ) : (
                                 <div className="row">
-                                  <div className="col-6">
+                                  <div className="col-2">
                                     <button
                                       className="btn"
                                       style={{
+                                        marginTop: "1rem",
                                         backgroundColor: "green",
                                         width: "3rem",
                                         color: "white",
                                         borderRadius: "10px",
+                                        marginLeft: "3rem",
                                       }}
                                       onClick={() =>
                                         modalTrue({
@@ -258,13 +316,14 @@ function Conges(props: any) {
                                       <DoneIcon />
                                     </button>
                                   </div>
-                                  <div className="col-6">
+                                  <div className="col-2">
                                     <button
-                                      className="btn"
+                                      className="btn btn-red"
                                       style={{
+                                        marginTop: "1rem",
                                         backgroundColor: "red",
                                         width: "3rem",
-                                        marginLeft: "4.4rem",
+                                        marginLeft: "5rem",
                                         color: "white",
                                         borderRadius: "10px",
                                       }}
@@ -287,6 +346,12 @@ function Conges(props: any) {
                       );
                     }
                   })}
+                  <span
+                    style={{
+                      borderBottom: "3px solid gray",
+                      marginTop: "1rem",
+                    }}
+                  ></span>
                 </div>
               );
             }
