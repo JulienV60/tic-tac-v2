@@ -20,8 +20,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     idUser = await userId(decoded.email);
   }
   if (profile === "Collaborateur") {
-    const numeroSemaine = parseInt(moment().locale("fr").format("w")) - 1;
-    const numeroSemaineSuivante = parseInt(moment().locale("fr").format("w"));
+    const numeroSemaine = parseInt(moment().locale("fr").format("w"));
+    const numeroSemaineSuivante = parseInt(moment().locale("fr").format("w")+1);
     const mongodb = await getDatabase();
     const searchCongesActual = await mongodb
       .db()
@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .collection("Collaborateurs")
       .findOne({ idUser: idUser?.toString() })
       .then((data) => data?.message);
-    const numSemaine = parseInt(moment().locale("fr").format("w")) - 1;
+    const numSemaine = parseInt(moment().locale("fr").format("w"));
 
     const contingentActuel = await mongodb
       .db()
@@ -293,7 +293,7 @@ export default function Home(props: any) {
         <div className="ecarts">Ecarts </div>
         <div className="datacompteurs">
           {" "}
-          Contingent contractuel cumulé au {temps} : {contingentActuel} Heures
+          Contingent contractuel cumulé au {temps} : {contingentActuel} Heures / {parseInt(moment().locale("fr").format("w"))}
           <br></br>
           <br></br>
           Contingent contractuel ajusté au {temps} :{contingentCumule} Heures
