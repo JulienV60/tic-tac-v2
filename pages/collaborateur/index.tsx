@@ -41,9 +41,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             nameday: element.designation,
             date: element.date,
             horairesStart: moment(element.horaires.split("/")[0]).format(
-              "HH:SS"
+              "HH:MM"
             ),
-            horairesEnd: moment(element.horaires.split("/")[1]).format("HH:SS"),
+            horairesEnd: moment(element.horaires.split("/")[1]).format("HH:MM"),
           };
         }
       }
@@ -54,8 +54,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return {
           nameday: element.designation,
           date: element.date,
-          horairesStart: moment(element.horaires.split("/")[0]).format("HH:SS"),
-          horairesEnd: moment(element.horaires.split("/")[1]).format("HH:SS"),
+          horairesStart: moment(element.horaires.split("/")[0]).format("HH:MM"),
+          horairesEnd: moment(element.horaires.split("/")[1]).format("HH:MM"),
         };
       }
     });
@@ -116,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       parseInt(sumTotalHeuresRea.toString()) -
       parseInt(sumTotalHeuresSup.toString());
 
-    const numeroJourSemaine = parseInt(moment().locale("fr").format("W"));
+    const numeroJourSemaine = parseInt(moment().locale("fr").format("e"));
 
     const searchUserConnected = await mongodb
       .db()
@@ -280,7 +280,11 @@ export default function Home(props: any) {
                   <br></br>
                   {element.date}
                   <br></br>
-                  {element.horairesStart}
+                  {element.horairesStart === undefined ? (
+                    <>Planning non programmé</>
+                  ) : (
+                    element.horairesStart
+                  )}
                   <br></br>
                   {element.horairesEnd}
                   <br></br>
