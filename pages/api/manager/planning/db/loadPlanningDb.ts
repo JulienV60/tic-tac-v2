@@ -14,19 +14,28 @@ export default async function handler(
   if (req.method === "GET") {
     const mongodb = await getDatabase();
     const semaineSelected = parseInt(req.query.semaine.toString()) - 1;
-    const idUser = req.query.id;
+    console.log("hello", semaineSelected);
+    // const idUser = req.query.id;
     let planning = null;
 
-    if (semaineSelected !== -1) {
-      planning = await mongodb
-        .db()
-        .collection("Collaborateurs")
-        .findOne({
-          _id: new ObjectID(idUser.toString()),
+    // if (15 !== -1) {
+    planning = await mongodb
+      .db()
+      .collection("Collaborateurs")
+      .find({
+        profile: "Collaborateur",
+      })
+      .toArray()
+      .then((result) =>
+        result.map((element) => {
+          return {
+            id: element._id.toString(),
+            horaires: element.horaires[semaineSelected],
+          };
         })
-        .then((result) => result?.horaires[semaineSelected]);
-    }
+      );
+    // }
 
-    res.end(JSON.stringify({ planningData: planning, id: idUser }));
+    res.end(JSON.stringify({ planningData: planning }));
   }
 }

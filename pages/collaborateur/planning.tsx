@@ -1,4 +1,4 @@
-import { Layout } from "../../components/LayoutCollab";
+import {Layout} from "../../components/LayoutCollab";
 import { GetServerSideProps } from "next";
 import { getDatabase } from "../../src/database";
 import moment from "moment";
@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
     profile = await userProfil(decoded.email);
   }
 
-  if (profile === "Collaborateur") {
+  if (profile === "Manager") {
     const mongodb = await getDatabase();
 
     //list of collaborateurs
@@ -41,20 +41,8 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
       return { prenom: element.prenom, _id: element._id, img: element.img };
     });
 
-    //list of horaires of this semaine for all collaborateurs
-    const data = await Promise.all(
-      listPrenom.map(async (element) => {
-        return await fetch(
-          `${
-            process.env.AUTH0_LOCAL
-          }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
-            moment().locale("fr").format("w")
-          )}&id=${element._id}&day=${parseInt(
-            moment().locale("fr").format("e")
-          )}`
-        ).then((result) => result.json());
-      })
-    );
+    const data = await fetch(`${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment().locale("fr").format("w"))}`)
+       .then((result) => result.json())
 
     return {
       props: {
@@ -76,30 +64,23 @@ export default function IndexManager(props: any) {
   const prenoms = JSON.parse(props.prenoms);
   const [myEvents, setEvents] = React.useState<MbscCalendarEvent[]>([]);
   const [selectedDate, setSelectedDate] = React.useState(
-    moment().format("DD/MM/YYYY").toString()
+    moment().format()
   );
   const [semaineShow, setsemaineShow] = React.useState(
     parseInt(moment().locale("fr").format("w")) - 1
   );
 
   async function onSelectedDateChange(args: any) {
+
     if (parseInt(moment(args).locale("fr").format("w")) - 1 !== semaineShow) {
-      const data = await Promise.all(
-        prenoms.map(async (element: any) => {
-          return await fetch(
-            `/api/manager/planning/db/loadPlanningDb?semaine=${
-              parseInt(moment(args).locale("fr").format("w")) - 1
-            }&id=${element._id}&day=${parseInt(
-              moment().locale("fr").format("e")
-            )}`
-          ).then((result) => result.json());
-        })
-      );
+      const data = await fetch(`${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment(args).locale("fr").format("w")) - 1}`)
+        .then((result) => result.json())
+
       setDataPlanning(data);
       setsemaineShow(parseInt(moment(args).locale("fr").format("w")) - 1);
-      setSelectedDate(moment(args).format("DD/MM/YYYY").toString());
+      setSelectedDate(moment(args).format());
     } else {
-      setSelectedDate(moment(args).format("DD/MM/YYYY").toString());
+       setSelectedDate(moment(args).format());
     }
   }
 
@@ -120,45 +101,25 @@ export default function IndexManager(props: any) {
       return {
         id: element._id,
         name: element.prenom,
-        color: "#2f9dac",
+        color: "#f7c4b4",
         img: element.img,
       };
     });
   }, []);
 
   React.useEffect(() => {
+
     const dataPlanningDbFilter: any = [];
-    fetch("/api/manager/planning/deleteJson");
-    const dataPlanningDb = dataPlanning.forEach(
-      (element: any, index: number) => {
-        element.planningData.forEach((ele: any) => {
-          if (ele.horaires !== "" && selectedDate === ele.date) {
-            dataPlanningDbFilter.push({ id: element.id, event: ele });
-          } else {
-            null;
-          }
-        });
-      }
-    );
 
-    const eventsPlanning = dataPlanningDbFilter.map(
-      (element: any, index: number) => {
-        const colorRandom =
-          "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-        const splitHoraires = element.event.horaires.split("/");
+    const dataEvent: any = [];
+    const eventsPlanning = dataPlanning.planningData.map((element: any, index: number) => {
 
-        fetch("/api/manager/planning/addSlot", {
-          method: "POST",
-          body: JSON.stringify({
-            id: index,
-            collaborateur: element.id,
-            start: splitHoraires[0],
-            end: splitHoraires[1],
-          }),
-        });
+      const test = element.horaires.map((ele:any, index:number) => {
+      const splitHoraires = ele.horaires.split("/");
 
-        return {
-          id: index,
+        if (index !== 0 && splitHoraires.length !== 1 && ele.date === moment(selectedDate).locale("fr").format("DD/MM/YYYY")) {
+          dataEvent.push({
+          id:`${index}:${element.id}`,
           color: "#2f9dac",
           start: formatDate(
             "YYYY-MM-DDTHH:mm:ss.000Z",
@@ -172,11 +133,13 @@ export default function IndexManager(props: any) {
           description: "Weekly meeting with team",
           location: "Office",
           resource: `${element.id}`,
-        };
-      }
-    );
+        })
+          }
+        });
 
-    setEvents(eventsPlanning);
+       })
+
+      setEvents(dataEvent);
   }, [selectedDate]);
 
   const renderDay = (args: any) => {

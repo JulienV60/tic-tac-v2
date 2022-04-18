@@ -4,12 +4,10 @@ import { Eventcalendar, formatDate, localeFr } from "@mobiscroll/react";
 import { getDatabase } from "../../src/database";
 import LayoutManager from "../../components/LayoutManager";
 const milestones = [];
+import {Toast,Header} from "react-bootstrap";
 import moment from "moment";
 import jwt_decode from "jwt-decode";
-import DoneIcon from "@mui/icons-material/Done";
-import PageNotFound from "../../components/PageNotFound";
 import { userProfil } from "../../src/userInfos";
-import { WindowSharp } from "@mui/icons-material";
 export const getServerSideProps = async (context) => {
   const accessTokken = context.req.cookies.IdToken;
   let profile;
@@ -33,17 +31,8 @@ export const getServerSideProps = async (context) => {
       return { prenom: element.prenom, _id: element._id, img: element.img };
     });
 
-    const data = await Promise.all(
-      listPrenom.map(async (element) => {
-        return await fetch(
-          `${
-            process.env.AUTH0_LOCAL
-          }/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(
-            moment().locale("fr").format("w")
-          )}&id=${element._id}`
-        ).then((result) => result.json());
-      })
-    );
+     const data = await fetch(`${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${parseInt(moment().locale("fr").format("w"))}`)
+       .then((result) => result.json())
 
     return {
       props: {
@@ -59,7 +48,7 @@ export const getServerSideProps = async (context) => {
 };
 
 function App(props) {
-  const [myEvents, setEvents] = React.useState([]);
+  const [myEvents, setEvents] = React.useState();
   const [dataPlanning, setDataPlanning] = React.useState(
     JSON.parse(props.dataPlanningInit)
   );
@@ -67,6 +56,8 @@ function App(props) {
     parseInt(moment().locale("fr").format("w")) - 1
   );
 
+  const [show, setShow] = useState(false);
+  const [test, setTest] = useState(<></>);
   const prenoms = JSON.parse(props.prenoms);
 
   const view = React.useMemo(() => {
@@ -95,102 +86,69 @@ function App(props) {
 
   //à la creation d'un evenement
   const onEventCreated = React.useCallback((args) => {
-    fetch("/api/manager/planning/addSlot", {
+    fetch("/api/manager/planning/db/addOneEventIntoDb", {
       method: "POST",
       body: JSON.stringify({
-        id: args.event.id,
         collaborateur: args.event.resource,
         start: args.event.start.toString(),
         end: args.event.end.toString(),
       }),
     });
+    setShow(true);
   }, []);
 
   //à la modification d'un evenement
   const eventUpdate = React.useCallback((args) => {
-    fetch("/api/manager/planning/updateSlot", {
+
+    fetch("/api/manager/planning/db/updateOneEventIntoDb", {
       method: "POST",
       body: JSON.stringify({
-        id: args.event.id,
         collaborateur: args.event.resource,
         start: args.event.start.toString(),
         end: args.event.end.toString(),
       }),
     });
+    setShow(true);
   }, []);
 
   //à la suppression d'un evenement
   const eventClose = React.useCallback((args) => {
-    fetch("/api/manager/planning/deleteSlot", {
+    fetch("/api/manager/planning/db/deleteOneEventIntoDb", {
       method: "POST",
       body: JSON.stringify({
-        id: args.event.id,
         collaborateur: args.event.resource,
         start: args.event.start.toString(),
         end: args.event.end.toString(),
       }),
     });
-  }, []);
+    setShow(true);
 
-  //delete file JSON when refresh page
-  useEffect(() => {
-    fetch("/api/manager/planning/deleteJson");
   }, []);
-
-  //update db whith JSON data
-  function updateDb() {
-    fetch("/api/manager/planning/db/updateDb");
-    window.location.reload();
-  }
 
   //function recuperation de la data mongo par semaine
   async function getDataPlanningDb(semaineShow) {
-    const data = await Promise.all(
-      prenoms.map(async (element) => {
-        return await fetch(
-          `/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow}&id=${element._id}`
-        ).then((result) => result.json());
-      })
-    );
+     const data = await fetch(`/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow}`)
+     .then((result) => result.json())
+
     setDataPlanning(data);
   }
 
   useEffect(() => {
     getDataPlanningDb(semaineShow);
+     //fetch("/api/manager/planning/deleteJson");
   }, [semaineShow]);
+
   //lorsque la semaine change
   useEffect(() => {
-    if (dataPlanning[0].planningData !== null) {
-      const dataPlanningDbFilter = [];
+    const dataEvent = [];
+    const eventsPlanning = dataPlanning.planningData.map((element, index) => {
 
-      const dataPlanningDb = dataPlanning.forEach((element, index) => {
-        element.planningData.forEach((ele) => {
-          if (ele.horaires !== "") {
-            dataPlanningDbFilter.push({ id: element.id, event: ele });
-          } else {
-            null;
-          }
-        });
-      });
+      const test = element.horaires.map((ele, index) => {
+        const splitHoraires = ele.horaires.split("/");
 
-      const eventsPlanning = dataPlanningDbFilter.map((element, index) => {
-        const colorRandom =
-          "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-        const splitHoraires = element.event.horaires.split("/");
-
-        if (semaineShow !== 0) {
-          fetch("/api/manager/planning/addSlot", {
-            method: "POST",
-            body: JSON.stringify({
-              id: index,
-              collaborateur: element.id,
-              start: splitHoraires[0],
-              end: splitHoraires[1],
-            }),
-          });
-        }
-        return {
-          id: index,
+          if (index !== 0 && splitHoraires.length !== 1) {
+          dataEvent.push({
+          id:`${index}:${element.id}`,
           color: "#2f9dac",
           start: formatDate(
             "YYYY-MM-DDTHH:mm:ss.000Z",
@@ -204,11 +162,14 @@ function App(props) {
           description: "Weekly meeting with team",
           location: "Office",
           resource: `${element.id}`,
-        };
-      });
+        })
+          }
+        });
 
-      setEvents(eventsPlanning);
-    }
+       })
+
+      setEvents(dataEvent);
+
   }, [dataPlanning]);
 
   const renderDay = (args) => {
@@ -258,19 +219,13 @@ function App(props) {
 
   return (
     <LayoutManager>
-      <div style={{ width: "1rem", height: "1rem" }}>
-        <button
-          className="bouton_validation_planning"
-          style={{
-            backgroundColor: "#2f9dac",
-            borderRadius: "50%",
-            color: "white",
-          }}
-          onClick={updateDb}
-        >
-          <DoneIcon />
-        </button>
-      </div>
+
+      <Toast onClose={() => setShow(false)} show={show} delay={1000} autohide>
+      <Toast.Header>
+        <strong className="me-auto">Modification</strong>
+      </Toast.Header>
+      <Toast.Body>Modification validée !</Toast.Body>
+      </Toast>
       <Eventcalendar
         className="planning"
         theme="ios"
@@ -290,6 +245,7 @@ function App(props) {
         renderDay={renderDay}
         renderResource={renderCustomResource}
       />
+
     </LayoutManager>
   );
 }
