@@ -179,6 +179,7 @@ export default function IndexManager(props: any) {
       })}
       <>date : {selectedDate}</>
       <>semaine: {semaineShow}</>
+      <>requete : {`${process.env.AUTH0_LOCAL}/api/manager/planning/db/loadPlanningDb?semaine=${semaineShow - 1}`}</>
       <Eventcalendar
         className="planning"
         theme="ios"
