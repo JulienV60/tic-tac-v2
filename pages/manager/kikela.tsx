@@ -78,7 +78,7 @@ export default function Kikela(props: any) {
             >
               <form className="">
                 <div className="row d-flex justify-content-between">
-                  <div className="col w-75">
+                  <div className="col w-75" style={{ marginLeft: "20rem" }}>
                     <input
                       type="text"
                       className="form-control"
@@ -104,7 +104,7 @@ export default function Kikela(props: any) {
                     <button
                       onClick={handleSubmit}
                       type="button"
-                      className="btn btn-primary"
+                      className="btn "
                       style={{ backgroundColor: "white", color: "#2f9dac" }}
                     >
                       Submit
